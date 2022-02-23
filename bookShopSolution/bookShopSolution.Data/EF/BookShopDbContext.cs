@@ -1,11 +1,7 @@
 ﻿using bookShopSolution.Data.Configurations;
 using bookShopSolution.Data.Entities;
+using bookShopSolution.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace bookShopSolution.Data.EF
 {
@@ -16,6 +12,7 @@ namespace bookShopSolution.Data.EF
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Configure using  fluent  api
             modelBuilder.ApplyConfiguration(new AppConfigConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
@@ -30,6 +27,10 @@ namespace bookShopSolution.Data.EF
             modelBuilder.ApplyConfiguration(new ProductTranslationConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+
+            // seeding data
+            modelBuilder.Seed();
+
             // base.OnModelCreating(modelBuilder);
         }
 
