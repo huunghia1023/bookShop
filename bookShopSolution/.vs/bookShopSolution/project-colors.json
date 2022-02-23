@@ -25,7 +25,17 @@
       "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
       "DisplayName": "Miscellaneous Files",
       "ColorIndex": -1
+    },
+    "f8f6bbb7-44d5-4a9a-8755-b5e170fde601": {
+      "ProjectGuid": "f8f6bbb7-44d5-4a9a-8755-b5e170fde601",
+      "DisplayName": "bookShopSolution.Data",
+      "ColorIndex": 4
+    },
+    "597ec2c9-ae6f-4138-9ef4-449c42cf8dad": {
+      "ProjectGuid": "597ec2c9-ae6f-4138-9ef4-449c42cf8dad",
+      "DisplayName": "bookShopSolution.Application",
+      "ColorIndex": 5
     }
   },
-  "NextColorIndex": 4
+  "NextColorIndex": 6
 }
