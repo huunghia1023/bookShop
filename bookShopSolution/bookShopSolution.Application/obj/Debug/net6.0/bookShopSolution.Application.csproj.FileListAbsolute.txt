@@ -10,3 +10,8 @@ D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\obj\Debug\n
 D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\obj\Debug\net6.0\ref\bookShopSolution.Application.dll
 D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\obj\Debug\net6.0\bookShopSolution.Application.pdb
 D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\obj\Debug\net6.0\bookShopSolution.Application.csproj.AssemblyReference.cache
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\bin\Debug\net6.0\bookShopSolution.Data.dll
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\bin\Debug\net6.0\bookShopSolution.Utilities.dll
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\bin\Debug\net6.0\bookShopSolution.Data.pdb
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\bin\Debug\net6.0\bookShopSolution.Utilities.pdb
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\obj\Debug\net6.0\bookShopSolution.Application.csproj.CopyComplete

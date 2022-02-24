@@ -10,6 +10,8 @@
 - Microsoft.Extensions.Configuration.FileExtension
 - Microsoft.Extensions.Configuration.Json
 - Microsoft.AspNetCore.Identity.EntityFrameworkCore
+- Microsoft.AspNetCore.Http.Features
+
 
 ##WEEK 1: Project structure and Design Database
 - create project structure

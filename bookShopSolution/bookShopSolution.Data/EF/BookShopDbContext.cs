@@ -48,6 +48,7 @@ namespace bookShopSolution.Data.EF
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductTranslation> ProductTranslations { get; set; }
         public DbSet<AppConfig> AppConfigs { get; set; }
+        public DbSet<ProductInCategory> ProductInCategories { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
         public DbSet<Contact> Contacts { get; set; }
@@ -55,5 +56,6 @@ namespace bookShopSolution.Data.EF
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }
