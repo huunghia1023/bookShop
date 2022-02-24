@@ -18,6 +18,7 @@ namespace bookShopSolution.Data.Entities
         public List<OrderDetail> OrderDetails { get; set; }
         public List<Cart> Carts { get; set; }
         public List<ProductTranslation> ProductTranslations { get; set; }
+        public List<ProductImage> ProductImages { get; set; }
 
     }
 }

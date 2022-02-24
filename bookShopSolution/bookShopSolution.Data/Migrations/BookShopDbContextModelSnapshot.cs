@@ -81,7 +81,7 @@ namespace bookShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("6a768150-5de9-48d0-97df-9d1542314334"),
-                            ConcurrencyStamp = "01eb2354-aabc-42c4-a50e-75979b893f36",
+                            ConcurrencyStamp = "35b6576b-11ea-4ff2-8a29-d9716bae3e84",
                             Description = "Adminstrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -159,7 +159,7 @@ namespace bookShopSolution.Data.Migrations
                             Id = new Guid("bab47f6a-ca90-4fc2-a18d-484060a1332b"),
                             AccessFailedCount = 0,
                             BirthDay = new DateTime(1999, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "042df80c-6543-47d7-9e8e-149b56399928",
+                            ConcurrencyStamp = "c3c8a41c-2127-472d-b30c-1c2be0b2622e",
                             Email = "nguyengiahuunghia118@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Nghia",
@@ -167,7 +167,7 @@ namespace bookShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "nguyengiahuunghia118@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAECfGzQ2evpSvmaSeVjjwrj4NdhaSdJuM1NCVH4oztMIWoIvbCb6AgPU0y7eqGn6btw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGbv+CwOfSlajVmz5XlWmKtA5oeQW8b6iGBgXTMvk2jn/qWV5RieBiSRqSwEQLrKCw==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "admin"
@@ -419,7 +419,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 24, 14, 43, 50, 55, DateTimeKind.Local).AddTicks(129));
+                        .HasDefaultValue(new DateTime(2022, 2, 24, 22, 39, 33, 151, DateTimeKind.Local).AddTicks(543));
 
                     b.Property<string>("ShipAddress")
                         .IsRequired()
@@ -526,7 +526,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 24, 14, 43, 50, 55, DateTimeKind.Local).AddTicks(3064));
+                        .HasDefaultValue(new DateTime(2022, 2, 24, 22, 39, 33, 151, DateTimeKind.Local).AddTicks(6135));
 
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
@@ -549,6 +549,8 @@ namespace bookShopSolution.Data.Migrations
                         .HasDefaultValue(0);
 
                     b.HasKey("ImageId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages", (string)null);
                 });
@@ -646,7 +648,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("FromDay")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 24, 14, 43, 50, 55, DateTimeKind.Local).AddTicks(5911));
+                        .HasDefaultValue(new DateTime(2022, 2, 24, 22, 39, 33, 152, DateTimeKind.Local).AddTicks(2699));
 
                     b.Property<string>("ProductCategoryIds")
                         .IsRequired()
@@ -669,7 +671,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("Today")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 24, 14, 43, 50, 55, DateTimeKind.Local).AddTicks(6048));
+                        .HasDefaultValue(new DateTime(2022, 2, 24, 22, 39, 33, 152, DateTimeKind.Local).AddTicks(2963));
 
                     b.HasKey("PromotionId");
 
@@ -713,7 +715,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 24, 14, 43, 50, 55, DateTimeKind.Local).AddTicks(6870));
+                        .HasDefaultValue(new DateTime(2022, 2, 24, 22, 39, 33, 152, DateTimeKind.Local).AddTicks(4718));
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -897,6 +899,17 @@ namespace bookShopSolution.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("bookShopSolution.Data.Entities.ProductImage", b =>
+                {
+                    b.HasOne("bookShopSolution.Data.Entities.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("bookShopSolution.Data.Entities.ProductInCategory", b =>
                 {
                     b.HasOne("bookShopSolution.Data.Entities.Category", "Category")
@@ -979,6 +992,8 @@ namespace bookShopSolution.Data.Migrations
                     b.Navigation("Carts");
 
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("ProductImages");
 
                     b.Navigation("ProductInCategories");
 

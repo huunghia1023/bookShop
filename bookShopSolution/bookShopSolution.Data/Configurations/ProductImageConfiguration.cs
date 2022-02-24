@@ -21,6 +21,7 @@ namespace bookShopSolution.Data.Configurations
             builder.Property(x => x.IsDefault).IsRequired().HasDefaultValue(true);
             builder.Property(x => x.DateCreated).HasDefaultValue(DateTime.Now);
             builder.Property(x => x.SortOrder).IsRequired().HasDefaultValue(0);
+            builder.HasOne(x => x.Product).WithMany(x => x.ProductImages).HasForeignKey(x => x.ProductId);
         }
     }
 }
