@@ -15,3 +15,5 @@ D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\bin\Debug\n
 D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\bin\Debug\net6.0\bookShopSolution.Data.pdb
 D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\bin\Debug\net6.0\bookShopSolution.Utilities.pdb
 D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\obj\Debug\net6.0\bookShopSolution.Application.csproj.CopyComplete
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\bin\Debug\net6.0\bookShopSolution.ViewModels.dll
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Application\bin\Debug\net6.0\bookShopSolution.ViewModels.pdb

@@ -1,5 +1,4 @@
 ﻿using bookShopSolution.ViewModels.Catalog.Products;
-using bookShopSolution.ViewModels.Catalog.Products.Manage;
 using bookShopSolution.ViewModels.common;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -18,7 +17,7 @@ namespace bookShopSolution.Application.Catalog.Products
         Task<bool> UpdatePrice(int productId, decimal newPrice);
         Task<bool> UpdateStock(int productId, int addedQuantity);
         Task AddViewCount(int productId);
-        Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
+        Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
         Task<int> AddImages(int productId, List<IFormFile> files);
         Task<bool> RemoveImage(int imageId);
         Task<int> UpdateImage(int imageId, string caption, bool isDefault, int sortOrder);

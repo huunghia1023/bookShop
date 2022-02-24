@@ -1,6 +1,5 @@
 ﻿using bookShopSolution.Data.EF;
 using bookShopSolution.ViewModels.Catalog.Products;
-using bookShopSolution.ViewModels.Catalog.Products.Public;
 using bookShopSolution.ViewModels.common;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +13,7 @@ namespace bookShopSolution.Application.Catalog.Products
             _context = context;
         }
 
-        public async Task<PagedResult<ProductViewModel>> GetAllByCategory(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllByCategory(GetPublicProductPagingRequest request)
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.ProductId equals pt.ProductId

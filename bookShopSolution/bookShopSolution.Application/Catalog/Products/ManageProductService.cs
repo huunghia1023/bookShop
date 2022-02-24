@@ -3,7 +3,6 @@ using bookShopSolution.Data.EF;
 using bookShopSolution.Data.Entities;
 using bookShopSolution.Utilities.Exceptions;
 using bookShopSolution.ViewModels.Catalog.Products;
-using bookShopSolution.ViewModels.Catalog.Products.Manage;
 using bookShopSolution.ViewModels.common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -105,7 +104,7 @@ namespace bookShopSolution.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
         {
             // select join
             var query = from p in _context.Products
