@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using bookShopSolution.Data.EF;
 
@@ -11,9 +12,10 @@ using bookShopSolution.Data.EF;
 namespace bookShopSolution.Data.Migrations
 {
     [DbContext(typeof(BookShopDbContext))]
-    partial class BookShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220224065623_AspNetCoreIdentityDatabase")]
+    partial class AspNetCoreIdentityDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,16 +78,6 @@ namespace bookShopSolution.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6a768150-5de9-48d0-97df-9d1542314334"),
-                            ConcurrencyStamp = "01eb2354-aabc-42c4-a50e-75979b893f36",
-                            Description = "Adminstrator role",
-                            Name = "admin",
-                            NormalizedName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("bookShopSolution.Data.Entities.AppUser", b =>
@@ -152,26 +144,6 @@ namespace bookShopSolution.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("bab47f6a-ca90-4fc2-a18d-484060a1332b"),
-                            AccessFailedCount = 0,
-                            BirthDay = new DateTime(1999, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "042df80c-6543-47d7-9e8e-149b56399928",
-                            Email = "nguyengiahuunghia118@gmail.com",
-                            EmailConfirmed = true,
-                            FirstName = "Nghia",
-                            LastName = "Gia",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "nguyengiahuunghia118@gmail.com",
-                            NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAECfGzQ2evpSvmaSeVjjwrj4NdhaSdJuM1NCVH4oztMIWoIvbCb6AgPU0y7eqGn6btw==",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("bookShopSolution.Data.Entities.Cart", b =>
@@ -419,7 +391,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 24, 14, 43, 50, 55, DateTimeKind.Local).AddTicks(129));
+                        .HasDefaultValue(new DateTime(2022, 2, 24, 13, 56, 23, 55, DateTimeKind.Local).AddTicks(983));
 
                     b.Property<string>("ShipAddress")
                         .IsRequired()
@@ -526,7 +498,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 24, 14, 43, 50, 55, DateTimeKind.Local).AddTicks(3064));
+                        .HasDefaultValue(new DateTime(2022, 2, 24, 13, 56, 23, 55, DateTimeKind.Local).AddTicks(4060));
 
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
@@ -646,7 +618,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("FromDay")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 24, 14, 43, 50, 55, DateTimeKind.Local).AddTicks(5911));
+                        .HasDefaultValue(new DateTime(2022, 2, 24, 13, 56, 23, 55, DateTimeKind.Local).AddTicks(7026));
 
                     b.Property<string>("ProductCategoryIds")
                         .IsRequired()
@@ -669,7 +641,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("Today")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 24, 14, 43, 50, 55, DateTimeKind.Local).AddTicks(6048));
+                        .HasDefaultValue(new DateTime(2022, 2, 24, 13, 56, 23, 55, DateTimeKind.Local).AddTicks(7164));
 
                     b.HasKey("PromotionId");
 
@@ -713,7 +685,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 24, 14, 43, 50, 55, DateTimeKind.Local).AddTicks(6870));
+                        .HasDefaultValue(new DateTime(2022, 2, 24, 13, 56, 23, 55, DateTimeKind.Local).AddTicks(8216));
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -800,13 +772,6 @@ namespace bookShopSolution.Data.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.ToTable("AppUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("bab47f6a-ca90-4fc2-a18d-484060a1332b"),
-                            RoleId = new Guid("6a768150-5de9-48d0-97df-9d1542314334")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>

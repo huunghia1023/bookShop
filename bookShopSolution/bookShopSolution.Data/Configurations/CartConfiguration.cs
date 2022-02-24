@@ -17,6 +17,7 @@ namespace bookShopSolution.Data.Configurations
             builder.HasKey(x => x.CartId);
             builder.Property(x => x.CartId).UseIdentityColumn();
             builder.HasOne(x => x.Product).WithMany(x => x.Carts).HasForeignKey(x => x.ProductId);
+            builder.HasOne(x => x.AppUser).WithMany(x => x.Carts).HasForeignKey(x => x.UserId);
         }
     }
 }
