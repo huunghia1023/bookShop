@@ -13,6 +13,8 @@ namespace bookShopSolution.Data.Entities
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public Product Product { get; set; }
+        public Guid UserId { get; set; }
+        public AppUser AppUser { get; set; }
 
     }
 }
