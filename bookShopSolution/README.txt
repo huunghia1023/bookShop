@@ -11,6 +11,7 @@
 - Microsoft.Extensions.Configuration
 - Microsoft.Extensions.Configuration.FileExtension
 - Microsoft.Extensions.Configuration.Json
+- Microsoft.AspNetCore.Identity.EntityFrameworkCore
 
 ## WEEK 1 (17/02/2022-23/02/2022): Project structure and Design Database
 - create project structure
