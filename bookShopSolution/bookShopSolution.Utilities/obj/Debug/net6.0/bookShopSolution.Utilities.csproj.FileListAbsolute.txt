@@ -1,0 +1,12 @@
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\bin\Debug\net6.0\bookShopSolution.Utilities.deps.json
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\bin\Debug\net6.0\bookShopSolution.Utilities.dll
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\bin\Debug\net6.0\ref\bookShopSolution.Utilities.dll
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\bin\Debug\net6.0\bookShopSolution.Utilities.pdb
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\obj\Debug\net6.0\bookShopSolution.Utilities.csproj.AssemblyReference.cache
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\obj\Debug\net6.0\bookShopSolution.Utilities.GeneratedMSBuildEditorConfig.editorconfig
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\obj\Debug\net6.0\bookShopSolution.Utilities.AssemblyInfoInputs.cache
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\obj\Debug\net6.0\bookShopSolution.Utilities.AssemblyInfo.cs
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\obj\Debug\net6.0\bookShopSolution.Utilities.csproj.CoreCompileInputs.cache
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\obj\Debug\net6.0\bookShopSolution.Utilities.dll
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\obj\Debug\net6.0\ref\bookShopSolution.Utilities.dll
+D:\NASH TRAIN\bookShop\bookShopSolution\bookShopSolution.Utilities\obj\Debug\net6.0\bookShopSolution.Utilities.pdb
