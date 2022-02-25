@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\bookShopSolution.Application\bookShopSolution.Application.csproj" />
+    <ProjectReference Include="..\bookShopSolution.Data\bookShopSolution.Data.csproj" />
+    <ProjectReference Include="..\bookShopSolution.Utilities\bookShopSolution.Utilities.csproj" />
+    <ProjectReference Include="..\bookShopSolution.ViewModels\bookShopSolution.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
