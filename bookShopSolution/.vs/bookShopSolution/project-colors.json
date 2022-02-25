@@ -35,7 +35,22 @@
       "ProjectGuid": "597ec2c9-ae6f-4138-9ef4-449c42cf8dad",
       "DisplayName": "bookShopSolution.Application",
       "ColorIndex": 5
+    },
+    "ef73e3d3-0e08-4044-a424-fb20a4d4392a": {
+      "ProjectGuid": "ef73e3d3-0e08-4044-a424-fb20a4d4392a",
+      "DisplayName": "bookShopSolution.Utilities",
+      "ColorIndex": 6
+    },
+    "b654ec1b-e225-4819-8f99-72b7e00162f1": {
+      "ProjectGuid": "b654ec1b-e225-4819-8f99-72b7e00162f1",
+      "DisplayName": "bookShopSolution.ViewModels",
+      "ColorIndex": 7
+    },
+    "11c784be-0add-49cf-8770-7d1f95d34fc5": {
+      "ProjectGuid": "11c784be-0add-49cf-8770-7d1f95d34fc5",
+      "DisplayName": "bookShopSolution.BackendApi",
+      "ColorIndex": 8
     }
   },
-  "NextColorIndex": 6
+  "NextColorIndex": 9
 }

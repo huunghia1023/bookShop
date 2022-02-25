@@ -11,5 +11,6 @@ namespace bookShopSolution.Application.Catalog.Products
     public interface IPublicProductService
     {
         Task<PagedResult<ProductViewModel>> GetAllByCategory(GetPublicProductPagingRequest request);
+        Task<List<ProductViewModel>> GetAll();
     }
 }
