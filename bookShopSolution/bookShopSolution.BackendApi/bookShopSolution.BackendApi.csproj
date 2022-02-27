@@ -17,4 +17,8 @@
     <ProjectReference Include="..\bookShopSolution.ViewModels\bookShopSolution.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\user-content\" />
+  </ItemGroup>
+
 </Project>

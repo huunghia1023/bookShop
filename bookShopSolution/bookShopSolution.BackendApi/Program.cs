@@ -1,4 +1,5 @@
 using bookShopSolution.Application.Catalog.Products;
+using bookShopSolution.Application.Common;
 using bookShopSolution.Data.EF;
 using bookShopSolution.Utilities.Constants;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BookShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
 // add DI
+builder.Services.AddTransient<IStorageService, FileStorageService>();
 builder.Services.AddTransient<IPublicProductService, PublicProductService>();
+builder.Services.AddTransient<IManageProductService, ManageProductService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
