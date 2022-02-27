@@ -10,7 +10,6 @@ namespace bookShopSolution.Application.Catalog.Products
 {
     public interface IPublicProductService
     {
-        Task<PagedResult<ProductViewModel>> GetAllByCategory(GetPublicProductPagingRequest request);
-        Task<List<ProductViewModel>> GetAll();
+        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(int languageId, GetPublicProductPagingRequest request);
     }
 }
