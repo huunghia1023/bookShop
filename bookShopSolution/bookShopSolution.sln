@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bookShopSolution.WebApp", "bookShopSolution.WebApp\bookShopSolution.WebApp.csproj", "{DB38E723-2DBA-4FE6-90C2-E99632C92250}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{35174493-07AF-459A-8B85-1B7325643EE1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Solution Items", "0. Solution Items", "{35174493-07AF-459A-8B85-1B7325643EE1}"
 	ProjectSection(SolutionItems) = preProject
 		README.txt = README.txt
 	EndProjectSection
@@ -14,11 +14,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bookShopSolution.Data", "bo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bookShopSolution.Application", "bookShopSolution.Application\bookShopSolution.Application.csproj", "{597EC2C9-AE6F-4138-9EF4-449C42CF8DAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bookShopSolution.Utilities", "bookShopSolution.Utilities\bookShopSolution.Utilities.csproj", "{EF73E3D3-0E08-4044-A424-FB20A4D4392A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bookShopSolution.Utilities", "bookShopSolution.Utilities\bookShopSolution.Utilities.csproj", "{EF73E3D3-0E08-4044-A424-FB20A4D4392A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bookShopSolution.ViewModels", "bookShopSolution.ViewModels\bookShopSolution.ViewModels.csproj", "{B654EC1B-E225-4819-8F99-72B7E00162F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bookShopSolution.ViewModels", "bookShopSolution.ViewModels\bookShopSolution.ViewModels.csproj", "{B654EC1B-E225-4819-8F99-72B7E00162F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bookShopSolution.BackendApi", "bookShopSolution.BackendApi\bookShopSolution.BackendApi.csproj", "{11C784BE-0ADD-49CF-8770-7D1F95D34FC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bookShopSolution.BackendApi", "bookShopSolution.BackendApi\bookShopSolution.BackendApi.csproj", "{11C784BE-0ADD-49CF-8770-7D1F95D34FC5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Infrastructure", "1. Infrastructure", "{CBAF2F0E-171A-413E-AA82-EF12D33F7779}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Domain", "2. Domain", "{EA8DA558-6321-4748-99AC-9AE2A5D62270}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Hosts", "3. Hosts", "{96D6C06D-18AE-4A90-8D75-D1874C5B54A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +59,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DB38E723-2DBA-4FE6-90C2-E99632C92250} = {96D6C06D-18AE-4A90-8D75-D1874C5B54A6}
+		{F8F6BBB7-44D5-4A9A-8755-B5E170FDE601} = {EA8DA558-6321-4748-99AC-9AE2A5D62270}
+		{597EC2C9-AE6F-4138-9EF4-449C42CF8DAD} = {EA8DA558-6321-4748-99AC-9AE2A5D62270}
+		{EF73E3D3-0E08-4044-A424-FB20A4D4392A} = {CBAF2F0E-171A-413E-AA82-EF12D33F7779}
+		{B654EC1B-E225-4819-8F99-72B7E00162F1} = {CBAF2F0E-171A-413E-AA82-EF12D33F7779}
+		{11C784BE-0ADD-49CF-8770-7D1F95D34FC5} = {96D6C06D-18AE-4A90-8D75-D1874C5B54A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78ABD25E-CF7F-41F8-B107-68BA9B007106}

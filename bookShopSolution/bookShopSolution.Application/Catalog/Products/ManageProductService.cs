@@ -2,6 +2,7 @@
 using bookShopSolution.Data.EF;
 using bookShopSolution.Data.Entities;
 using bookShopSolution.Utilities.Exceptions;
+using bookShopSolution.ViewModels.Catalog.ProductImages;
 using bookShopSolution.ViewModels.Catalog.Products;
 using bookShopSolution.ViewModels.common;
 using Microsoft.AspNetCore.Http;
@@ -14,30 +15,31 @@ namespace bookShopSolution.Application.Catalog.Products
     {
         private readonly BookShopDbContext _context;
         private readonly IStorageService _storageService;
+
         public ManageProductService(BookShopDbContext context, IStorageService storageService)
         {
             _context = context;
             _storageService = storageService;
         }
 
-        public async Task<int> AddImages(int productId, List<IFormFile> files)
+        public async Task<int> AddImage(int productId, ProductImageCreateRequest request)
         {
-            // save image
-            for (var i = 0; i < files.Count; i++)
+            var productImage = new ProductImage()
             {
-                var productImage = new ProductImage()
-                {
-                    Caption = $"Image {i + 1} of product {productId}",
-                    DateCreated = DateTime.Now,
-                    FileSize = files[i].Length,
-                    ImagePath = await this.SaveFile(files[i]),
-                    IsDefault = false,
-                    ProductId = productId,
-                    SortOrder = 2
-                };
-                _context.ProductImages.Add(productImage);
+                Caption = request.Caption,
+                DateCreated = DateTime.Now,
+                IsDefault = request.IsDefault,
+                ProductId = productId,
+                SortOrder = request.SortOrder
+            };
+            if (request.ImageFile != null)
+            {
+                productImage.ImagePath = await this.SaveFile(request.ImageFile);
+                productImage.FileSize = request.ImageFile.Length;
             }
-            return await _context.SaveChangesAsync();
+            _context.ProductImages.Add(productImage);
+            await _context.SaveChangesAsync();
+            return productImage.ImageId;
         }
 
         public async Task AddViewCount(int productId)
@@ -87,7 +89,8 @@ namespace bookShopSolution.Application.Catalog.Products
                 };
             }
             _context.Products.Add(product);
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return product.ProductId;
         }
 
         public async Task<int> Delete(int productId)
@@ -151,25 +154,78 @@ namespace bookShopSolution.Application.Catalog.Products
             return pageResult;
         }
 
-        public async Task<List<ProductImageViewModel>> GetAllProductImage(int productId)
-        {
-            var productImages = await _context.ProductImages.Where(i => i.ProductId == productId).Select(x => new ProductImageViewModel()
-            {
-                Caption = x.Caption,
-                FilePath = x.ImagePath,
-                FileSize = x.FileSize,
-                ImageId = x.ImageId,
-                IsDefault = x.IsDefault
-            }).ToListAsync();
-            return productImages;
-        }
-
-        public async Task<bool> RemoveImage(int imageId)
+        public async Task<ProductImageViewModel> GetImageById(int imageId)
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
-            if (productImage == null) throw new BookShopException($"Can not find image with id {imageId}");
+            if (productImage == null)
+            {
+                throw new BookShopException($"Can not find image with Id {imageId}");
+            }
+            var result = new ProductImageViewModel()
+            {
+                Caption = productImage.Caption,
+                DateCreated = productImage.DateCreated,
+                FileSize = productImage.FileSize,
+                ImageId = imageId,
+                ImagePath = productImage.ImagePath,
+                IsDefault = productImage.IsDefault,
+                ProductId = productImage.ProductId,
+                SortOrder = productImage.SortOrder
+            };
+            return result;
+        }
+
+        public async Task<List<ProductImageViewModel>> GetListImages(int productId)
+        {
+            return await _context.ProductImages.Where(x => x.ProductId == productId).
+                Select(i => new ProductImageViewModel()
+                {
+                    ProductId = productId,
+                    Caption = i.Caption,
+                    DateCreated = i.DateCreated,
+                    FileSize = i.FileSize,
+                    ImageId = i.ImageId,
+                    ImagePath = i.ImagePath,
+                    IsDefault = i.IsDefault,
+                    SortOrder = i.SortOrder
+                }).ToListAsync();
+        }
+
+        public async Task<ProductViewModel> GetProductById(int productId, int languageId)
+        {
+            var query = from p in _context.Products
+                        join pt in _context.ProductTranslations on p.ProductId equals pt.ProductId
+                        select new { p, pt };
+            var product = await query.FirstOrDefaultAsync(p => p.p.ProductId == productId && p.pt.LanguageId == languageId);
+            if (product == null) throw new BookShopException($"Can not find product");
+            var productModel = new ProductViewModel()
+            {
+                DateCreated = product.p.DateCreated,
+                Description = product.pt.Description,
+                Details = product.pt.Details,
+                LanguageId = product.pt.LanguageId,
+                OriginalPrice = product.p.OriginalPrice,
+                Price = product.p.Price,
+                ProductName = product.pt.ProductName,
+                SeoAlias = product.pt.SeoAlias,
+                SeoDescription = product.pt.SeoDescription,
+                SeoTitle = product.pt.SeoTitle,
+                Stock = product.p.Stock,
+                ViewCount = product.p.ViewCount,
+                ProductId = product.p.ProductId
+            };
+            return productModel;
+        }
+
+        public async Task<int> RemoveImage(int imageId)
+        {
+            var productImage = await _context.ProductImages.FindAsync(imageId);
+            if (productImage == null)
+            {
+                throw new BookShopException($"Can not find image with id {imageId}");
+            }
             _context.ProductImages.Remove(productImage);
-            return await _context.SaveChangesAsync() > 0;
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<int> Update(ProductUpdateRequest request)
@@ -197,12 +253,21 @@ namespace bookShopSolution.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateImage(int imageId, string caption, bool isDefault, int sortOrder)
+        public async Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request)
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
-            productImage.Caption = caption;
-            productImage.IsDefault = isDefault;
-            productImage.SortOrder = sortOrder;
+            if (productImage == null)
+            {
+                throw new BookShopException($"Can not find image with id {imageId}");
+            }
+            productImage.Caption = request.Caption;
+            productImage.IsDefault = request.IsDefault;
+            productImage.SortOrder = request.SortOrder;
+            if (request.ImageFile != null)
+            {
+                productImage.ImagePath = await this.SaveFile(request.ImageFile);
+                productImage.FileSize = request.ImageFile.Length;
+            }
             _context.ProductImages.Update(productImage);
             return await _context.SaveChangesAsync();
         }
@@ -223,6 +288,7 @@ namespace bookShopSolution.Application.Catalog.Products
             product.Stock += addedQuantity;
             return await _context.SaveChangesAsync() > 0;
         }
+
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
