@@ -1,7 +1,10 @@
 using bookShopSolution.Application.Catalog.Products;
 using bookShopSolution.Application.Common;
+using bookShopSolution.Application.System.Users;
 using bookShopSolution.Data.EF;
+using bookShopSolution.Data.Entities;
 using bookShopSolution.Utilities.Constants;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -9,10 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<BookShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
+builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<BookShopDbContext>().AddDefaultTokenProviders();
 // add DI
 builder.Services.AddTransient<IStorageService, FileStorageService>();
 builder.Services.AddTransient<IPublicProductService, PublicProductService>();
 builder.Services.AddTransient<IManageProductService, ManageProductService>();
+builder.Services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
+builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
+builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
+builder.Services.AddTransient<IUserService, UserService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
