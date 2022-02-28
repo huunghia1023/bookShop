@@ -4,6 +4,9 @@ using bookShopSolution.Application.System.Users;
 using bookShopSolution.Data.EF;
 using bookShopSolution.Data.Entities;
 using bookShopSolution.Utilities.Constants;
+using bookShopSolution.ViewModels.System.Users;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,8 +26,9 @@ builder.Services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
 builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
 builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 builder.Services.AddTransient<IUserService, UserService>();
+//builder.Services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
 // add swagger
 builder.Services.AddSwaggerGen(c =>
