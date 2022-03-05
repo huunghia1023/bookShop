@@ -1,4 +1,5 @@
-﻿using IdentityServer4;
+﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 
 namespace bookShopSolution.BackendApi.IdentityServer
@@ -21,7 +22,9 @@ namespace bookShopSolution.BackendApi.IdentityServer
         public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-                new ApiScope("api.BackendApi", "Backend API")
+                new ApiScope("api.BackendApi", "Backend API"),
+                new ApiScope(IdentityServerConstants.StandardScopes.OpenId),
+                new ApiScope(IdentityServerConstants.StandardScopes.Profile)
         };
 
         public static IEnumerable<Client> Clients =>

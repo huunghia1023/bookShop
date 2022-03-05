@@ -15,8 +15,8 @@ namespace bookShopSolution.Data.Configurations
         public void Configure(EntityTypeBuilder<Contact> builder)
         {
             builder.ToTable("Contacts");
-            builder.HasKey(x => x.ContactId);
-            builder.Property(x => x.ContactId).UseIdentityColumn();
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.ContactName).IsRequired();
             builder.Property(x => x.Email).IsRequired().IsUnicode(false);
             builder.Property(x => x.PhoneNumber).IsRequired().HasMaxLength(15);

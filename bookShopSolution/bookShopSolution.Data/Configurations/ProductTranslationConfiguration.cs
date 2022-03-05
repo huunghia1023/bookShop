@@ -14,8 +14,8 @@ namespace bookShopSolution.Data.Configurations
         public void Configure(EntityTypeBuilder<ProductTranslation> builder)
         {
             builder.ToTable("ProductTranslations");
-            builder.HasKey(x => x.ProductTranslationId);
-            builder.Property(x => x.ProductTranslationId).UseIdentityColumn();
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.ProductName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Description).IsRequired().HasMaxLength(200);
             builder.Property(x => x.Details).IsRequired().HasMaxLength(200);

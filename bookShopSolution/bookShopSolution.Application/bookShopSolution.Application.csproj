@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\bookShopSolution.Data\bookShopSolution.Data.csproj" />
     <ProjectReference Include="..\bookShopSolution.Utilities\bookShopSolution.Utilities.csproj" />
     <ProjectReference Include="..\bookShopSolution.ViewModels\bookShopSolution.ViewModels.csproj" />

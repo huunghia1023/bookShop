@@ -14,9 +14,8 @@ namespace bookShopSolution.Data.Configurations
         public void Configure(EntityTypeBuilder<Language> builder)
         {
             builder.ToTable("Languages");
-            builder.HasKey(x => x.LanguageId);
-            builder.Property(x => x.LanguageId).UseIdentityColumn();
-            builder.Property(x => x.LanguageCOD).IsRequired().HasMaxLength(5).IsUnicode(false);
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).IsRequired().HasMaxLength(5).IsUnicode(false);
             builder.Property(x => x.LanguageName).IsRequired().HasMaxLength(30);
             builder.Property(x => x.IsDefault).HasDefaultValue(true);
         }

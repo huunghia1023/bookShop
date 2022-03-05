@@ -9,7 +9,7 @@ namespace bookShopSolution.Data.Entities
 {
     public class Promotion
     {
-        public int PromotionId { get; set; }
+        public int Id { get; set; }
         public DateTime FromDay { get; set; }
         public DateTime Today { get; set; }
         public bool ApplyForAll { get; set; }
@@ -20,6 +20,5 @@ namespace bookShopSolution.Data.Entities
         public Status Status { get; set; }
         public string PromotionName { get; set; }
         public string Description { get; set; }
-
     }
 }
