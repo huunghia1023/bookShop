@@ -12,26 +12,24 @@ namespace bookShopSolution.BackendApi.Controllers
     [Authorize]
     public class ProductsController : ControllerBase
     {
-        private readonly IPublicProductService _publicProductService;
-        private readonly IManageProductService _manageProductService;
+        private readonly IProductService _productService;
 
-        public ProductsController(IPublicProductService publicProductService, IManageProductService manageProductService)
+        public ProductsController(IProductService productService)
         {
-            _publicProductService = publicProductService;
-            _manageProductService = manageProductService;
+            _productService = productService;
         }
 
         [HttpGet("{languageId}")]
-        public async Task<IActionResult> GetAllPaging(int languageId, [FromQuery] GetPublicProductPagingRequest request)
+        public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery] GetPublicProductPagingRequest request)
         {
-            var products = await _publicProductService.GetAllByCategoryId(languageId, request);
+            var products = await _productService.GetAllByCategoryId(languageId, request);
             return Ok(products);
         }
 
         [HttpGet("{productId}/{languageId}")]
-        public async Task<IActionResult> GetById(int productId, int languageId)
+        public async Task<IActionResult> GetById(int productId, string languageId)
         {
-            var product = await _manageProductService.GetProductById(productId, languageId);
+            var product = await _productService.GetProductById(productId, languageId);
             if (product == null)
             {
                 return BadRequest("Can not find product");
@@ -44,9 +42,9 @@ namespace bookShopSolution.BackendApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var productId = await _manageProductService.Create(request);
+            var productId = await _productService.Create(request);
             if (productId == 0) return BadRequest("Create failed");
-            var product = await _manageProductService.GetProductById(productId, request.LanguageId);
+            var product = await _productService.GetProductById(productId, request.LanguageId);
             return CreatedAtAction(nameof(GetById), new { id = productId, product });
         }
 
@@ -55,7 +53,7 @@ namespace bookShopSolution.BackendApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var updatedCount = await _manageProductService.Update(request);
+            var updatedCount = await _productService.Update(request);
             if (updatedCount == 0)
                 return BadRequest("Update failed");
 
@@ -65,7 +63,7 @@ namespace bookShopSolution.BackendApi.Controllers
         [HttpDelete("{productId}")]
         public async Task<IActionResult> Delete(int productId)
         {
-            var result = await _manageProductService.Delete(productId);
+            var result = await _productService.Delete(productId);
             if (result == 0)
                 return BadRequest("Delete failed");
 
@@ -78,7 +76,7 @@ namespace bookShopSolution.BackendApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var isUpdateSuccess = await _manageProductService.UpdatePrice(productId, newPrice);
+            var isUpdateSuccess = await _productService.UpdatePrice(productId, newPrice);
             if (isUpdateSuccess)
                 return Ok();
             return BadRequest();
@@ -87,7 +85,7 @@ namespace bookShopSolution.BackendApi.Controllers
         [HttpGet("{productId}/images/{imageId}")]
         public async Task<IActionResult> GetImageById(int productId, int imageId)
         {
-            var image = _manageProductService.GetImageById(imageId);
+            var image = _productService.GetImageById(imageId);
             if (image.Result == null)
             {
                 return BadRequest();
@@ -102,12 +100,12 @@ namespace bookShopSolution.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var imageIdCreated = await _manageProductService.AddImage(productId, request);
+            var imageIdCreated = await _productService.AddImage(productId, request);
             if (imageIdCreated == 0)
             {
                 return BadRequest();
             }
-            var imageCreated = await _manageProductService.GetImageById(imageIdCreated);
+            var imageCreated = await _productService.GetImageById(imageIdCreated);
             return CreatedAtAction(nameof(GetImageById), new { id = imageIdCreated }, imageCreated);
         }
 
@@ -116,7 +114,7 @@ namespace bookShopSolution.BackendApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var updatedCount = await _manageProductService.UpdateImage(imageId, request);
+            var updatedCount = await _productService.UpdateImage(imageId, request);
             if (updatedCount == 0)
                 return BadRequest("Update failed");
 
@@ -128,7 +126,7 @@ namespace bookShopSolution.BackendApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var result = await _manageProductService.RemoveImage(imageId);
+            var result = await _productService.RemoveImage(imageId);
             if (result == 0)
                 return BadRequest("Delete failed");
 

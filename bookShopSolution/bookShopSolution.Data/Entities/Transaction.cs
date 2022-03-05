@@ -9,7 +9,7 @@ namespace bookShopSolution.Data.Entities
 {
     public class Transaction
     {
-        public int TransactionId { get; set; }
+        public int Id { get; set; }
         public DateTime TransactionDate { get; set; }
         public string ExternalTransactionId { get; set; }
         public decimal Amount { get; set; }
@@ -20,6 +20,5 @@ namespace bookShopSolution.Data.Entities
         public string Provider { get; set; }
         public Guid UserId { get; set; }
         public AppUser AppUser { get; set; }
-
     }
 }

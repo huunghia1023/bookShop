@@ -14,8 +14,8 @@ namespace bookShopSolution.Data.Configurations
         public void Configure(EntityTypeBuilder<CategoryTranslation> builder)
         {
             builder.ToTable("CategoryTranslations");
-            builder.HasKey(x => x.CategoryTranslationId);
-            builder.Property(x => x.CategoryTranslationId).UseIdentityColumn();
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.CategoryName).IsRequired();
             builder.HasOne(x => x.Category).WithMany(x => x.CategoryTranslations).HasForeignKey(x => x.CategoryId);
             builder.HasOne(x => x.Language).WithMany(x => x.CategoryTranslations).HasForeignKey(x => x.LanguageId);

@@ -15,10 +15,10 @@ namespace bookShopSolution.Data.Configurations
         public void Configure(EntityTypeBuilder<Promotion> builder)
         {
             builder.ToTable("Promotions");
-            builder.HasKey(x => x.PromotionId);
-            builder.Property(x => x.PromotionId).UseIdentityColumn();
-            builder.Property(x => x.FromDay).IsRequired().HasDefaultValue(DateTime.Now);
-            builder.Property(x => x.Today).IsRequired().HasDefaultValue(DateTime.Now);
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
+            builder.Property(x => x.FromDay).IsRequired();
+            builder.Property(x => x.Today).IsRequired();
             builder.Property(x => x.Status).HasDefaultValue(Status.Active);
             builder.Property(x => x.PromotionName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Description).IsRequired().HasMaxLength(200);
