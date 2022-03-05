@@ -8,6 +8,7 @@ using bookShopSolution.Utilities.Constants;
 using bookShopSolution.ViewModels.System.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using IdentityServer4;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,14 +17,16 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// allow cors
+builder.Services.AddCors();
+
 // Add services to the container.
 builder.Services.AddDbContext<BookShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
 //builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<BookShopDbContext>().AddDefaultTokenProviders();
 // add DI
 builder.Services.AddTransient<IStorageService, FileStorageService>();
-builder.Services.AddTransient<IPublicProductService, PublicProductService>();
-builder.Services.AddTransient<IManageProductService, ManageProductService>();
+builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
 builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
 builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
@@ -53,6 +56,7 @@ builder.Services.AddIdentityServer(options => // custome event for identity serv
     .AddInMemoryApiScopes(Config.ApiScopes)
     .AddAspNetIdentity<AppUser>()// declare user using identity server
     .AddDeveloperSigningCredential();
+
 // add authenticate config for using scheme jwt
 builder.Services.AddAuthentication(options =>
 {
@@ -91,7 +95,7 @@ builder.Services.AddSwaggerGen(c =>
         {
             Password = new OpenApiOAuthFlow
             {
-                TokenUrl = new Uri(builder.Configuration["AuthorityUrl"] + "/connect/token"),
+                TokenUrl = new Uri(builder.Configuration["AuthorityUrl:value"] + "/connect/token"),
                 Scopes = new Dictionary<string, string>
                 {
                     //{ "api.BackendApi", "Backend API" }
@@ -115,7 +119,7 @@ builder.Services.AddSwaggerGen(c =>
                 Name = "Bearer",
                 In = ParameterLocation.Header,
              },
-             new List<string>{"api.BackendApi" }
+             new List<string>{ IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, "api.BackendApi" }
         }
     });
 });
@@ -161,6 +165,12 @@ app.UseIdentityServer();
 
 app.UseAuthentication();
 app.UseRouting();
+
+app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials());
 
 app.UseAuthorization();
 

@@ -9,7 +9,7 @@ namespace bookShopSolution.Data.Entities
 {
     public class Order
     {
-        public int OrderId { get; set; }
+        public int Id { get; set; }
         public DateTime OrderDate { get; set; }
         public Guid UserId { get; set; }
         public string ShipName { get; set; }
@@ -19,6 +19,5 @@ namespace bookShopSolution.Data.Entities
         public OrderStatus Status { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
         public AppUser AppUser { get; set; }
-
     }
 }

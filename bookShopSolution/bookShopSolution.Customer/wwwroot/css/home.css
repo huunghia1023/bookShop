@@ -1,0 +1,19 @@
+﻿.multi-language {
+    display: inline-block;
+    color: black;
+}
+
+    .multi-language a {
+        border: none !important;
+        color: black !important;
+    }
+
+        .multi-language a:active {
+            border: none !important;
+            color: black !important;
+        }
+
+        .multi-language a:hover {
+            border: none !important;
+            color: black !important;
+        }

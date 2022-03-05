@@ -15,9 +15,9 @@ namespace bookShopSolution.Data.Configurations
         public void Configure(EntityTypeBuilder<Transaction> builder)
         {
             builder.ToTable("Transactions");
-            builder.HasKey(x => x.TransactionId);
-            builder.Property(x => x.TransactionId).UseIdentityColumn();
-            builder.Property(x => x.TransactionDate).IsRequired().HasDefaultValue(DateTime.Now);
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
+            builder.Property(x => x.TransactionDate).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Fee).IsRequired();
             builder.Property(x => x.Status).IsRequired();

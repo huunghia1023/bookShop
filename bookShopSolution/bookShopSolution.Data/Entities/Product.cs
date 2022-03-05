@@ -8,7 +8,7 @@ namespace bookShopSolution.Data.Entities
 {
     public class Product
     {
-        public int ProductId { get; set; }
+        public int Id { get; set; }
         public decimal Price { get; set; }
         public decimal OriginalPrice { get; set; }
         public int Stock { get; set; }
@@ -19,6 +19,5 @@ namespace bookShopSolution.Data.Entities
         public List<Cart> Carts { get; set; }
         public List<ProductTranslation> ProductTranslations { get; set; }
         public List<ProductImage> ProductImages { get; set; }
-
     }
 }
