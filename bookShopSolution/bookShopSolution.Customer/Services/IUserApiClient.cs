@@ -8,6 +8,6 @@ namespace bookShopSolution.Customer.Services
     {
         Task<AuthenticateResponseViewModel> Authenticate(LoginRequest request);
 
-        Task<UserViewModel> GetUserInfo(string accessToken);
+        Task<GetUserInfoViewModel> GetUserInfo(string accessToken);
     }
 }

@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace bookShopSolution.Customer.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
 

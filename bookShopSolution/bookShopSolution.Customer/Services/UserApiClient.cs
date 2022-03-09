@@ -10,9 +10,11 @@ namespace bookShopSolution.Customer.Services
     public class UserApiClient : IUserApiClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserApiClient(IHttpClientFactory httpClientFactory)
+        public UserApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _httpClientFactory = httpClientFactory;
         }
 
@@ -44,11 +46,11 @@ namespace bookShopSolution.Customer.Services
             return responseViewModel;
         }
 
-        public async Task<UserViewModel> GetUserInfo(string accessToken)
+        public async Task<GetUserInfoViewModel> GetUserInfo(string accessToken)
         {
             if (string.IsNullOrEmpty(accessToken))
                 return null;
-            var user = new UserViewModel();
+            var user = new GetUserInfoViewModel();
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             client.BaseAddress = new Uri("https://localhost:5000");
@@ -57,7 +59,7 @@ namespace bookShopSolution.Customer.Services
             var response = await client.GetAsync("/api/users/info");
             if (response.IsSuccessStatusCode)
             {
-                user = await response.Content.ReadFromJsonAsync<UserViewModel>();
+                user = await response.Content.ReadFromJsonAsync<GetUserInfoViewModel>();
             }
             return user;
         }

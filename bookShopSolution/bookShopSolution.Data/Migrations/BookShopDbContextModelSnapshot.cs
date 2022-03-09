@@ -81,10 +81,18 @@ namespace bookShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("6a768150-5de9-48d0-97df-9d1542314334"),
-                            ConcurrencyStamp = "93a3b6f2-743b-45fa-985c-a1d30c29909c",
+                            ConcurrencyStamp = "df7c5614-0753-44f2-8642-4fd78aea661c",
                             Description = "Adminstrator role",
                             Name = "admin",
                             NormalizedName = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("7297be39-5977-40af-9aaf-4b57b21b24c1"),
+                            ConcurrencyStamp = "3ca67596-4d03-4b65-be39-e3a21cbf663f",
+                            Description = "Customer role",
+                            Name = "customer",
+                            NormalizedName = "customer"
                         });
                 });
 
@@ -159,7 +167,7 @@ namespace bookShopSolution.Data.Migrations
                             Id = new Guid("bab47f6a-ca90-4fc2-a18d-484060a1332b"),
                             AccessFailedCount = 0,
                             BirthDay = new DateTime(1999, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "0e88ab3b-35ef-4a27-9d0e-a6138406cf5c",
+                            ConcurrencyStamp = "f70c30d8-e3b8-4161-bb79-d70edb7f5532",
                             Email = "nguyengiahuunghia118@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Nghia",
@@ -167,10 +175,30 @@ namespace bookShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "nguyengiahuunghia118@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEACtSSSzxQGV9tHn/P5romG0g5MRrKBhmAaMXXiaeAI4+ti9eVv6FF1QxBrTlBXCpQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFN91n04EOaFMuIHFZ21vwzLhgE/BIcLPctyFnq+tRB1F1x50todycuZYVEW8tEszw==",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UserName = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("5f9ec3c0-6f07-4103-ab0a-413f961c8b06"),
+                            AccessFailedCount = 0,
+                            BirthDay = new DateTime(1999, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "52a0e180-7e58-4dce-ba08-43148a5bf9d6",
+                            Email = "nghiadev@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Nghia",
+                            LastName = "Dev",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "nghiadev@gmail.com",
+                            NormalizedUserName = "customer",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIReOlAJ3nPSdQlZUNrq1QSU88UDHA9UP7XIYUA5GsPpxavWh7qEcEAlUL2jX4aWuQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "customer"
                         });
                 });
 
@@ -411,7 +439,7 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 5, 22, 31, 15, 245, DateTimeKind.Local).AddTicks(7955));
+                        .HasDefaultValue(new DateTime(2022, 3, 8, 15, 0, 53, 638, DateTimeKind.Local).AddTicks(1228));
 
                     b.Property<string>("ShipAddress")
                         .IsRequired()
@@ -798,6 +826,11 @@ namespace bookShopSolution.Data.Migrations
                         {
                             UserId = new Guid("bab47f6a-ca90-4fc2-a18d-484060a1332b"),
                             RoleId = new Guid("6a768150-5de9-48d0-97df-9d1542314334")
+                        },
+                        new
+                        {
+                            UserId = new Guid("5f9ec3c0-6f07-4103-ab0a-413f961c8b06"),
+                            RoleId = new Guid("7297be39-5977-40af-9aaf-4b57b21b24c1")
                         });
                 });
 

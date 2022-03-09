@@ -15,7 +15,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/User/Login";
+        options.LoginPath = "/Login/Index";
         options.AccessDeniedPath = "/User/Forbidden/";
     });
 var cultures = new[]
@@ -71,6 +71,7 @@ builder.Services.AddSession(options =>
 
 // add DI
 builder.Services.AddTransient<IUserApiClient, UserApiClient>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
 
