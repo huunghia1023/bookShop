@@ -2,8 +2,10 @@
 using bookShopSolution.Utilities.Constants;
 using bookShopSolution.ViewModels.Catalog.IdentityServerResponses;
 using bookShopSolution.ViewModels.Catalog.User;
+using bookShopSolution.ViewModels.common;
 using bookShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -16,6 +18,8 @@ using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text;
 using System.Web;
+using IdentityModel.Client;
+using bookShopSolution.ViewModels.Common;
 
 namespace bookShopSolution.Application.System.Users
 {
@@ -26,27 +30,28 @@ namespace bookShopSolution.Application.System.Users
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IPasswordHasher<AppUser> _passwordHasher;
 
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration config, IHttpClientFactory httpClientFactory)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration config, IHttpClientFactory httpClientFactory, IPasswordHasher<AppUser> passwordHasher)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = config;
             _httpClientFactory = httpClientFactory;
+            _passwordHasher = passwordHasher;
         }
 
-        public async Task<AuthenticateResponseViewModel> Authenticate(LoginRequest request)
+        public async Task<ApiResult<AuthenticateResponseViewModel>> Authenticate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
-                return null;
+                return new ApiErrorResult<AuthenticateResponseViewModel>("Username or Password is invalid");
+
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, request.RememberMe, true);
             if (!result.Succeeded)
-                return null;
-            var roles = await _userManager.GetRolesAsync(user);
+                return new ApiErrorResult<AuthenticateResponseViewModel>("Username or Password is invalid");
 
-            var responseModel = new AuthenticateResponseViewModel();
             IdentityServerRequest getTokenRequest = new IdentityServerRequest(request.UserName, request.Password, SystemConstants.BackendGrandType, SystemConstants.BackendClientId, SystemConstants.BackendClientSecret);
             // identity server 4 only accept "application/x-www-form-urlencoded"
 
@@ -59,33 +64,24 @@ namespace bookShopSolution.Application.System.Users
             var response = await client.PostAsync("/connect/token", httpContent);
             if (response.IsSuccessStatusCode)
             {
-                responseModel = await response.Content.ReadFromJsonAsync<AuthenticateResponseViewModel>();
-                responseModel.Email = user.Email;
-                responseModel.FirstName = user.FirstName;
-                responseModel.LastName = user.LastName;
-                responseModel.Roles = String.Join(";", roles);
+                var responseModel = await response.Content.ReadFromJsonAsync<AuthenticateResponseViewModel>();
+                return new ApiSuccessResult<AuthenticateResponseViewModel>(responseModel);
             }
-
-            return responseModel;
-
-            //var claims = new[]
-            //{
-            //    new Claim(ClaimTypes.Email, user.Email),
-            //    new Claim(ClaimTypes.GivenName, user.FirstName),
-            //    new Claim(ClaimTypes.Surname, user.LastName),
-            //    new Claim(ClaimTypes.Role, String.Join(";", roles))
-            //};
-
-            //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Tokens")["Key"]));
-
-            //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            //var token = new JwtSecurityToken(_config.GetSection("Tokens")["Issuer"], _config.GetSection("Tokens")["Issuer"], claims, expires: DateTime.Now.AddHours(3), signingCredentials: creds);
-            //return new JwtSecurityTokenHandler().WriteToken(token);
+            return new ApiErrorResult<AuthenticateResponseViewModel>("Login failed");
         }
 
-        public async Task<bool> Register(RegisterRequest request)
+        public async Task<ApiResult<string>> Register(RegisterRequest request)
         {
-            var user = new AppUser()
+            var user = await _userManager.FindByNameAsync(request.UserName);
+            if (user != null)
+            {
+                return new ApiErrorResult<string>("Username is existed");
+            }
+            if (await _userManager.FindByEmailAsync(request.Email) != null)
+            {
+                return new ApiErrorResult<string>("Email is existed");
+            }
+            user = new AppUser()
             {
                 BirthDay = request.BirthDay,
                 Email = request.Email,
@@ -94,33 +90,119 @@ namespace bookShopSolution.Application.System.Users
                 PhoneNumber = request.PhoneNumber,
                 UserName = request.UserName
             };
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (result.Succeeded)
-                return true;
-            return false;
+            var isAddToUserTable = await _userManager.CreateAsync(user, request.Password);
+
+            if (isAddToUserTable.Succeeded)
+            {
+                var currentUser = await _userManager.FindByNameAsync(user.UserName);
+                var roles = request.Roles;
+                var isAddToRoleTable = await _userManager.AddToRolesAsync(currentUser, roles);
+                if (isAddToRoleTable.Succeeded)
+                    return new ApiSuccessResult<string>(currentUser.Id.ToString());
+            }
+            return new ApiErrorResult<string>("Register failed");
         }
 
-        public async Task<UserViewModel> GetUserInfo(string accessToken)
+        public async Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(GetUserPagingRequest request)
         {
-            if (string.IsNullOrEmpty(accessToken))
-                return null;
-            var user = new UserViewModel();
-            var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            client.BaseAddress = new Uri("https://localhost:5000");
+            var query = _userManager.Users;
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.UserName.Contains(request.Keyword) || x.PhoneNumber.Contains(request.Keyword));
+            }
+            // paging
+            var totalRow = await query.CountAsync();
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+                .Select(x => new UserVm()
+                {
+                    Id = x.Id,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    UserName = x.UserName,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName
+                }).ToListAsync();
+            // set result to PageResult and return
+            var pageResult = new PagedResult<UserVm>()
+            {
+                TotalRecord = totalRow,
+                Items = data
+            };
+            return new ApiSuccessResult<PagedResult<UserVm>>(pageResult);
+        }
 
-            //client.DefaultRequestHeaders.Add("Authorization", bearerToken);
+        public async Task<ApiResult<UserVm>> GetUserInfo(string token)
+        {
+            var userModel = new UserVm();
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.BaseAddress = new Uri(_config.GetSection("AuthorityUrl")["value"]);
             var response = await client.GetAsync("/connect/userinfo");
             if (response.IsSuccessStatusCode)
             {
-                //var jsonUser = await response.Content.ReadAsStringAsync();
-                user = await response.Content.ReadFromJsonAsync<UserViewModel>();
-                AppUser appUser = await _userManager.FindByIdAsync(user.sub);
+                //var a = await response.Content.ReadAsStringAsync();
+                //var b = JsonConvert.DeserializeObject<GetUserInfoViewModel>(a);
 
-                var roles = await _userManager.GetRolesAsync(appUser);
-                user.Roles = roles;
+                var responseModel = await response.Content.ReadFromJsonAsync<GetUserInfoViewModel>();
+                userModel.Id = responseModel.sub;
+                userModel.UserName = responseModel.preferred_username;
+                userModel.Roles = string.Join(";", responseModel.role);
+                userModel.FirstName = responseModel.firstname;
+                userModel.LastName = responseModel.lastname;
+                userModel.BirthDay = DateTime.Parse(responseModel.birthday);
+                userModel.Email = responseModel.email;
+                userModel.EmailVerified = responseModel.email_verified;
+                return new ApiSuccessResult<UserVm>(userModel);
             }
-            return user;
+            return new ApiErrorResult<UserVm>("Get user info failed");
+        }
+
+        public async Task<ApiResult<string>> Update(Guid id, UserUpdateRequest request)
+        {
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
+            {
+                return new ApiErrorResult<string>("Email is existed");
+            }
+            // update user
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            user.BirthDay = request.BirthDay;
+            user.Email = request.Email;
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.PhoneNumber = request.PhoneNumber;
+
+            var updateUserInfoRs = await _userManager.UpdateAsync(user);
+
+            if (updateUserInfoRs.Succeeded)
+            {
+                // update roles
+                var oldRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, oldRoles);
+
+                var isAddToRoleTable = await _userManager.AddToRolesAsync(user, request.Roles);
+                if (isAddToRoleTable.Succeeded)
+                    return new ApiSuccessResult<string>(user.Id.ToString());
+            }
+            return new ApiErrorResult<string>("Update failed");
+        }
+
+        public async Task<ApiResult<UserVm>> GetUserById(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<UserVm>("User invalid");
+            }
+            var userVm = new UserVm()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                BirthDay = user.BirthDay,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber
+            };
+            return new ApiSuccessResult<UserVm>(userVm);
         }
     }
 }

@@ -9,7 +9,9 @@ using bookShopSolution.ViewModels.System.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using IdentityServer4;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,7 +20,20 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // allow cors
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+    builder => builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+    //setup.AddDefaultPolicy(policy =>
+    //{
+    //    policy.AllowAnyHeader();
+    //    policy.AllowAnyMethod();
+    //    policy.WithOrigins("https://localhost:5001/api/authenticate", "https://localhost:44401");
+    //    policy.AllowCredentials();
+    //});
+});
 
 // Add services to the container.
 builder.Services.AddDbContext<BookShopDbContext>(options =>
@@ -31,6 +46,17 @@ builder.Services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
 builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
 builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddSingleton<ICorsPolicyService>((container) =>
+{
+    var logger = container.GetRequiredService<ILogger<DefaultCorsPolicyService>>();
+    return new DefaultCorsPolicyService(logger)
+    {
+        AllowedOrigins = { "http://localhost:3000" }
+    };
+});
+
+builder.Services.AddTransient<IProfileService, ProfileService>();
+builder.Services.AddTransient<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
 //builder.Services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
 
 // Add services to the container.
@@ -51,11 +77,14 @@ builder.Services.AddIdentityServer(options => // custome event for identity serv
     options.Events.RaiseFailureEvents = true;
     options.Events.RaiseSuccessEvents = true;
 })
-    .AddInMemoryApiResources(Config.Apis) // using in-memory resources
+    //.AddInMemoryApiResources(Config.Apis) // using in-memory resources
+    .AddInMemoryIdentityResources(Config.Ids)
+    .AddInMemoryPersistedGrants()
     .AddInMemoryClients(Config.Clients)
     .AddInMemoryApiScopes(Config.ApiScopes)
     .AddAspNetIdentity<AppUser>()// declare user using identity server
-    .AddDeveloperSigningCredential();
+    .AddDeveloperSigningCredential()
+    .AddProfileService<ProfileService>(); ;
 
 // add authenticate config for using scheme jwt
 builder.Services.AddAuthentication(options =>
@@ -63,12 +92,17 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
+}).AddJwtBearer(options =>
 {
-    options.Authority = builder.Configuration["AuthorityUrl"];
+    options.Authority = builder.Configuration["AuthorityUrl:value"];
     options.TokenValidationParameters.ValidateAudience = false;
 });
+
+//.AddJwtBearer(options =>
+//{
+//    options.Authority = builder.Configuration["AuthorityUrl"];
+//    options.TokenValidationParameters.ValidateAudience = false;
+//});
 
 // add author
 builder.Services.AddAuthorization();
@@ -166,11 +200,7 @@ app.UseIdentityServer();
 app.UseAuthentication();
 app.UseRouting();
 
-app.UseCors(x => x
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true) // allow any origin
-                .AllowCredentials());
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
@@ -183,6 +213,7 @@ app.UseSwaggerUI(c =>
     c.OAuthClientSecret("swagger_RookiesB4_BookShopBackendApi");
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger BookShop v1");
 });
+
 //app.UseSwaggerUI(c =>
 //{
 //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger bookShopSolution v1");

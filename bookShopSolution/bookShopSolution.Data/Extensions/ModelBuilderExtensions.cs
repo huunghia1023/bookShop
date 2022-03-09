@@ -37,6 +37,19 @@ namespace bookShopSolution.Data.Extensions
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(
                 new IdentityUserRole<Guid> { RoleId = roleId, UserId = adminId }
                 );
+            // role and user
+            var roleCustomerId = new Guid("7297BE39-5977-40AF-9AAF-4B57B21B24C1");
+            var customerId = new Guid("5F9EC3C0-6F07-4103-AB0A-413F961C8B06");
+            modelBuilder.Entity<AppRole>().HasData(
+                new AppRole() { Id = roleCustomerId, Name = "customer", NormalizedName = "customer", Description = "Customer role" }
+                );
+
+            modelBuilder.Entity<AppUser>().HasData(
+                new AppUser() { Id = customerId, FirstName = "Nghia", LastName = "Dev", Email = "nghiadev@gmail.com", BirthDay = new DateTime(1999, 6, 8), EmailConfirmed = true, NormalizedEmail = "nghiadev@gmail.com", UserName = "customer", PasswordHash = hasher.HashPassword(null, "N1234@"), NormalizedUserName = "customer", SecurityStamp = "" }
+                );
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(
+                new IdentityUserRole<Guid> { RoleId = roleCustomerId, UserId = customerId }
+                );
         }
     }
 }

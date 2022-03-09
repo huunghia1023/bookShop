@@ -1,0 +1,19 @@
+.full-height {
+    height: 100vh;
+}
+
+.center-align {
+    text-align: center!important;
+}
+
+.margin-auto {
+    margin: auto!important;
+}
+
+.width-50p {
+    width: 50%!important;
+}
+
+.margin-bot-50 {
+    margin-bottom: 50px!important;
+}
