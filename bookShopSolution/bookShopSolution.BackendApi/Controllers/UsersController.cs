@@ -12,6 +12,7 @@ namespace bookShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -99,6 +100,24 @@ namespace bookShopSolution.BackendApi.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _userService.GetUserById(id);
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _userService.Delete(id);
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> DeleteMultiple([FromForm] List<Guid> ids)
+        {
+            var result = await _userService.DeleteMultiple(ids);
             if (!result.IsSuccessed)
                 return BadRequest(result);
             return Ok(result);

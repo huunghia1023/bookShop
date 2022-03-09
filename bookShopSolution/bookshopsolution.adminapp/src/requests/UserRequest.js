@@ -2,48 +2,46 @@ import AxiosClient from "./AxiosClient";
 
 const config = {
   headers: {
-    Authorization: "Bearer token",
+    Authorization: "Bearer ",
   },
 };
 
-const convertParams = (params) => {
-  if (!params) return {};
-  var qs = require("qs");
-  return {
-    params: {
-      ...params,
-    },
-    paramsSerializer: (params) => {
-      //ví dụ với trường hợp size=[1,2] => &size=1&size=2
-      return qs.stringify(params, { arrayFormat: "repeat" });
-    },
-  };
-};
+// const convertParams = (params) => {
+//   if (!params) return {};
+//   var qs = require("qs");
+//   return {
+//     params: {
+//       ...params,
+//     },
+//     paramsSerializer: (params) => {
+//       //ví dụ với trường hợp size=[1,2] => &size=1&size=2
+//       return qs.stringify(params, { arrayFormat: "repeat" });
+//     },
+//   };
+// };
 
 const userResquest = {
-  // get(id) {
-  //     const url = `/products/${id}/`;
-  //     return axiosClient.get(url);
-  // },
+  getUserInfo(id, token) {
+    config.headers.Authorization = "Bearer " + token;
+    const url = `api/users/${id}/`;
+    return AxiosClient.get(url, config);
+  },
 
   authenticate(data) {
     const url = `api/users/authenticate/`;
     return AxiosClient.post(url, data);
   },
 
-  getInfo(token) {
+  getAccountInfo(token) {
     config.headers.Authorization = "Bearer " + token;
     const url = `api/users/info/`;
     return AxiosClient.get(url, config);
   },
 
-  async getAll(params, token) {
+  async getAll(pageIndex, pageSize, keyword, token) {
+    const url = `api/users/paging?PageIndex=${pageIndex}&PageSize=${pageSize}&Keyword=${keyword}`;
     config.headers.Authorization = "Bearer " + token;
-    const response = await AxiosClient.get(
-      "api/users/paging",
-      convertParams(params),
-      config
-    );
+    const response = await AxiosClient.get(url, config);
     return response;
   },
 
@@ -59,9 +57,10 @@ const userResquest = {
     return AxiosClient.put(url, data, config);
   },
 
-  remove(id) {
-    const url = `/products/${id}/`;
-    return AxiosClient.delete(url);
+  deleteMultiple(params, token) {
+    const url = `/api/users/`;
+    config.headers.Authorization = "Bearer " + token;
+    return AxiosClient.patch(url, params, config);
   },
 };
 

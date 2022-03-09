@@ -193,6 +193,7 @@ namespace bookShopSolution.Application.System.Users
             {
                 return new ApiErrorResult<UserVm>("User invalid");
             }
+            var roles = await _userManager.GetRolesAsync(user);
             var userVm = new UserVm()
             {
                 Id = user.Id,
@@ -200,9 +201,53 @@ namespace bookShopSolution.Application.System.Users
                 BirthDay = user.BirthDay,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName,
+                EmailVerified = user.EmailConfirmed,
+                Roles = String.Join(";", roles)
             };
+
             return new ApiSuccessResult<UserVm>(userVm);
+        }
+
+        public async Task<ApiResult<bool>> Delete(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("User invalid");
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Delete failed");
+        }
+
+        public async Task<ApiResult<List<string>>> DeleteMultiple(List<Guid> ids)
+        {
+            var listIdSuccessed = new List<string>();
+            var listIdFailed = new List<string>();
+            foreach (Guid id in ids)
+            {
+                var user = await _userManager.FindByIdAsync(id.ToString());
+                if (user == null)
+                {
+                    listIdFailed.Add(id.ToString());
+                    continue;
+                }
+                var result = await _userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                {
+                    listIdFailed.Add(id.ToString());
+                    continue;
+                }
+                listIdSuccessed.Add(id.ToString());
+            };
+            if (listIdFailed.Count() == ids.Count())
+            {
+                return new ApiErrorResult<List<string>>("Delete Failed");
+            }
+            return new ApiSuccessResult<List<string>>(listIdSuccessed);
         }
     }
 }

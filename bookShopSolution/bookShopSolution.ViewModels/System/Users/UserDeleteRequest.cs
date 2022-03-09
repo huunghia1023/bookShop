@@ -1,5 +1,4 @@
-﻿using bookShopSolution.ViewModels.common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace bookShopSolution.ViewModels.System.Users
 {
-    public class GetUserPagingRequest : PagingRequestBase
+    public class UserDeleteRequest
     {
-        public string? Keyword { get; set; }
+        public Guid Id { get; set; }
     }
 }
