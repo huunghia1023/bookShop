@@ -10,21 +10,31 @@ namespace bookShopSolution.BackendApi.IdentityServer
           new IdentityResource[]
           {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResources.Email(),
+                new IdentityResources.Phone(),
+                new IdentityResource("UserInfo", new List<string>{"firstname", "lastname", "birthday", "role"})
           };
 
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
             {
-                new ApiResource("api.BackendApi", "Backend API")
+                new ApiResource {
+                    Name="api.BackendApi",
+                    ApiSecrets={ new Secret("swagger_RookiesB4_BookShopBackendApi".Sha256()) },
+
+                    UserClaims =
+                    {
+                        JwtClaimTypes.Name,
+                        JwtClaimTypes.Profile,
+                    },
+                } // "api.BackendApi", "Backend API"
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-                new ApiScope("api.BackendApi", "Backend API"),
-                new ApiScope(IdentityServerConstants.StandardScopes.OpenId),
-                new ApiScope(IdentityServerConstants.StandardScopes.Profile)
+                new ApiScope("BackendApiScope", "Backend API Scope")
         };
 
         public static IEnumerable<Client> Clients =>
@@ -47,7 +57,7 @@ namespace bookShopSolution.BackendApi.IdentityServer
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "api.BackendApi"
+                        "BackendApiScope"
                     }
                  },
                 new Client
@@ -57,13 +67,17 @@ namespace bookShopSolution.BackendApi.IdentityServer
                     ClientSecrets = { new Secret("swagger_RookiesB4_BookShopBackendApi".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowedCorsOrigins = { "https://localhost:5000" }, // cho phép nguồn gốc cores
+                    AllowedCorsOrigins = { "https://localhost:5000", "http://localhost:3000" }, // cho phép nguồn gốc cores
 
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "api.BackendApi"
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.Phone,
+                        "BackendApiScope",
+                        //"api.BackendApi",
+                        "UserInfo"
                     }
                 },
             };

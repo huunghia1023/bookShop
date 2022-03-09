@@ -1,6 +1,8 @@
 ﻿using bookShopSolution.Application.System.Users;
 using bookShopSolution.ViewModels.Catalog.User;
+using bookShopSolution.ViewModels.common;
 using bookShopSolution.ViewModels.System.Users;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,15 +29,16 @@ namespace bookShopSolution.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             var result = await _userService.Authenticate(request);
-            if (result == null)
+            if (!result.IsSuccessed)
             {
-                return BadRequest("Username or Password is incorrect");
+                return BadRequest(result);
             }
             return Ok(result);
         }
 
-        [HttpPost("register")]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] RegisterRequest request)
         {
@@ -45,21 +48,60 @@ namespace bookShopSolution.BackendApi.Controllers
             }
 
             var result = await _userService.Register(request);
-            if (!result)
+            if (!result.IsSuccessed)
             {
-                return BadRequest("Register failed");
+                return BadRequest(result);
             }
-            return Ok();
+            return Ok(result);
+        }
+
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
+        {
+            var result = await _userService.GetUserPaging(request);
+            return Ok(result);
         }
 
         [HttpGet("info")]
-        public async Task<UserViewModel> GetUserInfo()
+        public async Task<IActionResult> GetUserInfo()
         {
-            var accessToken = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
-            if (string.IsNullOrEmpty(accessToken))
-                return null;
-            var user = await _userService.GetUserInfo(accessToken);
-            return user;
+            var token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            if (token == null)
+            {
+                return BadRequest();
+            }
+            var result = await _userService.GetUserInfo(token);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        //PUT https://localhost/users/id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromForm] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _userService.Update(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await _userService.GetUserById(id);
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }

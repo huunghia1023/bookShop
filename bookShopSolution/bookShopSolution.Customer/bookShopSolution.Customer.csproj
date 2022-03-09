@@ -32,4 +32,8 @@
     <ProjectReference Include="..\bookShopSolution.ViewModels\bookShopSolution.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\User\" />
+  </ItemGroup>
+
 </Project>

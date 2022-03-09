@@ -6,3 +6,4 @@ FluentValidation.AspNetCore
 IdentityServer4
 IdentityServer4.AccessTokenValidation
 IdentityServer4.AspNetIdentity
+IdentityModel
