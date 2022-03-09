@@ -66,4 +66,12 @@ export default class UserRequestModel {
     });
     return formData;
   }
+
+  GetDeleteUserFormData(Ids) {
+    var formData = new FormData();
+    Ids.forEach((id) => {
+      formData.append("ids", id);
+    });
+    return formData;
+  }
 }

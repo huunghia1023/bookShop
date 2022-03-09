@@ -46,7 +46,7 @@ const UserFormCreate = () => {
           listRole
         );
         let response = await userResquest.create(requestFormData, token);
-        if (response.status === 201) {
+        if (response.status === 200) {
           var responseData = response.data ? response.data : "";
           if (!responseData) {
             await Swal.fire({

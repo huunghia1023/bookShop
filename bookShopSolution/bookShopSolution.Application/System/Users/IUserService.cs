@@ -25,5 +25,9 @@ namespace bookShopSolution.Application.System.Users
         Task<ApiResult<UserVm>> GetUserInfo(string token);
 
         Task<ApiResult<UserVm>> GetUserById(Guid id);
+
+        Task<ApiResult<bool>> Delete(Guid id);
+
+        Task<ApiResult<List<string>>> DeleteMultiple(List<Guid> ids);
     }
 }

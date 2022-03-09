@@ -11,8 +11,6 @@ namespace bookShopSolution.ViewModels.System.Users
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
-        [DataType(DataType.Date)]
         public DateTime BirthDay { get; set; }
 
         public string Email { get; set; }
