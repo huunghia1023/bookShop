@@ -20,6 +20,7 @@ import Swal from "sweetalert2";
 import DataTable from "react-data-table-component";
 import styled, { keyframes } from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
+import UserRequestModel from "../../models/UserRequestModel";
 
 const columns = [
   {
@@ -103,13 +104,16 @@ const CustomLoader = () => (
 
 function UserTable() {
   const [users, setUsers] = useState([]);
-  const [keyword, setKeyword] = useState("a");
+  const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(true);
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [toggleCleared, setToggleCleared] = React.useState(false);
+  const [selectedData, setSelectedData] = useState([]);
+  const [toggleCleared, setToggleCleared] = useState(false);
+  const [totalRows, setTotalRows] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
   let navigate = useNavigate();
   useEffect(() => {
-    GetListUser();
+    GetListUser(1, 10);
   }, []);
 
   const addUser = () => {
@@ -122,20 +126,14 @@ function UserTable() {
     </Button>
   );
 
-  async function GetListUser() {
+  async function GetListUser(page, size) {
     try {
       setLoading(true);
       let token = sessionStorage.getItem("token");
       if (token) {
         var listUser = [];
-        let params = {
-          PageIndex: 1,
-          PageSize: 10,
-          Keyword: keyword,
-          BearerToken: token,
-        };
 
-        let response = await userResquest.getAll(params, token);
+        let response = await userResquest.getAll(page, size, keyword, token);
         if (response.status === 200) {
           var responseData = response.data ? response.data : "";
 
@@ -149,6 +147,8 @@ function UserTable() {
           }
           var results = responseData.results ? responseData.results : "";
           if (results) {
+            var totalRows = results.totalRecord ? results.totalRecord : 0;
+            setTotalRows(totalRows);
             var userResponse = results.items ? results.items : [];
             userResponse.forEach((element) => {
               var user = new UserModel();
@@ -187,15 +187,74 @@ function UserTable() {
     }
   }
 
-  const handleRowSelected = () => {
-    setSelectedRows(selectedRows);
+  const DeleteUser = async (ids) => {
+    try {
+      let token = sessionStorage.getItem("token");
+      if (token) {
+        let requestModel = new UserRequestModel();
+        let requestFormData = requestModel.GetDeleteUserFormData(ids);
+        let response = await userResquest.deleteMultiple(
+          requestFormData,
+          token
+        );
+        if (response.status === 200) {
+          var responseData = response.data ? response.data : "";
+          if (!responseData) {
+            await Swal.fire({
+              icon: "error",
+              title: "Error: Can not create user",
+              showConfirmButton: true,
+            });
+            return;
+          }
+          var results = responseData.results ? responseData.results : "";
+          var userData = users.filter(function (e) {
+            return (
+              results.filter(function (ae) {
+                return ae == e.id;
+              }).length == 0
+            );
+          });
+
+          setUsers(userData);
+          await Swal.fire({
+            icon: "success",
+            title: "Detete user success",
+          });
+        }
+      }
+    } catch (error) {
+      await Swal.fire({
+        icon: "error",
+        title: error,
+        showConfirmButton: true,
+      });
+    }
   };
 
-  const deleteAll = () => {
-    const rows = selectedRows.map((r) => r.name);
-    setToggleCleared(!toggleCleared);
-    alert("Deleted");
+  const handlePageChange = (page) => {
+    GetListUser(page, pageSize);
+  };
+
+  const handlePerRowsChange = async (newPageSize, page) => {
+    // call api
+    GetListUser(page, newPageSize);
+    //const response = await axios.get(`https://reqres.in/api/users?page=${page}&per_page=${newPerPage}&delay=1`);
+
+    //setData(response.data.data);
+    setPageSize(newPageSize);
+    setLoading(false);
+  };
+
+  const handleRowSelected = (state) => {
+    setSelectedData(state.selectedRows);
+  };
+
+  const deleteUser = async () => {
+    const ids = selectedData.map((r) => r.id);
     //delete
+    await DeleteUser(ids);
+    setToggleCleared(!toggleCleared);
   };
 
   return (
@@ -214,7 +273,7 @@ function UserTable() {
                 <InputGroup>
                   <Input
                     onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="search username or "
+                    placeholder="search username or phonenumer"
                   />
                   <Button onClick={GetListUser} color="success">
                     Search
@@ -234,12 +293,16 @@ function UserTable() {
             data={users}
             selectableRows
             pagination
+            paginationServer
+            paginationTotalRows={totalRows}
+            onChangeRowsPerPage={handlePerRowsChange}
+            onChangePage={handlePageChange}
             progressPending={loading}
             progressComponent={<CustomLoader />}
             highlightOnHover
             pointerOnHover
             actions={actions}
-            contextActions={contextActions(deleteAll)}
+            contextActions={contextActions(deleteUser)}
             onSelectedRowsChange={handleRowSelected}
             clearSelectedRows={toggleCleared}
           />

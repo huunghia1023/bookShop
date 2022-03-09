@@ -25,20 +25,21 @@ const UserFormUpdate = (props) => {
   const [email, setEmail] = useState("");
   const [admin, setAdmin] = useState(false);
   const [customer, setCustomer] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
   let params = useParams();
   let navigate = useNavigate();
   var userId = params.id ? params.id : "";
   useEffect(() => {
     if (!userId) {
-      GetUserInfo();
-    }
+      GetAccountInfo();
+    } else GetUserInfo(userId);
   }, []);
-  const GetUserInfo = async () => {
+  const GetAccountInfo = async () => {
     try {
       let token = sessionStorage.getItem("token");
       if (token) {
         var user = new UserModel();
-        let response = await userResquest.getInfo(token);
+        let response = await userResquest.getAccountInfo(token);
         if (response.status === 200) {
           var responseData = response.data ? response.data : "";
           if (!responseData) {
@@ -99,6 +100,77 @@ const UserFormUpdate = (props) => {
             showConfirmButton: true,
           });
         }
+      }
+    } catch (error) {
+      await Swal.fire({
+        icon: "error",
+        title: error,
+        showConfirmButton: true,
+      });
+    }
+  };
+  const GetUserInfo = async (id) => {
+    try {
+      let token = sessionStorage.getItem("token");
+      if (!token) {
+        navigate("/login", { replace: true });
+        return;
+      }
+      var user = new UserModel();
+      let response = await userResquest.getUserInfo(id, token);
+      if (response.status !== 200 || !response.data) {
+        await Swal.fire({
+          icon: "error",
+          title: "Can not get user in system",
+          showConfirmButton: true,
+        });
+        return;
+      }
+      //var responseData = response.data ? response.data : "";
+      // if (!responseData) {
+      //   await Swal.fire({
+      //     icon: "error",
+      //     title: "Error: Can not get account",
+      //     showConfirmButton: true,
+      //   });
+
+      //   return;
+      // }
+      var responseData = response.data;
+      var userResponse = responseData.results ? responseData.results : "";
+      if (userResponse) {
+        user.id = userResponse.id ? userResponse.id : "";
+        user.email = userResponse.email ? userResponse.email : "";
+        user.firstName = userResponse.firstName ? userResponse.firstName : "";
+        user.lastName = userResponse.lastName ? userResponse.lastName : "";
+        user.username = userResponse.userName ? userResponse.userName : "";
+        user.phoneNumber = userResponse.phoneNumber
+          ? userResponse.phoneNumber
+          : "";
+        if (userResponse.birthDay) {
+          var birth = new Date(userResponse.birthDay);
+          birth = birth
+            .toLocaleDateString("pt-br")
+            .split("/")
+            .reverse()
+            .join("-");
+          user.birthDay = birth;
+        }
+
+        user.emailVerified = userResponse.emailVerified
+          ? userResponse.emailVerified
+          : false;
+        user.roles = userResponse.roles ? userResponse.roles : "";
+
+        setEmailVerified(user.emailVerified);
+        setBirthDay(user.birthDay);
+        setEmail(user.email);
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setPhoneNumber(user.phoneNumber);
+        setUserName(user.username);
+        if (user.roles.includes("admin")) setAdmin(true);
+        if (user.roles.includes("customter")) setCustomer(true);
       }
     } catch (error) {
       await Swal.fire({

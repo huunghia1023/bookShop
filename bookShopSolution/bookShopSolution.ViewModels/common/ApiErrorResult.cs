@@ -9,6 +9,7 @@ namespace bookShopSolution.ViewModels.Common
     public class ApiErrorResult<T> : ApiResult<T>
     {
         public string[] ValidationErrors { get; set; }
+        public List<string> Errors { get; set; }
 
         public ApiErrorResult()
         {
@@ -24,6 +25,12 @@ namespace bookShopSolution.ViewModels.Common
         {
             IsSuccessed = false;
             ValidationErrors = validationErrors;
+        }
+
+        public ApiErrorResult(List<string> errors)
+        {
+            IsSuccessed = false;
+            Errors = errors;
         }
     }
 }
