@@ -1,6 +1,7 @@
 ﻿using bookShopSolution.ViewModels.Catalog.ProductImages;
 using bookShopSolution.ViewModels.Catalog.Products;
 using bookShopSolution.ViewModels.common;
+using bookShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace bookShopSolution.Application.Catalog.Products
     {
         Task<int> Create(ProductCreateRequest request);
 
-        Task<int> Update(ProductUpdateRequest request);
+        Task<int> Update(int productId, ProductUpdateRequest request);
 
         Task<int> Delete(int productId);
 
@@ -34,10 +35,12 @@ namespace bookShopSolution.Application.Catalog.Products
 
         Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request);
 
-        Task<List<ProductImageViewModel>> GetListImages(int productId);
+        Task<PagedResult<ProductImageViewModel>> GetListImages(int productId);
 
         Task<ProductImageViewModel> GetImageById(int imageId);
 
         Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
+
+        Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
     }
 }

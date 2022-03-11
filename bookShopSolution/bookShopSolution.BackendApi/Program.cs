@@ -1,3 +1,4 @@
+using bookShopSolution.Application.Catalog.Categories;
 using bookShopSolution.Application.Catalog.Products;
 using bookShopSolution.Application.Common;
 using bookShopSolution.Application.System.Users;
@@ -9,6 +10,7 @@ using bookShopSolution.ViewModels.System.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using IdentityServer4;
+using IdentityServer4.Configuration;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -42,6 +44,8 @@ builder.Services.AddDbContext<BookShopDbContext>(options =>
 // add DI
 builder.Services.AddTransient<IStorageService, FileStorageService>();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+
 builder.Services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
 builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
 builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
@@ -68,7 +72,8 @@ builder.Services.AddIdentity<AppUser, AppRole>() // use custome user and role
             .AddEntityFrameworkStores<BookShopDbContext>() // declare DbContext
                                                            // add default token provider used to generate tokens for reset password,
                                                            // change mail and telephone number, operations and for 2FA token generation
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddRoles<AppRole>();
 // add identity server
 builder.Services.AddIdentityServer(options => // custome event for identity server
 {
@@ -79,12 +84,13 @@ builder.Services.AddIdentityServer(options => // custome event for identity serv
 })
     //.AddInMemoryApiResources(Config.Apis) // using in-memory resources
     .AddInMemoryIdentityResources(Config.Ids)
+    .AddInMemoryApiResources(Config.Apis)
     .AddInMemoryPersistedGrants()
     .AddInMemoryClients(Config.Clients)
     .AddInMemoryApiScopes(Config.ApiScopes)
     .AddAspNetIdentity<AppUser>()// declare user using identity server
     .AddDeveloperSigningCredential()
-    .AddProfileService<ProfileService>(); ;
+    .AddProfileService<ProfileService>();
 
 // add authenticate config for using scheme jwt
 builder.Services.AddAuthentication(options =>
@@ -95,7 +101,12 @@ builder.Services.AddAuthentication(options =>
 }).AddJwtBearer(options =>
 {
     options.Authority = builder.Configuration["AuthorityUrl:value"];
-    options.TokenValidationParameters.ValidateAudience = false;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateAudience = false,
+        NameClaimType = "name",
+        RoleClaimType = "role"
+    };
 });
 
 //.AddJwtBearer(options =>
@@ -105,7 +116,10 @@ builder.Services.AddAuthentication(options =>
 //});
 
 // add author
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("admin"));
+});
 
 // add swagger
 builder.Services.AddSwaggerGen(c =>
@@ -129,10 +143,11 @@ builder.Services.AddSwaggerGen(c =>
         {
             Password = new OpenApiOAuthFlow
             {
+                //AuthorizationUrl = new Uri(builder.Configuration["AuthorityUrl:value"] + "/connect/authorize"),
                 TokenUrl = new Uri(builder.Configuration["AuthorityUrl:value"] + "/connect/token"),
                 Scopes = new Dictionary<string, string>
                 {
-                    //{ "api.BackendApi", "Backend API" }
+                    //{ "BackendApiScope", "Backend API Scope" }
                 },
             }
         }

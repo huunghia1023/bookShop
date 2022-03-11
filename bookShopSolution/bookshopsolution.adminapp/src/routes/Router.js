@@ -8,22 +8,40 @@ const FullLayout = lazy(() => import("../layouts/FullLayout.js"));
 const Login = lazy(() => import("../views/login/Login.js"));
 const Starter = lazy(() => import("../views/Starter.js"));
 const Account = lazy(() => import("../components/account/Account.js"));
-const ManageUser = lazy(() => import("../views/ManageUser"));
+const ManageUsers = lazy(() => import("../views/ManageUsers"));
+const ManageProducts = lazy(() => import("../views/ManageProducts"));
+const ManageCategories = lazy(() => import("../views/ManageCategories"));
 const UserFormUpdate = lazy(() =>
-  import("../components/manage-user/UserFormUpdate.js")
+  import("../components/manage-users/UserFormUpdate.js")
 );
 const UserFormCreate = lazy(() =>
-  import("../components/manage-user/UserFormCreate.js")
+  import("../components/manage-users/UserFormCreate.js")
 );
-const About = lazy(() => import("../views/About.js"));
-const Alerts = lazy(() => import("../views/ui/Alerts"));
-const Badges = lazy(() => import("../views/ui/Badges"));
-const Buttons = lazy(() => import("../views/ui/Buttons"));
-const Cards = lazy(() => import("../views/ui/Cards"));
-const Grid = lazy(() => import("../views/ui/Grid"));
-const Tables = lazy(() => import("../views/ui/Tables"));
-const Forms = lazy(() => import("../views/ui/Forms"));
-const Breadcrumbs = lazy(() => import("../views/ui/Breadcrumbs"));
+const ProductFormCreate = lazy(() =>
+  import("../components/manage-products/ProductFormCreate.js")
+);
+const ProductFormUpdate = lazy(() =>
+  import("../components/manage-products/ProductFormUpdate.js")
+);
+const ProductAssignCategory = lazy(() =>
+  import("../components/manage-products/ProductAssignCategory.js")
+);
+const ProductImageCreate = lazy(() =>
+  import("../components/manage-products/ProductImageCreate.js")
+);
+const ProductImageUpdate = lazy(() =>
+  import("../components/manage-products/ProductImageUpdate.js")
+);
+const ProductImageTable = lazy(() =>
+  import("../components/manage-products/ProductImageTable.js")
+);
+const CategoryFormUpdate = lazy(() =>
+  import("../components/manage-categories/CategoryFormUpdate.js")
+);
+const CategoryFormCreate = lazy(() =>
+  import("../components/manage-categories/CategoryFormCreate.js")
+);
+
 const ErrorPage = lazy(() => import("../views/ErrorPage"));
 
 /*****Routes******/
@@ -32,36 +50,103 @@ const ThemeRoutes = [
   {
     path: "/",
     element: <Login />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    children: [{ path: "/login/", element: <Navigate to="/" /> }],
+    children: [{ path: "login", element: <Login /> }],
   },
   {
     path: "/home",
     element: <FullLayout />,
+    children: [{ path: "", element: <Starter /> }],
+  },
+  {
+    path: "/manage-categories",
+    element: <FullLayout />,
     children: [
-      { path: "/home/", element: <Navigate to="/home/starter" /> },
-      { path: "/home/starter", element: <Starter /> },
-      { path: "/home/account", element: <Account /> },
       {
-        path: "/home/manage-user",
-        element: <ManageUser />,
+        path: "",
+        element: <ManageCategories />,
       },
-      { path: "/home/manage-user/add", element: <UserFormCreate /> },
-      { path: `/home/manage-user/edit/:id`, element: <UserFormUpdate /> },
-      { path: "/home/about", element: <About /> },
-      { path: "/home/alerts", element: <Alerts /> },
-      { path: "/home/badges", element: <Badges /> },
-      { path: "/home/buttons", element: <Buttons /> },
-      { path: "/home/cards", element: <Cards /> },
-      { path: "/home/grid", element: <Grid /> },
-      { path: "/home/table", element: <Tables /> },
-      { path: "/home/forms", element: <Forms /> },
-      { path: "/home/breadcrumbs", element: <Breadcrumbs /> },
+      { path: "add", element: <CategoryFormCreate /> },
+      {
+        path: ":id",
+        element: <CategoryFormUpdate />,
+      },
     ],
   },
+
+  {
+    path: "/account",
+    element: <FullLayout />,
+    children: [
+      {
+        path: "",
+        element: <Account />,
+      },
+    ],
+  },
+  {
+    path: "/manage-users",
+    element: <FullLayout />,
+    children: [
+      {
+        path: "",
+        element: <ManageUsers />,
+      },
+      { path: "add", element: <UserFormCreate /> },
+      { path: ":id", element: <UserFormUpdate /> },
+    ],
+  },
+  {
+    path: "/manage-products",
+    element: <FullLayout />,
+    children: [
+      {
+        path: "",
+        element: <ManageProducts />,
+      },
+      { path: "add", element: <ProductFormCreate /> },
+      {
+        path: ":idProduct",
+        element: <Navigate to="/manage-products/:idProduct" />,
+      },
+    ],
+  },
+  {
+    path: "/manage-products/:idProduct",
+    element: <FullLayout />,
+    children: [
+      {
+        path: "",
+        element: <ProductFormUpdate />,
+      },
+      {
+        path: "categories",
+        element: <ProductAssignCategory />,
+      },
+      {
+        path: "images",
+        element: <Navigate to="/manage-products/:idProduct/images" />,
+      },
+    ],
+  },
+  {
+    path: "/manage-products/:idProduct/images",
+    element: <FullLayout />,
+    children: [
+      {
+        path: "",
+        element: <ProductImageTable />,
+      },
+      {
+        path: ":idImage",
+        element: <ProductImageUpdate />,
+      },
+      {
+        path: "add",
+        element: <ProductImageCreate />,
+      },
+    ],
+  },
+
   {
     path: "/404",
     element: <ErrorPage />,

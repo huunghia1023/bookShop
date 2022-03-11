@@ -1,5 +1,6 @@
 ﻿using bookShopSolution.ViewModels.Catalog.IdentityServerResponses;
 using bookShopSolution.ViewModels.Catalog.User;
+using bookShopSolution.ViewModels.Common;
 using bookShopSolution.ViewModels.System.Users;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -18,7 +19,7 @@ namespace bookShopSolution.Customer.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<AuthenticateResponseViewModel> Authenticate(LoginRequest request)
+        public async Task<ApiResult<AuthenticateResponseViewModel>> Authenticate(LoginRequest request)
         {
             var responseViewModel = new AuthenticateResponseViewModel();
             var json = JsonConvert.SerializeObject(request);
@@ -28,8 +29,17 @@ namespace bookShopSolution.Customer.Services
             var response = await client.PostAsync("/api/users/authenticate", httpContent);
             if (response.IsSuccessStatusCode)
             {
+                var a = await response.Content.ReadAsStringAsync();
+                var body = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    var data = JsonConvert.DeserializeObject(body, typeof(AuthenticateResponseViewModel));
+                    return new ApiSuccessResult<AuthenticateResponseViewModel>(responseViewModel);
+                }
                 responseViewModel = await response.Content.ReadFromJsonAsync<AuthenticateResponseViewModel>();
             }
+
+            return new ApiSuccessResult<AuthenticateResponseViewModel>(responseViewModel);
             //var token = await response.Content.ReadAsStringAsync();
             //var tokenJson = new Object();
             //if (response.IsSuccessStatusCode)
@@ -43,7 +53,6 @@ namespace bookShopSolution.Customer.Services
             //        tokenJson = serializer.Deserialize(jsonTextReader);
             //    }
             //}
-            return responseViewModel;
         }
 
         public async Task<GetUserInfoViewModel> GetUserInfo(string accessToken)

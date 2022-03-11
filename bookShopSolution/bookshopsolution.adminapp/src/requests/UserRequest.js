@@ -38,7 +38,7 @@ const userResquest = {
     return AxiosClient.get(url, config);
   },
 
-  async getAll(pageIndex, pageSize, keyword, token) {
+  async getPaging(pageIndex, pageSize, keyword, token) {
     const url = `api/users/paging?PageIndex=${pageIndex}&PageSize=${pageSize}&Keyword=${keyword}`;
     config.headers.Authorization = "Bearer " + token;
     const response = await AxiosClient.get(url, config);

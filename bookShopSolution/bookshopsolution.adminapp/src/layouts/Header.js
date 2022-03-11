@@ -1,12 +1,9 @@
 import React from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Navbar,
   Collapse,
-  Nav,
-  NavItem,
   NavbarBrand,
-  UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
@@ -14,12 +11,13 @@ import {
   Button,
 } from "reactstrap";
 import Logo from "./Logo";
+import "./layout.css";
 import { ReactComponent as LogoWhite } from "../assets/images/logos/adminprowhite.svg";
 import user1 from "../assets/images/users/user4.jpg";
-
+import Swal from "sweetalert2";
 
 const Header = () => {
-  let navigate = useNavigate(); 
+  let navigate = useNavigate();
   const [isOpen, setIsOpen] = React.useState(false);
 
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
@@ -32,19 +30,29 @@ const Header = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
 
-  const OpenMyAccountPage = () => {
-      navigate("/home/account", {replace: true});
-  }
+  const OpenMyAccountPage = async () => {
+    var user = localStorage.getItem("user");
+    var userJson = JSON.parse(user);
+    if (userJson.id) {
+      navigate(`/manage-users/${userJson.id}`, { replace: true });
+      return;
+    }
+    await Swal.fire({
+      icon: "error",
+      title: "Error: Please login again",
+      showConfirmButton: true,
+    });
+    navigate("/login", { replace: true });
+  };
 
-  const Logout = ()=> {
-      try {
-          window.sessionStorage.removeItem("token");
-          // do somethings
-          navigate("/login", {replace: true});
-      } catch (error) {
-      
-      }
-  }
+  const Logout = () => {
+    try {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      // do somethings
+      navigate("/login", { replace: true });
+    } catch (error) {}
+  };
 
   return (
     <Navbar color="white" light expand="md" className="fix-header">
@@ -78,45 +86,19 @@ const Header = () => {
         </Button>
       </div>
 
-      <Collapse navbar isOpen={isOpen}>
-        <Nav className="me-auto" navbar>
-          <NavItem>
-            <Link to="/starter" className="nav-link">
-              Starter
-            </Link>
-          </NavItem>
-          <NavItem>
-            <Link to="/about" className="nav-link">
-              About
-            </Link>
-          </NavItem>
-          <UncontrolledDropdown inNavbar nav>
-            <DropdownToggle caret nav>
-              DD Menu
-            </DropdownToggle>
-            <DropdownMenu end>
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Reset</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-        </Nav>
+      <Collapse className="right-position" navbar isOpen={isOpen}>
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color="transparent">
             <img
               src={user1}
               alt="profile"
               className="rounded-circle"
-              width="30"
+              width="50"
             ></img>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem header>Info</DropdownItem>
             <DropdownItem onClick={OpenMyAccountPage}>My Account</DropdownItem>
             <DropdownItem divider />
-            <DropdownItem>My Balance</DropdownItem>
-            <DropdownItem>Inbox</DropdownItem>
             <DropdownItem onClick={Logout}>Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
