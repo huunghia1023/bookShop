@@ -1,4 +1,4 @@
-import UserFormUpdate from "../manage-user/UserFormUpdate";
+import UserFormUpdate from "../manage-users/UserFormUpdate";
 
 const Account = () => {
   return <UserFormUpdate />;

@@ -34,7 +34,22 @@ namespace bookShopSolution.BackendApi.IdentityServer
         public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-                new ApiScope("BackendApiScope", "Backend API Scope")
+            new ApiScope(){
+                Name = "BackendApiScope",
+                DisplayName = "Backend API Scope",
+                Enabled = true,
+                UserClaims =
+                {   JwtClaimTypes.Name,
+                    JwtClaimTypes.Email,
+                    JwtClaimTypes.Subject,
+                    JwtClaimTypes.Role,
+                    JwtClaimTypes.Address,
+                    JwtClaimTypes.Confirmation,
+                    JwtClaimTypes.EmailVerified,
+                    JwtClaimTypes.Id,
+                    JwtClaimTypes.Profile
+                }
+            },
         };
 
         public static IEnumerable<Client> Clients =>

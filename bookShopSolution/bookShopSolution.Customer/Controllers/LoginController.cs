@@ -35,12 +35,12 @@ namespace bookShopSolution.Customer.Controllers
             //var user = await this.GetUserInfo(responseModel.access_token);
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, responseModel.Email),
-                new Claim(ClaimTypes.Name, request.UserName),
-                new Claim(ClaimTypes.GivenName, responseModel.FirstName),
-                new Claim(ClaimTypes.Surname, responseModel.LastName),
-                new Claim(ClaimTypes.Role, responseModel.Roles),
-                new Claim(ClaimTypes.Expired, responseModel.expires_in.ToString())
+                //new Claim(ClaimTypes.Email, responseModel.Email),
+                //new Claim(ClaimTypes.Name, request.UserName),
+                //new Claim(ClaimTypes.GivenName, responseModel.FirstName),
+                //new Claim(ClaimTypes.Surname, responseModel.LastName),
+                //new Claim(ClaimTypes.Role, responseModel.Roles),
+                //new Claim(ClaimTypes.Expired, responseModel.expires_in.ToString())
             };
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -50,7 +50,7 @@ namespace bookShopSolution.Customer.Controllers
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = true
             };
-            HttpContext.Session.SetString("Token", responseModel.access_token);
+            //HttpContext.Session.SetString("Token", responseModel.access_token);
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 userPrincipal,
