@@ -4,53 +4,23 @@ import { Link, useLocation } from "react-router-dom";
 const navigation = [
   {
     title: "Dashboard",
-    href: "/home/starter",
+    href: "/home",
     icon: "bi bi-speedometer2",
   },
   {
-    title: "Manager User",
-    href: "/home/manage-user",
+    title: "Manage Users",
+    href: "/manage-users",
     icon: "bi bi-person-video2",
   },
   {
-    title: "Badges",
-    href: "/home/badges",
-    icon: "bi bi-patch-check",
+    title: "Manage Products",
+    href: "/manage-products",
+    icon: "bi bi-collection",
   },
   {
-    title: "Buttons",
-    href: "/home/buttons",
+    title: "Manage Categories",
+    href: "/manage-categories",
     icon: "bi bi-hdd-stack",
-  },
-  {
-    title: "Cards",
-    href: "/home/cards",
-    icon: "bi bi-card-text",
-  },
-  {
-    title: "Grid",
-    href: "/home/grid",
-    icon: "bi bi-columns",
-  },
-  {
-    title: "Table",
-    href: "/home/table",
-    icon: "bi bi-layout-split",
-  },
-  {
-    title: "Forms",
-    href: "/home/forms",
-    icon: "bi bi-textarea-resize",
-  },
-  {
-    title: "Breadcrumbs",
-    href: "/home/breadcrumbs",
-    icon: "bi bi-link",
-  },
-  {
-    title: "About",
-    href: "/home/about",
-    icon: "bi bi-people",
   },
 ];
 
@@ -88,15 +58,6 @@ const Sidebar = () => {
               </Link>
             </NavItem>
           ))}
-          {/* <Button
-            color="danger"
-            tag="a"
-            target="_blank"
-            className="mt-3"
-            href="https://www.wrappixel.com/templates/adminpro-react-redux-admin/?ref=33"
-          >
-            Upgrade To Pro
-          </Button> */}
         </Nav>
       </div>
     </div>

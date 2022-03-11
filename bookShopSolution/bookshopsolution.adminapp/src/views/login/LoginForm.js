@@ -4,8 +4,10 @@ import "./Login.css";
 import userResquest from "../../requests/UserRequest";
 import AuthenticateResponseModel from "../../models/AuthenticateResponseModel";
 import { useNavigate } from "react-router-dom";
+import UserModel from "../../models/UserModel";
+import Swal from "sweetalert2";
 
-function LoginForm() {
+function LoginForm(props) {
   let navigate = useNavigate();
   const [loginError, setLoginError] = useState({
     errors: [],
@@ -17,10 +19,68 @@ function LoginForm() {
   });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(true);
+
+  var user = new UserModel();
 
   const onErrorDismiss = () => setLoginError({ isError: false });
   const onSuccessDismiss = () => setLoginSuccess({ isSuccess: false });
+
+  const GetAccountInfo = async (token) => {
+    try {
+      // var user = new UserModel();
+      let response = await userResquest.getAccountInfo(token);
+      if (response.status === 200) {
+        var responseData = response.data ? response.data : "";
+        if (!responseData) {
+          await Swal.fire({
+            icon: "error",
+            title: "Error: Can not get account",
+            showConfirmButton: true,
+          });
+
+          return;
+        }
+        var userResponse = responseData.results ? responseData.results : "";
+        if (userResponse) {
+          user.id = userResponse.id ? userResponse.id : "";
+          user.email = userResponse.email ? userResponse.email : "";
+          user.firstName = userResponse.firstName ? userResponse.firstName : "";
+          user.lastName = userResponse.lastName ? userResponse.lastName : "";
+          user.username = userResponse.userName ? userResponse.userName : "";
+          user.phoneNumber = userResponse.phoneNumber
+            ? userResponse.phoneNumber
+            : "";
+          if (userResponse.birthDay) {
+            var birth = new Date(userResponse.birthDay);
+            birth = birth
+              .toLocaleDateString("pt-br")
+              .split("/")
+              .reverse()
+              .join("-");
+            user.birthDay = birth;
+          }
+
+          user.emailVerified = userResponse.emailVerified
+            ? userResponse.emailVerified
+            : false;
+          user.roles = userResponse.roles ? userResponse.roles : "";
+          user.id = userResponse.id ? userResponse.id : "";
+        }
+      } else {
+        await Swal.fire({
+          icon: "error",
+          title: "Can not get account info",
+          showConfirmButton: true,
+        });
+      }
+    } catch (error) {
+      await Swal.fire({
+        icon: "error",
+        title: error,
+        showConfirmButton: true,
+      });
+    }
+  };
 
   const Login = async (e) => {
     e.preventDefault();
@@ -57,9 +117,20 @@ function LoginForm() {
             ? results.token_type
             : "";
           if (responseModel.accessToken) {
-            window.sessionStorage.setItem("token", responseModel.accessToken);
-            setLoginSuccess({ messages: "Login Success!", isSuccess: true });
-
+            // get account info
+            await GetAccountInfo(responseModel.accessToken);
+            if (user.roles.includes("admin")) {
+              localStorage.setItem("token", responseModel.accessToken);
+              setLoginSuccess({ messages: "Login Success!", isSuccess: true });
+              localStorage.setItem("user", JSON.stringify(user));
+              return;
+            }
+            setLoginError({
+              errors: [
+                "Your account don't have permission to access this site",
+              ],
+              isError: true,
+            });
             return;
           }
         }
@@ -135,16 +206,6 @@ function LoginForm() {
             id="password"
             placeholder="Password"
           />
-        </FormGroup>
-
-        <FormGroup check>
-          <Label check>
-            <Input
-              type="checkbox"
-              onChange={(e) => setRememberMe(e.target.value)}
-            />{" "}
-            Remember me?
-          </Label>
         </FormGroup>
         <Button type="submit">Login</Button>
       </Form>
