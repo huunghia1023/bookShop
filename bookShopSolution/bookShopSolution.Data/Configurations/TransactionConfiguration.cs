@@ -17,10 +17,6 @@ namespace bookShopSolution.Data.Configurations
             builder.ToTable("Transactions");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
-            builder.Property(x => x.TransactionDate).IsRequired();
-            builder.Property(x => x.Amount).IsRequired();
-            builder.Property(x => x.Fee).IsRequired();
-            builder.Property(x => x.Status).IsRequired();
             builder.Property(x => x.Message).HasMaxLength(200);
             builder.Property(x => x.Provider).HasMaxLength(200);
             builder.HasOne(x => x.AppUser).WithMany(x => x.Transactions).HasForeignKey(x => x.UserId);

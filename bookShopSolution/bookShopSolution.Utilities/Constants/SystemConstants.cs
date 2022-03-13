@@ -12,5 +12,13 @@ namespace bookShopSolution.Utilities.Constants
         public const string BackendGrandType = "password";
         public const string BackendClientId = "swagger";
         public const string BackendClientSecret = "swagger_RookiesB4_BookShopBackendApi";
+        public const string CartSession = "CartSession";
+
+        public class AppSettings
+        {
+            public const string DefaultLanguageId = "DefaultLanguageId";
+            public const string Token = "Token";
+            public const string BaseAddress = "BaseAddress";
+        }
     }
 }

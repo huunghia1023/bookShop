@@ -22,57 +22,68 @@ import productResquest from "../../requests/ProductRequest";
 import ProductModel from "../../models/ProductModel";
 import categoryResquest from "../../requests/CategoryRequest";
 import CategorytModel from "../../models/CategoryModel";
+import { Markup } from "interweave";
 
 const columns = [
   {
     name: "Id",
     selector: (row) => row.id,
     sortable: true,
+    maxWidth: "20px",
   },
   {
     name: "Name",
     selector: (row) => row.name,
     sortable: true,
+    maxWidth: "300px",
   },
   {
     name: "Original Price",
     selector: (row) => row.originalPrice,
     sortable: true,
+    maxWidth: "100px",
   },
   {
     name: "Price",
     selector: (row) => row.price,
     sortable: true,
+    maxWidth: "100px",
   },
   {
     name: "Description",
-    selector: (row) => row.description,
+    selector: (row) => <Markup content={row.description} />,
     sortable: true,
+    maxWidth: "500px",
   },
   {
     name: "Details",
     selector: (row) => row.details,
     sortable: true,
+    maxWidth: "300px",
   },
   {
     name: "Date Created",
     selector: (row) => row.dateCreated,
     sortable: true,
+    maxWidth: "200px",
   },
   {
     name: "Stock",
     selector: (row) => row.stock,
     sortable: true,
+    maxWidth: "20px",
   },
   {
     name: "ViewCount",
     selector: (row) => row.viewCount,
     sortable: true,
+    maxWidth: "20px",
   },
   {
     name: "Status",
     selector: (row) => row.email,
     sortable: true,
+    maxWidth: "20px",
   },
   {
     cell: (row, index, column, id) => (

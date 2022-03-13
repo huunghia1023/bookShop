@@ -47,7 +47,15 @@ namespace bookShopSolution.Application.System.Users
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
                 return new ApiErrorResult<AuthenticateResponseViewModel>("Username or Password is invalid");
-
+            
+            if (request.IsFromAdmin)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                if (!roles.Where(x => x == "admin").Any())
+                {
+                    return new ApiErrorResult<AuthenticateResponseViewModel>("Access Denied");
+                }
+            }
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, request.RememberMe, true);
             if (!result.Succeeded)
                 return new ApiErrorResult<AuthenticateResponseViewModel>("Username or Password is invalid");
@@ -62,12 +70,20 @@ namespace bookShopSolution.Application.System.Users
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_config.GetSection("AuthorityUrl")["value"]);
             var response = await client.PostAsync("/connect/token", httpContent);
+            var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                var responseModel = await response.Content.ReadFromJsonAsync<AuthenticateResponseViewModel>();
-                return new ApiSuccessResult<AuthenticateResponseViewModel>(responseModel);
+                var myDeserializedObjList = (AuthenticateResponseViewModel)JsonConvert.DeserializeObject(body,
+                    typeof(AuthenticateResponseViewModel));
+
+                return new ApiSuccessResult<AuthenticateResponseViewModel>(myDeserializedObjList);
             }
             return new ApiErrorResult<AuthenticateResponseViewModel>("Login failed");
+
+            //var responseModel = await response.Content.ReadFromJsonAsync<AuthenticateResponseViewModel>();
+            //    return new ApiSuccessResult<AuthenticateResponseViewModel>(responseModel);
+            //}
+            //return new ApiErrorResult<AuthenticateResponseViewModel>("Login failed");
         }
 
         public async Task<ApiResult<string>> Register(RegisterRequest request)
@@ -96,11 +112,17 @@ namespace bookShopSolution.Application.System.Users
             {
                 var currentUser = await _userManager.FindByNameAsync(user.UserName);
                 var roles = request.Roles;
-                var isAddToRoleTable = await _userManager.AddToRolesAsync(currentUser, roles);
-                if (isAddToRoleTable.Succeeded)
-                    return new ApiSuccessResult<string>(currentUser.Id.ToString());
+                if (roles != null)
+                {
+                    await _userManager.AddToRolesAsync(currentUser, roles);
+                }
+                return new ApiSuccessResult<string>(currentUser.Id.ToString());
+
+            } else
+            {
+                return new ApiErrorResult<string>("Register failed");
             }
-            return new ApiErrorResult<string>("Register failed");
+            
         }
 
         public async Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(GetUserPagingRequest request)

@@ -7,7 +7,6 @@ import { Navigate } from "react-router-dom";
 
 function Login() {
   var token = localStorage.getItem("token");
-  console.log(token);
   if (token !== null) {
     // neu da login thi Redirect
     return <Navigate to="/home" />;

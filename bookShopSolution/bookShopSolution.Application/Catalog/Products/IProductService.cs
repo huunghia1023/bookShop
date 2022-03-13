@@ -42,5 +42,8 @@ namespace bookShopSolution.Application.Catalog.Products
         Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
 
         Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
+
+        Task<List<ProductViewModel>> GetFeaturedProduct(string languageId, int take);
+        Task<List<ProductViewModel>> GetLatestProduct(string languageId, int take);
     }
 }

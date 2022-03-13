@@ -9,7 +9,6 @@ namespace bookShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -20,6 +19,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("paging")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
         {
             var products = await _productService.GetAllPaging(request);
@@ -42,6 +42,22 @@ namespace bookShopSolution.BackendApi.Controllers
                 return BadRequest("Can not find product");
             }
             return Ok(product);
+        }
+
+        [HttpGet("featured/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFeatured(int take, string languageId)
+        {
+            var products = await _productService.GetFeaturedProduct(languageId, take);
+            return Ok(products);
+        }
+
+        [HttpGet("latest/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLatest(int take, string languageId)
+        {
+            var products = await _productService.GetLatestProduct(languageId, take);
+            return Ok(products);
         }
 
         [HttpPost]

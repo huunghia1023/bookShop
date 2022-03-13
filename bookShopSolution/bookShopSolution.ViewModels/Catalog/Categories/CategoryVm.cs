@@ -15,5 +15,6 @@ namespace bookShopSolution.ViewModels.Catalog.Categories
         public string LanguageId { get; set; }
         public string SeoAlias { get; set; }
         public bool IsShowOnHome { get; set; }
+        public int? ParentId { get; set; }
     }
 }

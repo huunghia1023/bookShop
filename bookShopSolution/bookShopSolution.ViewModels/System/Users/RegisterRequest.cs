@@ -20,6 +20,6 @@ namespace bookShopSolution.ViewModels.System.Users
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public string PhoneNumber { get; set; }
-        public IEnumerable<string> Roles { get; set; }
+        public IEnumerable<string>? Roles { get; set; }
     }
 }

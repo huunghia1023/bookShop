@@ -48,7 +48,7 @@ const columns = [
   },
   {
     cell: (row, index, column, id) => (
-      <Link to={`~/${row.ImageId}`} replace>
+      <Link to={`${row.ImageId}`} replace>
         <Button variant="contained" color="warning">
           Edit
         </Button>

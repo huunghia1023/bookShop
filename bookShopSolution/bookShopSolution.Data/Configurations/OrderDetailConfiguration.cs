@@ -17,8 +17,6 @@ namespace bookShopSolution.Data.Configurations
             builder.HasKey(x => new { x.ProductId, x.OrderId });
             builder.HasOne(o => o.Order).WithMany(x => x.OrderDetails).HasForeignKey(x => x.OrderId);
             builder.HasOne(p => p.Product).WithMany(x => x.OrderDetails).HasForeignKey(x => x.ProductId);
-            builder.Property(x => x.Quantity).IsRequired().HasDefaultValue(0);
-            builder.Property(x => x.Price).IsRequired();
         }
     }
 }

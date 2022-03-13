@@ -17,11 +17,8 @@ namespace bookShopSolution.Data.Configurations
             builder.ToTable("Promotions");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
-            builder.Property(x => x.FromDay).IsRequired();
-            builder.Property(x => x.Today).IsRequired();
-            builder.Property(x => x.Status).HasDefaultValue(Status.Active);
-            builder.Property(x => x.PromotionName).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.Description).IsRequired().HasMaxLength(200);
+            builder.Property(x => x.PromotionName).HasMaxLength(200);
+            builder.Property(x => x.Description).HasMaxLength(200);
         }
     }
 }
