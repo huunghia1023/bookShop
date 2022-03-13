@@ -1,5 +1,7 @@
+using bookShopSolution.ViewModels.System.Users;
 using bookShopSolution.WebApp.LocalizationResources;
 using bookShopSolution.WebApp.Services;
+using FluentValidation.AspNetCore;
 using LazZiya.ExpressLocalization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
@@ -20,7 +22,9 @@ var cultures = new[]
 };
 
 // Add services to the container.
-builder.Services.AddControllersWithViews().AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(ops =>
+builder.Services.AddControllersWithViews()
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>())
+    .AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(ops =>
 {
     // When using all the culture providers, the localization process will
     // check all available culture providers in order to detect the request culture.

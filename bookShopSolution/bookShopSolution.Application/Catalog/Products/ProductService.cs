@@ -218,23 +218,18 @@ namespace bookShopSolution.Application.Catalog.Products
         {
             var product = await _context.Products.FindAsync(productId);
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == languageId);
-
-            //var query = from p in _context.Products
-            //            join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-            //            select new { p, pt };
-            //var product = await query.FirstOrDefaultAsync(p => p.p.Id == productId && p.pt.LanguageId == languageId);
-            //if (product == null) throw new BookShopException($"Can not find product");
             var categories = await (from c in _context.Categories
                                     join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
                                     join pic in _context.ProductInCategories on c.Id equals pic.CategoryId
                                     where pic.ProductId == productId && ct.LanguageId == languageId
                                     select ct.CategoryName).ToListAsync();
+            var image = _context.ProductImages.Where(x => x.ProductId == productId && x.IsDefault == true).FirstOrDefault();
             var productModel = new ProductViewModel()
             {
+                Id = product.Id,
                 DateCreated = product.DateCreated,
                 Description = productTranslation.Description,
                 Details = productTranslation.Details,
-                LanguageId = productTranslation.LanguageId,
                 OriginalPrice = product.OriginalPrice,
                 Price = product.Price,
                 Name = productTranslation.ProductName,
@@ -243,8 +238,9 @@ namespace bookShopSolution.Application.Catalog.Products
                 SeoTitle = productTranslation.SeoTitle,
                 Stock = product.Stock,
                 ViewCount = product.ViewCount,
-                Id = product.Id,
-                Categories = categories
+                Thumbnail = image.ImagePath,
+                IsFeatured = product.IsFeatured,
+                LikeCount = product.LikeCount
             };
             return productModel;
         }
@@ -462,7 +458,7 @@ namespace bookShopSolution.Application.Catalog.Products
                 IsFeatured = x.p.IsFeatured,
                 LikeCount = x.p.LikeCount,
                 Thumbnail = x.pi.ImagePath
-            }).Distinct().OrderByDescending(x=>x.DateCreated).ToListAsync();
+            }).Distinct().OrderByDescending(x => x.DateCreated).ToListAsync();
             return data;
         }
     }

@@ -112,11 +112,17 @@ namespace bookShopSolution.Application.System.Users
             {
                 var currentUser = await _userManager.FindByNameAsync(user.UserName);
                 var roles = request.Roles;
-                var isAddToRoleTable = await _userManager.AddToRolesAsync(currentUser, roles);
-                if (isAddToRoleTable.Succeeded)
-                    return new ApiSuccessResult<string>(currentUser.Id.ToString());
+                if (roles != null)
+                {
+                    await _userManager.AddToRolesAsync(currentUser, roles);
+                }
+                return new ApiSuccessResult<string>(currentUser.Id.ToString());
+
+            } else
+            {
+                return new ApiErrorResult<string>("Register failed");
             }
-            return new ApiErrorResult<string>("Register failed");
+            
         }
 
         public async Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(GetUserPagingRequest request)
