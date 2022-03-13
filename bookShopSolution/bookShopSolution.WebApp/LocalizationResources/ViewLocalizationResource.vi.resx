@@ -129,9 +129,29 @@
     <value>Tất cả Danh Mục</value>
     <comment>Header</comment>
   </data>
+  <data name="By clicking the 'Sign Up' button, you confirm that you accept our" xml:space="preserve">
+    <value>Bằng cách click vào nút đăng kí, bạn chấp nhận</value>
+    <comment>Login form</comment>
+  </data>
   <data name="categoryUrl" xml:space="preserve">
     <value>danh-muc</value>
     <comment>Layout</comment>
+  </data>
+  <data name="Don't have account" xml:space="preserve">
+    <value>Chưa có tài khoản</value>
+    <comment>Login form</comment>
+  </data>
+  <data name="Forgot Password" xml:space="preserve">
+    <value>Quên mật khẩu</value>
+    <comment>/account/vi/register</comment>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Khách</value>
+    <comment>Header</comment>
+  </data>
+  <data name="Have an account" xml:space="preserve">
+    <value>Bạn đã có tài khoản</value>
+    <comment>Register form</comment>
   </data>
   <data name="Hot Item" xml:space="preserve">
     <value>Sách Nổi Bật</value>
@@ -168,6 +188,18 @@
   <data name="Quick Shop" xml:space="preserve">
     <value>Mua Ngay</value>
     <comment>/home featured product quick shop model</comment>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Đăng Kí</value>
+    <comment>/account/vi/register</comment>
+  </data>
+  <data name="Remember me" xml:space="preserve">
+    <value>Nhớ mật khẩu</value>
+    <comment>Login form</comment>
+  </data>
+  <data name="Terms of use and Privacy Policy" xml:space="preserve">
+    <value>Điều kiện và điều khoản</value>
+    <comment>Login form</comment>
   </data>
   <data name="View Cart" xml:space="preserve">
     <value>Giỏ Hàng</value>

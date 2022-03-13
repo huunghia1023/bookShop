@@ -46,7 +46,7 @@ namespace bookShopSolution.WebApp.Services
             return data;
         }
 
-        public async Task<ProductViewModel> GetProductDetail(int id, string languageId)
+        public async Task<ProductViewModel> GetProductById(int id, string languageId)
         {
             var url = $"/api/products/{id}/{languageId}";
             var data = await GetAsync<ProductViewModel>(url);

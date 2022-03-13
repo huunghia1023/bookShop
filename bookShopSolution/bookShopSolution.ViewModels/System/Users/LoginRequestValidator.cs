@@ -11,8 +11,7 @@ namespace bookShopSolution.ViewModels.System.Users
     {
         public LoginRequestValidator()
         {
-            RuleFor(x => x.UserName).NotEmpty().WithMessage("Username is required");
-            RuleFor(x => x.Password).NotEmpty().WithMessage("Password is required").MinimumLength(6).WithMessage("Password has at least 6 characters");
+            RuleFor(x => x.Password).MinimumLength(6).WithMessage("Password has at least 6 characters");
         }
     }
 }

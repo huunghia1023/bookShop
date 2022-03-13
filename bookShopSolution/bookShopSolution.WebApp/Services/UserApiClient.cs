@@ -35,5 +35,23 @@ namespace bookShopSolution.WebApp.Services
 
             return JsonConvert.DeserializeObject<ApiErrorResult<AuthenticateResponseViewModel>>(await response.Content.ReadAsStringAsync());
         }
+
+        public async Task<ApiResult<string>> Register(RegisterRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var url = $"/api/Users";
+            var response = await client.PostAsync(url, httpContent);
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(body);
+            }
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<string>>(body);
+        }
     }
 }

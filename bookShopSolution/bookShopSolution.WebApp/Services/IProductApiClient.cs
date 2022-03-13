@@ -12,8 +12,8 @@ namespace bookShopSolution.WebApp.Services
 
         Task<List<ProductViewModel>> GetLatestProduct(int take, string languageId);
 
-        Task<ProductViewModel> GetProductDetail(int id, string languageId);
-
         Task<PagedResult<ProductImageViewModel>> GetAllImages(int id);
+
+        Task<ProductViewModel> GetProductById(int id, string languageId);
     }
 }

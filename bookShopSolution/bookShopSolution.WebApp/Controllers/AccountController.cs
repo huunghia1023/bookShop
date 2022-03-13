@@ -66,5 +66,56 @@ namespace bookShopSolution.WebApp.Controllers
                         CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+
+                return View(request);
+
+            }
+            var response = await _userApiClient.Register(request);
+            if (!response.IsSuccessed)
+            {
+                ModelState.AddModelError("", response.Message);
+                return View();
+            }
+            var loginResult = await _userApiClient.Login(new LoginRequest()
+            {
+                UserName = request.UserName,
+                Password = request.Password,
+                RememberMe = true,
+                IsFromAdmin = false
+            });
+            var claims = new List<Claim>
+            {
+                new Claim("Expire", loginResult.Results.expires_in.ToString()),
+                new Claim("Token", loginResult.Results.access_token),
+                new Claim(ClaimTypes.Name, request.UserName),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                IsPersistent = false
+            };
+            HttpContext.Session.SetString("Token", loginResult.Results.access_token);
+            await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
