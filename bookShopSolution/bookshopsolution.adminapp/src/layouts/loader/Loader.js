@@ -3,10 +3,11 @@ import "./loader.scss";
 import { Spinner } from "reactstrap";
 
 const Loader = () => (
-  <div className="fallback-spinner">
-    <div className="loading">
-      <Spinner color="primary" />
-    </div>
-  </div>
+  <Spinner size="sm" type="grow" color="warning" />
+  // <div className="fallback-spinner">
+  //   <div className="loading">
+
+  //   </div>
+  // </div>
 );
 export default Loader;

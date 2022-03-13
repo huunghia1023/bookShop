@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace bookShopSolution.Data.Entities
 {
-    public class AppUser: IdentityUser<Guid>
+    public class AppUser : IdentityUser<Guid>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -15,5 +15,6 @@ namespace bookShopSolution.Data.Entities
         public List<Transaction> Transactions { get; set; }
         public List<Cart> Carts { get; set; }
         public List<Order> Orders { get; set; }
+        public List<Review> Reviews { get; set; }
     }
 }

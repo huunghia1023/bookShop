@@ -16,11 +16,11 @@ namespace bookShopSolution.Data.Configurations
             builder.ToTable("ProductTranslations");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
-            builder.Property(x => x.ProductName).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.Description).IsRequired().HasMaxLength(200);
-            builder.Property(x => x.Details).IsRequired().HasMaxLength(200);
+            builder.Property(x => x.ProductName).HasMaxLength(200);
+            builder.Property(x => x.Description);
+            builder.Property(x => x.Details);
             builder.Property(x => x.SeoDescription).HasMaxLength(200);
-            builder.Property(x => x.SeoTitle).HasMaxLength(100);
+            builder.Property(x => x.SeoTitle).HasMaxLength(200);
             builder.Property(x => x.SeoAlias).HasMaxLength(200);
             builder.HasOne(x => x.Product).WithMany(x => x.ProductTranslations).HasForeignKey(x => x.ProductId);
             builder.HasOne(x => x.Language).WithMany(x => x.ProductTranslations).HasForeignKey(x => x.LanguageId);

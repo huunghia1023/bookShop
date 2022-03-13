@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { Form, FormGroup, Label, Input, Button, Alert } from "reactstrap";
+import React, { useEffect, useState } from "react";
+import {
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Alert,
+  Spinner,
+} from "reactstrap";
 import "./Login.css";
 import userResquest from "../../requests/UserRequest";
 import AuthenticateResponseModel from "../../models/AuthenticateResponseModel";
@@ -7,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import UserModel from "../../models/UserModel";
 import Swal from "sweetalert2";
 
-function LoginForm(props) {
+function LoginForm() {
   let navigate = useNavigate();
   const [loginError, setLoginError] = useState({
     errors: [],
@@ -19,27 +27,19 @@ function LoginForm(props) {
   });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   var user = new UserModel();
 
-  const onErrorDismiss = () => setLoginError({ isError: false });
+  const onErrorDismiss = () => setLoginError({ errors: [], isError: false });
   const onSuccessDismiss = () => setLoginSuccess({ isSuccess: false });
 
   const GetAccountInfo = async (token) => {
-    try {
-      // var user = new UserModel();
-      let response = await userResquest.getAccountInfo(token);
-      if (response.status === 200) {
-        var responseData = response.data ? response.data : "";
-        if (!responseData) {
-          await Swal.fire({
-            icon: "error",
-            title: "Error: Can not get account",
-            showConfirmButton: true,
-          });
-
-          return;
-        }
+    // var user = new UserModel();
+    let response = await userResquest.getAccountInfo(token);
+    if (response.status === 200) {
+      var responseData = response.data ? response.data : "";
+      if (responseData) {
         var userResponse = responseData.results ? responseData.results : "";
         if (userResponse) {
           user.id = userResponse.id ? userResponse.id : "";
@@ -66,25 +66,20 @@ function LoginForm(props) {
           user.roles = userResponse.roles ? userResponse.roles : "";
           user.id = userResponse.id ? userResponse.id : "";
         }
-      } else {
-        await Swal.fire({
-          icon: "error",
-          title: "Can not get account info",
-          showConfirmButton: true,
-        });
       }
-    } catch (error) {
-      await Swal.fire({
-        icon: "error",
-        title: error,
-        showConfirmButton: true,
-      });
     }
+  };
+
+  const CloseAlert = () => {
+    window.setTimeout(() => {
+      setLoginError({ errors: [], isError: false });
+    }, 2000);
   };
 
   const Login = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       let response = await userResquest.authenticate(
         JSON.stringify({
           UserName: username,
@@ -99,6 +94,7 @@ function LoginForm(props) {
             isError: true,
             errors: ["Can not get authenticate"],
           });
+          //CloseAlert();
           return;
         }
         var results = responseData.results ? responseData.results : "";
@@ -123,6 +119,8 @@ function LoginForm(props) {
               localStorage.setItem("token", responseModel.accessToken);
               setLoginSuccess({ messages: "Login Success!", isSuccess: true });
               localStorage.setItem("user", JSON.stringify(user));
+              setLoading(false);
+              navigate("/home", { replace: true });
               return;
             }
             setLoginError({
@@ -131,6 +129,8 @@ function LoginForm(props) {
               ],
               isError: true,
             });
+            setLoading(false);
+            //CloseAlert();
             return;
           }
         }
@@ -139,8 +139,10 @@ function LoginForm(props) {
           errors: ["Can not get access token"],
           isError: true,
         });
+        setLoading(false);
       }
     } catch (error) {
+      setLoading(false);
       if (error.response.data.message) {
         setLoginError({
           isError: true,
@@ -155,23 +157,26 @@ function LoginForm(props) {
           isError: true,
           errors: messageErrors,
         });
-        console.log(loginError);
       } else {
         setLoginError({
           isError: true,
           errors: error,
         });
       }
+      //CloseAlert();
     }
   };
-  if (loginSuccess.isSuccess) {
-    navigate("/home", { replace: true });
-  }
+
+  // if (loginSuccess.isSuccess) {
+  //   setLoading(false);
+  //   navigate("/home", { replace: true });
+  // }
   return (
     <React.Fragment>
       <Form onSubmit={Login}>
-        {loginError.errors.map((el) => (
+        {loginError.errors.map((el, index) => (
           <Alert
+            key={index}
             color="danger"
             isOpen={loginError.isError}
             toggle={onErrorDismiss}
@@ -207,7 +212,14 @@ function LoginForm(props) {
             placeholder="Password"
           />
         </FormGroup>
-        <Button type="submit">Login</Button>
+        <Button type="submit">
+          Login
+          {loading ? (
+            <Spinner size="sm" className="loading-custom" color="warning" />
+          ) : (
+            ""
+          )}
+        </Button>
       </Form>
     </React.Fragment>
   );
