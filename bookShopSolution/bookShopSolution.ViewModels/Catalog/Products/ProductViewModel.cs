@@ -1,4 +1,5 @@
 ﻿using bookShopSolution.ViewModels.Catalog.Categories;
+using bookShopSolution.ViewModels.Catalog.ProductImages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,9 @@ namespace bookShopSolution.ViewModels.Catalog.Products
         public string SeoTitle { get; set; }
         public string LanguageId { get; set; }
         public string SeoAlias { get; set; }
+        public int LikeCount { get; set; }
+        public bool IsFeatured { get; set; }
         public List<string> Categories { get; set; } = new List<string>();
+        public string Thumbnail { get; set; }
     }
 }

@@ -81,7 +81,7 @@ namespace bookShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("6a768150-5de9-48d0-97df-9d1542314334"),
-                            ConcurrencyStamp = "df7c5614-0753-44f2-8642-4fd78aea661c",
+                            ConcurrencyStamp = "11a7992a-2cd4-435e-9731-fc8df5d79398",
                             Description = "Adminstrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -89,7 +89,7 @@ namespace bookShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("7297be39-5977-40af-9aaf-4b57b21b24c1"),
-                            ConcurrencyStamp = "3ca67596-4d03-4b65-be39-e3a21cbf663f",
+                            ConcurrencyStamp = "1c6bd67a-1839-4ec5-9326-b1cf3b135d93",
                             Description = "Customer role",
                             Name = "customer",
                             NormalizedName = "customer"
@@ -167,7 +167,7 @@ namespace bookShopSolution.Data.Migrations
                             Id = new Guid("bab47f6a-ca90-4fc2-a18d-484060a1332b"),
                             AccessFailedCount = 0,
                             BirthDay = new DateTime(1999, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "f70c30d8-e3b8-4161-bb79-d70edb7f5532",
+                            ConcurrencyStamp = "82f794a0-4593-4bc9-86bf-998c3fd84971",
                             Email = "nguyengiahuunghia118@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Nghia",
@@ -175,7 +175,7 @@ namespace bookShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "nguyengiahuunghia118@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFN91n04EOaFMuIHFZ21vwzLhgE/BIcLPctyFnq+tRB1F1x50todycuZYVEW8tEszw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMNaFbu9VNJxBoXgLjwQz1TYKnCzvxLTfaS2HcxI6R2L97codHBrimk9ryTBX3qkSw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -186,7 +186,7 @@ namespace bookShopSolution.Data.Migrations
                             Id = new Guid("5f9ec3c0-6f07-4103-ab0a-413f961c8b06"),
                             AccessFailedCount = 0,
                             BirthDay = new DateTime(1999, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "52a0e180-7e58-4dce-ba08-43148a5bf9d6",
+                            ConcurrencyStamp = "987bb12b-9358-47c5-9ed8-a510576acc05",
                             Email = "nghiadev@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Nghia",
@@ -194,7 +194,7 @@ namespace bookShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "nghiadev@gmail.com",
                             NormalizedUserName = "customer",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIReOlAJ3nPSdQlZUNrq1QSU88UDHA9UP7XIYUA5GsPpxavWh7qEcEAlUL2jX4aWuQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKFoEsqRQZH1HMM9Ebv9/ENpaxOdPahKGV+xNQ8DQv2v3vlJxg62vAhCXXp2Zm09Qw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -400,14 +400,12 @@ namespace bookShopSolution.Data.Migrations
                         .HasColumnType("varchar(5)");
 
                     b.Property<bool>("IsDefault")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
+                        .HasColumnType("bit");
 
                     b.Property<string>("LanguageName")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -437,9 +435,7 @@ namespace bookShopSolution.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("OrderDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 8, 15, 0, 53, 638, DateTimeKind.Local).AddTicks(1228));
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ShipAddress")
                         .IsRequired()
@@ -448,9 +444,9 @@ namespace bookShopSolution.Data.Migrations
 
                     b.Property<string>("ShipEmail")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(200)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("ShipName")
                         .IsRequired()
@@ -487,9 +483,7 @@ namespace bookShopSolution.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("ProductId", "OrderId");
 
@@ -509,6 +503,15 @@ namespace bookShopSolution.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("OriginalPrice")
                         .HasColumnType("decimal(18,2)");
 
@@ -516,14 +519,10 @@ namespace bookShopSolution.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Stock")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.Property<int>("ViewCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -554,17 +553,13 @@ namespace bookShopSolution.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDefault")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("SortOrder")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("ImageId");
 
@@ -598,13 +593,11 @@ namespace bookShopSolution.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LanguageId")
                         .IsRequired()
@@ -615,8 +608,8 @@ namespace bookShopSolution.Data.Migrations
 
                     b.Property<string>("ProductName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("SeoAlias")
                         .IsRequired()
@@ -630,8 +623,8 @@ namespace bookShopSolution.Data.Migrations
 
                     b.Property<string>("SeoTitle")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -677,13 +670,11 @@ namespace bookShopSolution.Data.Migrations
 
                     b.Property<string>("PromotionName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Today")
                         .HasColumnType("datetime2");
@@ -691,6 +682,45 @@ namespace bookShopSolution.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Promotions", (string)null);
+                });
+
+            modelBuilder.Entity("bookShopSolution.Data.Entities.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Star")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Review");
                 });
 
             modelBuilder.Entity("bookShopSolution.Data.Entities.Transaction", b =>
@@ -970,6 +1000,25 @@ namespace bookShopSolution.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("bookShopSolution.Data.Entities.Review", b =>
+                {
+                    b.HasOne("bookShopSolution.Data.Entities.AppUser", "AppUser")
+                        .WithMany("Reviews")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("bookShopSolution.Data.Entities.Product", "Product")
+                        .WithMany("ProductReviews")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("bookShopSolution.Data.Entities.Transaction", b =>
                 {
                     b.HasOne("bookShopSolution.Data.Entities.AppUser", "AppUser")
@@ -1038,6 +1087,8 @@ namespace bookShopSolution.Data.Migrations
 
                     b.Navigation("Orders");
 
+                    b.Navigation("Reviews");
+
                     b.Navigation("Transactions");
                 });
 
@@ -1069,6 +1120,8 @@ namespace bookShopSolution.Data.Migrations
                     b.Navigation("ProductImages");
 
                     b.Navigation("ProductInCategories");
+
+                    b.Navigation("ProductReviews");
 
                     b.Navigation("ProductTranslations");
                 });

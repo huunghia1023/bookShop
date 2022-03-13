@@ -33,7 +33,7 @@ namespace bookShopSolution.Application.Catalog.Categories
                         LanguageId = request.LanguageId,
                         SeoAlias = request.SeoAlias,
                         SeoDescription = request.SeoDescription,
-                        SeoTitle = request.SeoTitle
+                        SeoTitle = request.SeoTitle,
                     }
                 }
             };
@@ -90,7 +90,8 @@ namespace bookShopSolution.Application.Catalog.Categories
                 IsShowOnHome = category.IsShowOnHome,
                 SeoAlias = categoryTranslation.SeoAlias,
                 SeoDescription = categoryTranslation.SeoDescription,
-                SeoTitle = categoryTranslation.SeoTitle
+                SeoTitle = categoryTranslation.SeoTitle,
+                ParentId = category.ParentId
             };
             return categoryModel;
         }

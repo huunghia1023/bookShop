@@ -16,8 +16,7 @@ namespace bookShopSolution.Data.Configurations
             builder.ToTable("Languages");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).IsRequired().HasMaxLength(5).IsUnicode(false);
-            builder.Property(x => x.LanguageName).IsRequired().HasMaxLength(30);
-            builder.Property(x => x.IsDefault).HasDefaultValue(true);
+            builder.Property(x => x.LanguageName).IsRequired().HasMaxLength(50);
         }
     }
 }

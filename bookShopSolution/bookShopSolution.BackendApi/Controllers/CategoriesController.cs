@@ -1,5 +1,6 @@
 ﻿using bookShopSolution.Application.Catalog.Categories;
 using bookShopSolution.ViewModels.Catalog.Categories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll(string languageId)
         {
             var category = await _categoryService.GetAll(languageId);
@@ -24,6 +26,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("{categoryId}/{languageId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int categoryId, string languageId)
         {
             var category = await _categoryService.GetCategoryById(categoryId, languageId);

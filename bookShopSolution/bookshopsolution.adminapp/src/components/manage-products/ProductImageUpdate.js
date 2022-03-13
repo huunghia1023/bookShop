@@ -21,13 +21,13 @@ const ProductImageUpdate = () => {
   const [order, setOrder] = useState(1);
   const [image, setImage] = useState("");
 
-  let { productIdParam, imageIdParam } = useParams();
+  let { idProduct, idImage } = useParams();
 
   let navigate = useNavigate();
 
   const UpdateImage = async () => {
     try {
-      if (!productIdParam || !imageIdParam) {
+      if (!idProduct || !idImage) {
         await Swal.fire({
           icon: "error",
           title: "Error: Product or image not found",
@@ -46,24 +46,24 @@ const ProductImageUpdate = () => {
           image
         );
         let response = await ImageResquest.update(
-          productIdParam,
-          imageIdParam,
+          idProduct,
+          idImage,
           requestData,
           token
         );
-        if (response.status === 201) {
+        if (response.status === 200) {
           await Swal.fire({
             icon: "success",
             title: "Update image success",
           });
-          navigate(`/manage-products/${productIdParam}/images`, {
+          navigate(`/manage-products/${idProduct}/images`, {
             replace: true,
           });
           return;
         }
         await Swal.fire({
           icon: "error",
-          title: "Error: Upload image Failed",
+          title: "Error: Update image Failed",
           showConfirmButton: true,
         });
       }

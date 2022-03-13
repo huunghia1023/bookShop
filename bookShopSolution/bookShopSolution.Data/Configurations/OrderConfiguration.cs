@@ -16,11 +16,10 @@ namespace bookShopSolution.Data.Configurations
             builder.ToTable("Orders");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
-            builder.Property(x => x.OrderDate).IsRequired().HasDefaultValue(DateTime.Now);
-            builder.Property(x => x.ShipName).IsRequired().HasMaxLength(200);
-            builder.Property(x => x.ShipEmail).IsUnicode(false).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.ShipAddress).IsRequired().HasMaxLength(200);
-            builder.Property(x => x.ShipPhoneNumber).IsRequired().HasMaxLength(15);
+            builder.Property(x => x.ShipName).HasMaxLength(200);
+            builder.Property(x => x.ShipEmail).IsUnicode(false).HasMaxLength(200);
+            builder.Property(x => x.ShipAddress).HasMaxLength(200);
+            builder.Property(x => x.ShipPhoneNumber).HasMaxLength(15);
             builder.HasOne(x => x.AppUser).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
         }
     }
