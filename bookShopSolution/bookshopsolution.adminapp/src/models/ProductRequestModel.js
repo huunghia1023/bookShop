@@ -10,7 +10,8 @@ export default class ProductRequestModel {
     SeoTitle,
     SeoAlias,
     LanguageId,
-    Thumbnail
+    Thumbnail,
+    IsFeatured
   ) {
     this.Description = Description;
     this.ProductName = ProductName;
@@ -23,6 +24,7 @@ export default class ProductRequestModel {
     this.SeoAlias = SeoAlias;
     this.LanguageId = LanguageId;
     this.Thumbnail = Thumbnail;
+    this.IsFeatured = IsFeatured;
   }
 
   GetCreateProductFormData(
@@ -36,7 +38,8 @@ export default class ProductRequestModel {
     SeoTitle,
     SeoAlias,
     LanguageId,
-    Thumbnail
+    Thumbnail,
+    IsFeatured
   ) {
     var formData = new FormData();
     formData.append("Description", Description);
@@ -51,6 +54,7 @@ export default class ProductRequestModel {
     formData.append("LanguageId", LanguageId);
     formData.append("SeoAlias", SeoAlias);
     formData.append("ThumbnailImage", Thumbnail);
+    formData.append("IsFeatured", IsFeatured);
 
     return formData;
   }

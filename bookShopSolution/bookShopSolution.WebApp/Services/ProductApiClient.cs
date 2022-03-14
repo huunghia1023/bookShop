@@ -1,4 +1,5 @@
-﻿using bookShopSolution.ViewModels.Catalog.ProductImages;
+﻿using bookShopSolution.Utilities.Constants;
+using bookShopSolution.ViewModels.Catalog.ProductImages;
 using bookShopSolution.ViewModels.Catalog.Products;
 using bookShopSolution.ViewModels.common;
 
@@ -16,6 +17,15 @@ namespace bookShopSolution.WebApp.Services
             _httpClientFactory = httpClientFactory;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
+        }
+
+        public async Task AddViewCount(int productId)
+        {
+            var url = $"/api/products/{productId}/addview";
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+            await client.GetAsync(url);
         }
 
         public async Task<PagedResult<ProductImageViewModel>> GetAllImages(int id)
