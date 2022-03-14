@@ -62,6 +62,7 @@ namespace bookShopSolution.BackendApi.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [Authorize]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -176,6 +177,17 @@ namespace bookShopSolution.BackendApi.Controllers
                 return BadRequest(result);
             }
             return Ok(result);
+        }
+
+        [HttpGet("{id}/addview")]
+        public async Task<IActionResult> AddViewCount(int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _productService.AddViewCount(id);
+
+            return Ok();
         }
     }
 }

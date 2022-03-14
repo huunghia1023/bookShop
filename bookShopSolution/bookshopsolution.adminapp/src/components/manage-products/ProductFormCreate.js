@@ -28,6 +28,7 @@ const ProductFormCreate = () => {
   const [seoAlias, setSeoAlias] = useState("");
   const [languageId, setLanguageId] = useState("en");
   const [thumbnail, setThumbnail] = useState("");
+  const [isFeatured, setIsFeatured] = useState(true);
 
   const CreateProduct = async () => {
     try {
@@ -45,7 +46,8 @@ const ProductFormCreate = () => {
           seoTitle,
           seoAlias,
           languageId,
-          thumbnail
+          thumbnail,
+          isFeatured
         );
         let response = await productResquest.create(requestFormData, token);
         if (response.status === 201) {
@@ -177,6 +179,16 @@ const ProductFormCreate = () => {
                 id="addproductthumbnail"
                 name="addproductthumbnail"
                 type="file"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="addproductfeature">Featured</Label>
+              <Input
+                checked={isFeatured}
+                onChange={(e) => setIsFeatured(e.target.checked)}
+                id="addproductfeature"
+                name="addproductfeature"
+                type="checkbox"
               />
             </FormGroup>
             <br />

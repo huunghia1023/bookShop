@@ -15,5 +15,7 @@ namespace bookShopSolution.WebApp.Services
         Task<PagedResult<ProductImageViewModel>> GetAllImages(int id);
 
         Task<ProductViewModel> GetProductById(int id, string languageId);
+
+        Task AddViewCount(int productId);
     }
 }
