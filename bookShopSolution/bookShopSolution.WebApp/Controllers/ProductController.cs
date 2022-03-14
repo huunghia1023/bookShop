@@ -19,6 +19,7 @@ namespace bookShopSolution.WebApp.Controllers
         public async Task<IActionResult> Detail(int id, string culture)
         {
             var productDetail = await _productApiClient.GetProductById(id, culture);
+            await _productApiClient.AddViewCount(id);
             var productImages = await _productApiClient.GetAllImages(id);
             return View(new ProductDetailViewModel()
             {

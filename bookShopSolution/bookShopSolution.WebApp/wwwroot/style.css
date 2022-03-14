@@ -3511,7 +3511,6 @@ Version:1.0
 .shopping-cart .table td {
     vertical-align: middle;
     border-top: 1px solid #eee;
-    padding: 30px;
 }
 
 .shopping-summery tbody .price {
@@ -4247,7 +4246,7 @@ Version:1.0
 .pagination {
     text-align: left;
     margin: 50px 0 0 0;
-    display: block;
+    /*display: block;*/
 }
 
     .pagination.center {
@@ -5812,3 +5811,7 @@ Version:1.0
 /*=============================
 	End Footer CSS
 ===============================*/
+.btn-remove {
+    background-color: transparent;
+    border: none;
+}

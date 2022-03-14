@@ -51,11 +51,9 @@ namespace bookShopSolution.WebApp.Services
                                 .HttpContext
                                .Session
                                .GetString(SystemConstants.AppSettings.Token);
-                
-                
+
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             }
-
 
             var response = await client.GetAsync(url);
             var body = await response.Content.ReadAsStringAsync();

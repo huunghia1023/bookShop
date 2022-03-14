@@ -20,5 +20,6 @@ namespace bookShopSolution.ViewModels.Catalog.Products
         public string LanguageId { get; set; }
         public string SeoAlias { get; set; }
         public IFormFile ThumbnailImage { get; set; }
+        public bool IsFeatured { get; set; }
     }
 }

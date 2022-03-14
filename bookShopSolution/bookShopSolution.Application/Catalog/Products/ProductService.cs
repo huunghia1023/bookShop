@@ -59,6 +59,9 @@ namespace bookShopSolution.Application.Catalog.Products
                 DateCreated = DateTime.Now,
                 OriginalPrice = request.OriginalPrice,
                 Stock = request.Stock,
+                IsFeatured = request.IsFeatured,
+                DateModified = DateTime.Now,
+                
                 ProductTranslations = new List<ProductTranslation>()
                 {
                     new ProductTranslation()
@@ -240,7 +243,8 @@ namespace bookShopSolution.Application.Catalog.Products
                 ViewCount = product.ViewCount,
                 Thumbnail = image.ImagePath,
                 IsFeatured = product.IsFeatured,
-                LikeCount = product.LikeCount
+                LikeCount = product.LikeCount,
+                LanguageId = languageId
             };
             return productModel;
         }
@@ -267,6 +271,7 @@ namespace bookShopSolution.Application.Catalog.Products
             productTranslation.SeoDescription = request.SeoDescription;
             productTranslation.SeoTitle = request.SeoTitle;
             productTranslation.SeoAlias = request.SeoAlias;
+            
             // save image
             //if (request.ThumbnailImage != null)
             //{
