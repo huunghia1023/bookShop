@@ -32,6 +32,7 @@ namespace bookShopSolution.Data.EF
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
             modelBuilder.ApplyConfiguration(new AppUserConfiguration());
             modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new ReviewConfiguration());
 
             // config identity
             modelBuilder.Entity<AppUser>(b =>
@@ -180,5 +181,6 @@ namespace bookShopSolution.Data.EF
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }

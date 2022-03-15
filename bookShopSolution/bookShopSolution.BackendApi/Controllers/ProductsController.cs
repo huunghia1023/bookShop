@@ -9,6 +9,7 @@ namespace bookShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -34,6 +35,7 @@ namespace bookShopSolution.BackendApi.Controllers
         //}
 
         [HttpGet("{productId}/{languageId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {
             var product = await _productService.GetProductById(productId, languageId);
@@ -52,6 +54,14 @@ namespace bookShopSolution.BackendApi.Controllers
             return Ok(products);
         }
 
+        [HttpGet("viewest/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTopView(int take, string languageId)
+        {
+            var products = await _productService.GetTopViewProduct(languageId, take);
+            return Ok(products);
+        }
+
         [HttpGet("latest/{languageId}/{take}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetLatest(int take, string languageId)
@@ -62,7 +72,6 @@ namespace bookShopSolution.BackendApi.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        [Authorize]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -139,6 +148,26 @@ namespace bookShopSolution.BackendApi.Controllers
             }
             var imageCreated = await _productService.GetImageById(imageIdCreated);
             return CreatedAtAction(nameof(GetImageById), new { id = imageIdCreated }, imageCreated);
+        }
+
+        [HttpPost("{productId}/rating")]
+        public async Task<IActionResult> Rating(int productId, [FromBody] RatingRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _productService.Rating(productId, request);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{productId}/rating/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetRatingById(int productId, int take)
+        {
+            var reviews = await _productService.GetAllRating(productId, take);
+            return Ok(reviews);
         }
 
         [HttpPut("{productId}/images/{imageId}")]

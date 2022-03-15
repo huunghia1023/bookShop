@@ -8,6 +8,7 @@ namespace bookShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="admin")]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;

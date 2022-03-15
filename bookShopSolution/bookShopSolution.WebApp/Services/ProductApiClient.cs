@@ -1,7 +1,11 @@
 ﻿using bookShopSolution.Utilities.Constants;
 using bookShopSolution.ViewModels.Catalog.ProductImages;
+using bookShopSolution.ViewModels.Catalog.ProductRatings;
 using bookShopSolution.ViewModels.Catalog.Products;
 using bookShopSolution.ViewModels.common;
+using bookShopSolution.ViewModels.Common;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace bookShopSolution.WebApp.Services
 {
@@ -49,9 +53,18 @@ namespace bookShopSolution.WebApp.Services
             return data;
         }
 
+        public async Task<List<ProductViewModel>> GetTopViewProduct(int take, string languageId)
+        {
+            var url = $"/api/products/viewest/{languageId}/{take}";
+            var data = await GetListAsync<ProductViewModel>(url);
+            return data;
+        }
+
         public async Task<PagedResult<ProductViewModel>> GetProductByCategory(GetManageProductPagingRequest request)
         {
-            var url = $"/api/products/paging?pageindex={request.PageIndex}&pagesize={request.PageSize}&keyword={request.Keyword}&languageid={request.LanguageId}&categoryid={request.CategoryId}";
+            var url = $"/api/products/paging?pageIndex={request.PageIndex}" +
+                $"&pageSize={request.PageSize}" +
+                $"&keyword={request.Keyword}&languageId={request.LanguageId}&categoryId={request.CategoryId}";
             var data = await GetAsync<PagedResult<ProductViewModel>>(url);
             return data;
         }
@@ -60,6 +73,29 @@ namespace bookShopSolution.WebApp.Services
         {
             var url = $"/api/products/{id}/{languageId}";
             var data = await GetAsync<ProductViewModel>(url);
+            return data;
+        }
+
+        public async Task<ApiResult<bool>> Rating(int productId, RatingRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/products/{productId}/rating", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+
+        public async Task<List<ProductRatingViewModel>> GetAllRating(int id, int take)
+        {
+            var url = $"/api/products/{id}/rating/{take}";
+            var data = await GetAsync<List<ProductRatingViewModel>>(url);
             return data;
         }
     }

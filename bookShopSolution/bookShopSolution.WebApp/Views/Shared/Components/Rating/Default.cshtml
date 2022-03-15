@@ -1,0 +1,133 @@
+﻿@model ProductReviewViewModel
+@{
+    ViewData["Title"] = "Default";
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+<div class="card mt-3">
+    <h3 style="margin-bottom: 30px">Review And Rating</h3>
+
+    @{
+
+
+        <h3 class="text-center">@ViewData["ratingResult"]</h3>
+
+        if (User.Identity.IsAuthenticated)
+        {
+            <form method="POST" asp-action="Rating" asp-controller="Product">
+                <div class="rating-component">
+
+                    <div class="stars-box">
+                        <i class="star fa fa-star" title="1 star" data-message="Poor" data-value="1"></i>
+                        <i class="star fa fa-star" title="2 stars" data-message="Too bad" data-value="2"></i>
+                        <i class="star fa fa-star" title="3 stars" data-message="Average quality" data-value="3"></i>
+                        <i class="star fa fa-star" title="4 stars" data-message="Nice" data-value="4"></i>
+                        <i class="star fa fa-star" title="5 stars" data-message="very good qality" data-value="5"></i>
+                    </div>
+                    <input id="product_rating_start" type="hidden" name="star" class="form-control">
+                    @{
+                        var productId = ViewContext.RouteData.Values["id"];
+                        TempData["productId"] = productId;
+
+                    }
+
+                </div>
+
+                <div class="feedback-tags">
+                    <div class="tags-container" data-tag-set="1">
+                        <div class="question-tag">
+                            Why was this book so bad?
+                        </div>
+                    </div>
+                    <div class="tags-container" data-tag-set="2">
+                        <div class="question-tag">
+                            Why was this book so bad?
+                        </div>
+
+                    </div>
+
+                    <div class="tags-container" data-tag-set="3">
+                        <div class="question-tag">
+                            Why was this book good?
+                        </div>
+                    </div>
+                    <div class="tags-container" data-tag-set="4">
+                        <div class="question-tag">
+                            Why was this book good?
+                        </div>
+                    </div>
+
+                    <div class="tags-container" data-tag-set="5">
+                        <div class="make-compliment">
+                            <div class="compliment-container">
+                                Give a compliment
+                                <i class="far fa-smile-wink"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tags-box">
+                        <div class="input-group mb-3">
+                            <input type="text" class="tag form-control" name="comment" id="inlineFormInputName" placeholder="please enter your review" aria-label="please enter your review">
+                            <input type="hidden" name="product_id" value="{{ $products->id }}" />
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit">Comment</button>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                    </div>
+
+                </div>
+            </form>
+
+
+        }
+        else
+        {
+            <button class="btn" style="width: 200px;margin: auto;" type="submit" localize-content><a href="/@culture/Account/Login"><localize>Login to rating</localize></a></button>
+            
+        }
+    }
+    @foreach (var item in @Model.Reviews)
+    {
+        <div class="col-md-12">
+            <div class="media g-mb-30 media-comment">
+                <img class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Image Description">
+                <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                    <div class="g-mb-15">
+                        <h5 class="h5 g-color-gray-dark-v1 mb-0">@item.UserName</h5>
+                        <span class="g-color-gray-dark-v4 g-font-size-12">@item.DateCreated</span>
+                    </div>
+
+                    <p>
+                        @item.Comment
+                    </p>
+
+                    <ul class="list-inline d-sm-flex my-0">
+                        <li class="list-inline-item g-mr-20">
+                            <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#!">
+                                <i class="fa fa-thumbs-up g-pos-rel g-top-1 g-mr-3"></i>
+                                178
+                            </a>
+                        </li>
+                        <li class="list-inline-item g-mr-20">
+                            <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#!">
+                                <i class="fa fa-thumbs-down g-pos-rel g-top-1 g-mr-3"></i>
+                                34
+                            </a>
+                        </li>
+                        <li class="list-inline-item ml-auto">
+                            <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#!">
+                                <i class="fa fa-reply g-pos-rel g-top-1 g-mr-3"></i>
+                                Reply
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+
+</div>

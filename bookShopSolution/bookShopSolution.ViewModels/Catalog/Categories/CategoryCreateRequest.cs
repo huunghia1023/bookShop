@@ -9,10 +9,10 @@ namespace bookShopSolution.ViewModels.Catalog.Categories
     public class CategoryCreateRequest
     {
         public string Name { get; set; }
-        public string SeoDescription { get; set; }
-        public string SeoTitle { get; set; }
+        public string? SeoDescription { get; set; }
+        public string? SeoTitle { get; set; }
         public string LanguageId { get; set; }
-        public string SeoAlias { get; set; }
+        public string? SeoAlias { get; set; }
         public bool IsShowOnHome { get; set; }
     }
 }

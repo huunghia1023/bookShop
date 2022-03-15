@@ -9,5 +9,6 @@ namespace bookShopSolution.WebApp.Models
         public List<CategoryVm> categories { get; set; }
         public List<ProductViewModel> productByCategory { get; set; }
         public List<ProductViewModel> latestProducts { get; set; }
+        public List<ProductViewModel> topViewProducts { get; set; }
     }
 }

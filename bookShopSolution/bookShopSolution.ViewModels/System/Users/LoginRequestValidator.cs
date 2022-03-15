@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace bookShopSolution.ViewModels.System.Users
 {
-    public class LoginRequestValidator : AbstractValidator<LoginRequest>
+    public class ProductCreateRequestValidator : AbstractValidator<LoginRequest>
     {
-        public LoginRequestValidator()
+        public ProductCreateRequestValidator()
         {
             RuleFor(x => x.Password).MinimumLength(6).WithMessage("Password has at least 6 characters");
         }

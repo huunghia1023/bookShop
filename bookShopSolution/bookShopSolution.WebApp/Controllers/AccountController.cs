@@ -34,7 +34,7 @@ namespace bookShopSolution.WebApp.Controllers
             if (response.Results == null)
             {
                 ModelState.AddModelError("", "Login failed");
-                return View();
+                return View(ModelState);
             }
             var claims = new List<Claim>
             {
@@ -78,9 +78,7 @@ namespace bookShopSolution.WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-
                 return View(request);
-
             }
             var response = await _userApiClient.Register(request);
             if (!response.IsSuccessed)
