@@ -21,7 +21,7 @@ const UserFormUpdate = (props) => {
   const [firstName, setFirstName] = useState("");
   const [userName, setUserName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [birthDay, setBirthDay] = useState("");
+  const [birthDay, setBirthDay] = useState(new Date().toISOString());
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [admin, setAdmin] = useState(false);
@@ -31,24 +31,8 @@ const UserFormUpdate = (props) => {
   let navigate = useNavigate();
   var userIdParam = params.id ? params.id : "";
 
-  var userStr = localStorage.getItem("user");
-  var userStored = JSON.parse(userStr);
-
   useEffect(() => {
-    if (userStored.id === userIdParam) {
-      setEmailVerified(userStored.emailVerified);
-      setBirthDay(userStored.birthDay);
-      setEmail(userStored.email);
-      setFirstName(userStored.firstName);
-      setLastName(userStored.lastName);
-      setPhoneNumber(userStored.phoneNumber);
-      setUserName(userStored.username);
-      setUserId(userStored.id);
-      if (userStored.roles.includes("admin")) setAdmin(true);
-      if (userStored.roles.includes("customter")) setCustomer(true);
-    } else {
-      GetUserInfo(userIdParam);
-    }
+    GetUserInfo(userIdParam);
   }, []);
 
   const GetUserInfo = async (id) => {
@@ -104,7 +88,7 @@ const UserFormUpdate = (props) => {
         setUserName(user.username);
         setUserId(user.id);
         if (user.roles.includes("admin")) setAdmin(true);
-        if (user.roles.includes("customter")) setCustomer(true);
+        if (user.roles.includes("customer")) setCustomer(true);
       }
     } catch (error) {
       await Swal.fire({
@@ -117,6 +101,15 @@ const UserFormUpdate = (props) => {
 
   const UpdateUser = async () => {
     try {
+      if (!birthDay) {
+        await Swal.fire({
+          icon: "error",
+          title: "Error: Please select birthday",
+          showConfirmButton: true,
+        });
+
+        return;
+      }
       var userId = params.id ? params.id : "";
       if (!userId) {
         //navigate("/home/manage-user", { replace: true });
@@ -127,15 +120,23 @@ const UserFormUpdate = (props) => {
         var listRole = [];
         if (admin) listRole.push("admin");
         if (customer) listRole.push("customer");
-        let requestModel = new UserRequestModel();
-        let requestFormData = requestModel.GetUpdateUserFormData(
-          firstName,
-          lastName,
-          phoneNumber,
-          email,
-          birthDay,
-          listRole
-        );
+        //let requestModel = new UserRequestModel();
+        // let requestFormData = requestModel.GetUpdateUserFormData(
+        //   firstName,
+        //   lastName,
+        //   phoneNumber,
+        //   email,
+        //   birthDay,
+        //   listRole
+        // );
+        var requestFormData = {
+          firstName: firstName,
+          lastName: lastName,
+          phoneNumber: phoneNumber,
+          email: email,
+          birthDay: birthDay,
+          roles: listRole,
+        };
         let response = await userResquest.update(
           userId,
           requestFormData,
@@ -246,7 +247,7 @@ const UserFormUpdate = (props) => {
               <Input
                 type="checkbox"
                 checked={admin}
-                onChange={(e) => setAdmin(e.target.value)}
+                onChange={(e) => setAdmin(e.target.checked)}
               />
               <Label check>Admin</Label>
             </FormGroup>
@@ -254,7 +255,7 @@ const UserFormUpdate = (props) => {
               <Input
                 type="checkbox"
                 checked={customer}
-                onChange={(e) => setCustomer(e.target.value)}
+                onChange={(e) => setCustomer(e.target.checked)}
               />
               <Label check>Customer</Label>
             </FormGroup>

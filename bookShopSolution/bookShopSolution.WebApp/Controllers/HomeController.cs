@@ -31,14 +31,8 @@ namespace bookShopSolution.WebApp.Controllers
             {
                 featuredProducts = await _productApiClient.GetFeaturedProduct(10, culture),
                 categories = await _categoryApiClient.GetAllCategory(culture),
-                latestProducts = await _productApiClient.GetLatestProduct(9, culture)
-                //productByCategory = await _productApiClient.GetProductByCategory(new GetManageProductPagingRequest {
-                //    CategoryId = 2,
-                //    Keyword = "",
-                //    LanguageId = culture,
-                //    PageIndex = 1,
-                //    PageSize = 8
-                //})
+                latestProducts = await _productApiClient.GetLatestProduct(9, culture),
+                topViewProducts = await _productApiClient.GetTopViewProduct(3, culture)
             };
             return View(viewModel);
         }

@@ -78,6 +78,14 @@ function LoginForm() {
 
   const Login = async (e) => {
     e.preventDefault();
+    // validate
+    if (!username || !password || password.length < 6) {
+      setLoginError({
+        isError: true,
+        errors: ["Username or Password invalid"],
+      });
+      return;
+    }
     try {
       setLoading(true);
       let response = await userResquest.authenticate(
@@ -113,24 +121,10 @@ function LoginForm() {
             ? results.token_type
             : "";
           if (responseModel.accessToken) {
-            // get account info
-            await GetAccountInfo(responseModel.accessToken);
-            if (user.roles.includes("admin")) {
-              localStorage.setItem("token", responseModel.accessToken);
-              setLoginSuccess({ messages: "Login Success!", isSuccess: true });
-              localStorage.setItem("user", JSON.stringify(user));
-              setLoading(false);
-              navigate("/home", { replace: true });
-              return;
-            }
-            setLoginError({
-              errors: [
-                "Your account don't have permission to access this site",
-              ],
-              isError: true,
-            });
+            localStorage.setItem("token", responseModel.accessToken);
+            setLoginSuccess({ messages: "Login Success!", isSuccess: true });
             setLoading(false);
-            //CloseAlert();
+            navigate("/home", { replace: true });
             return;
           }
         }
@@ -151,7 +145,7 @@ function LoginForm() {
       } else if (error.response.data.errors) {
         let messageErrors = [];
         for (const [key, value] of Object.entries(error.response.data.errors)) {
-          messageErrors.push(key + ": " + value);
+          messageErrors.push(value);
         }
         setLoginError({
           isError: true,

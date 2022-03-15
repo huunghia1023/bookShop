@@ -26,7 +26,7 @@ $(".rating-component .stars-box .star").on("click", function () {
     }
     $('.rating-component .starrate .ratevalue').val(msg);
 
-
+    $("#product_rating_start").val(onStar);
 
     $(".fa-smile-wink").show();
 
@@ -71,15 +71,11 @@ $(".feedback-tags  ").on("click", function () {
     }
 });
 
-
-
 $(".compliment-container .fa-smile-wink").on("click", function () {
     $(this).fadeOut("slow", function () {
         $(".list-of-compliment").fadeIn();
     });
 });
-
-
 
 $(".done").on("click", function () {
     $(".rating-component").hide();

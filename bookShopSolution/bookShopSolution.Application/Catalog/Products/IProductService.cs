@@ -1,4 +1,5 @@
 ﻿using bookShopSolution.ViewModels.Catalog.ProductImages;
+using bookShopSolution.ViewModels.Catalog.ProductRatings;
 using bookShopSolution.ViewModels.Catalog.Products;
 using bookShopSolution.ViewModels.common;
 using bookShopSolution.ViewModels.Common;
@@ -44,6 +45,13 @@ namespace bookShopSolution.Application.Catalog.Products
         Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
 
         Task<List<ProductViewModel>> GetFeaturedProduct(string languageId, int take);
+
         Task<List<ProductViewModel>> GetLatestProduct(string languageId, int take);
+
+        Task<List<ProductViewModel>> GetTopViewProduct(string languageId, int take);
+
+        Task<ApiResult<bool>> Rating(int productId, RatingRequest request);
+
+        Task<List<ProductRatingViewModel>> GetAllRating(int productId, int take);
     }
 }

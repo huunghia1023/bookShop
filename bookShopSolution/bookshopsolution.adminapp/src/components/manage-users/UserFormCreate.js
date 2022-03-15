@@ -13,6 +13,12 @@ import userResquest from "../../requests/UserRequest";
 import { useState } from "react";
 import UserRequestModel from "../../models/UserRequestModel";
 import Swal from "sweetalert2";
+import { roles } from "aria-query";
+import {
+  validateConfirmPassword,
+  validateEmail,
+  validatePassword,
+} from "../../utils/validate";
 
 const UserFormCreate = () => {
   const [lastName, setLastName] = useState("");
@@ -28,23 +34,80 @@ const UserFormCreate = () => {
 
   const createUser = async () => {
     try {
+      if (!birthDay) {
+        await Swal.fire({
+          icon: "error",
+          title: "Error: Please select birthday",
+          showConfirmButton: true,
+        });
+
+        return;
+      }
+      if (!userName) {
+        await Swal.fire({
+          icon: "error",
+          title: "Error: Username invalid",
+          showConfirmButton: true,
+        });
+
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        await Swal.fire({
+          icon: "error",
+          title: "Error: Email invalid",
+          showConfirmButton: true,
+        });
+
+        return;
+      }
+      if (!validatePassword(password)) {
+        await Swal.fire({
+          icon: "error",
+          title: "Error: Password invalid",
+          showConfirmButton: true,
+        });
+
+        return;
+      }
+      if (!validateConfirmPassword(confirmPassword, password)) {
+        await Swal.fire({
+          icon: "error",
+          title: "Error: Confirm password invalid",
+          showConfirmButton: true,
+        });
+
+        return;
+      }
       let token = localStorage.getItem("token");
       if (token) {
         var listRole = [];
         if (admin) listRole.push("admin");
         if (customer) listRole.push("customer");
-        let requestModel = new UserRequestModel();
-        let requestFormData = requestModel.GetCreateUserFormData(
-          lastName,
-          userName,
-          phoneNumber,
-          firstName,
-          confirmPassword,
-          password,
-          email,
-          birthDay,
-          listRole
-        );
+        //let requestModel = new UserRequestModel();
+        // let requestFormData = requestModel.GetCreateUserFormData(
+        //   lastName,
+        //   userName,
+        //   phoneNumber,
+        //   firstName,
+        //   confirmPassword,
+        //   password,
+        //   email,
+        //   birthDay,
+        //   listRole
+        // );
+        var requestFormData = {
+          lastName: lastName,
+          userName: userName,
+          phoneNumber: phoneNumber,
+          firstName: firstName,
+          confirmPassword: confirmPassword,
+          password: password,
+          email: email,
+          birthDay: birthDay,
+          listRole: listRole,
+        };
         let response = await userResquest.create(requestFormData, token);
         if (response.status === 200) {
           var responseData = response.data ? response.data : "";
@@ -67,7 +130,9 @@ const UserFormCreate = () => {
     } catch (error) {
       await Swal.fire({
         icon: "error",
-        title: error,
+        title: error.response.data.message
+          ? error.response.data.message
+          : "Failed",
         showConfirmButton: true,
       });
     }
@@ -114,7 +179,7 @@ const UserFormCreate = () => {
                 onChange={(e) => setBirthDay(e.target.value.toString())}
                 id="adduserbirthDay"
                 name="adduserbirthDay"
-                type="text"
+                type="date"
               />
             </FormGroup>
             <FormGroup>

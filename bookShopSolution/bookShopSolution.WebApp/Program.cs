@@ -23,7 +23,7 @@ var cultures = new[]
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>())
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProductCreateRequestValidator>())
     .AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(ops =>
 {
     // When using all the culture providers, the localization process will

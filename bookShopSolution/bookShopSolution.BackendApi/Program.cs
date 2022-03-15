@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,7 +65,7 @@ builder.Services.AddTransient<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>
 //builder.Services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
 
 // Add services to the container.
-builder.Services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+builder.Services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProductCreateRequestValidator>());
 
 // Identity Server 4
 // add identity EF
@@ -93,6 +94,7 @@ builder.Services.AddIdentityServer(options => // custome event for identity serv
     .AddProfileService<ProfileService>();
 
 // add authenticate config for using scheme jwt
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -104,8 +106,8 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateAudience = false,
-        NameClaimType = "name",
-        RoleClaimType = "role"
+        //NameClaimType = "name",
+        //RoleClaimType = "role"
     };
 });
 
@@ -116,10 +118,10 @@ builder.Services.AddAuthentication(options =>
 //});
 
 // add author
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("admin"));
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireClaim("role", "admin"));
+//});
 
 // add swagger
 builder.Services.AddSwaggerGen(c =>
@@ -223,16 +225,11 @@ app.UseSwagger();
 
 app.UseSwaggerUI(c =>
 {
-    c.OAuthClientId("swagger");
+    c.OAuthClientId("customer");
     c.OAuthScopeSeparator(" ");
-    c.OAuthClientSecret("swagger_RookiesB4_BookShopBackendApi");
+    c.OAuthClientSecret("customer_RookiesB4_BookShop");
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger BookShop v1");
 });
-
-//app.UseSwaggerUI(c =>
-//{
-//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger bookShopSolution v1");
-//});
 
 app.MapControllerRoute(
     name: "default",

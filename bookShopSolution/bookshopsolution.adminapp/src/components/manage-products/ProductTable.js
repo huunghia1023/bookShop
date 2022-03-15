@@ -23,7 +23,9 @@ import ProductModel from "../../models/ProductModel";
 import categoryResquest from "../../requests/CategoryRequest";
 import CategorytModel from "../../models/CategoryModel";
 import { Markup } from "interweave";
+import { BaseAddress } from "../../utils/constant";
 
+const thumbStyle = { width: "100%", padding: "20px 0px" };
 const columns = [
   {
     name: "Id",
@@ -32,10 +34,23 @@ const columns = [
     maxWidth: "20px",
   },
   {
+    name: "Thumbnail",
+    selector: (row) => (
+      <img style={thumbStyle} src={row.thumbnail} alt="thumbnail"></img>
+    ),
+    maxWidth: "100px",
+  },
+  {
     name: "Name",
     selector: (row) => row.name,
     sortable: true,
     maxWidth: "300px",
+  },
+  {
+    name: "Description",
+    selector: (row) => <Markup content={row.description} />,
+    sortable: true,
+    maxWidth: "500px",
   },
   {
     name: "Original Price",
@@ -50,24 +65,6 @@ const columns = [
     maxWidth: "100px",
   },
   {
-    name: "Description",
-    selector: (row) => <Markup content={row.description} />,
-    sortable: true,
-    maxWidth: "500px",
-  },
-  {
-    name: "Details",
-    selector: (row) => row.details,
-    sortable: true,
-    maxWidth: "300px",
-  },
-  {
-    name: "Date Created",
-    selector: (row) => row.dateCreated,
-    sortable: true,
-    maxWidth: "200px",
-  },
-  {
     name: "Stock",
     selector: (row) => row.stock,
     sortable: true,
@@ -80,10 +77,10 @@ const columns = [
     maxWidth: "20px",
   },
   {
-    name: "Status",
-    selector: (row) => row.email,
+    name: "Date Created",
+    selector: (row) => row.dateCreated,
     sortable: true,
-    maxWidth: "20px",
+    maxWidth: "200px",
   },
   {
     cell: (row, index, column, id) => (
@@ -165,7 +162,7 @@ function ProductTable() {
   const [pageSize, setPageSize] = useState(10);
   const [languageId, setLanguageId] = useState("en");
   const [categorySelected, setCategorySelected] = useState(
-    new CategorytModel(0, "Select Category")
+    new CategorytModel(0, "All Category")
   );
 
   let navigate = useNavigate();
@@ -244,8 +241,11 @@ function ProductTable() {
                 ? element.seoDescription
                 : "";
               product.seoTitle = element.seoTitle ? element.seoTitle : "";
-              product.stock = element.stock ? element.stock : -1;
-              product.viewCount = element.viewCount ? element.viewCount : -1;
+              product.stock = element.stock ? element.stock : 0;
+              product.viewCount = element.viewCount ? element.viewCount : 0;
+              product.thumbnail = element.thumbnail
+                ? BaseAddress + "/user-content/" + element.thumbnail
+                : "";
               listProduct.push(product);
             });
 
@@ -274,6 +274,11 @@ function ProductTable() {
     try {
       setLoading(true);
       var listCategory = [];
+      var defaultCategory = new CategorytModel();
+      defaultCategory.id = 0;
+      defaultCategory.name = "All Category";
+      defaultCategory.isShowOnHome = true;
+      listCategory.push(defaultCategory);
       let token = localStorage.getItem("token");
       if (token) {
         let response = await categoryResquest.getAll(token, languageId);

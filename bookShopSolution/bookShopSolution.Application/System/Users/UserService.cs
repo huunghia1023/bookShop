@@ -20,6 +20,9 @@ using System.Text;
 using System.Web;
 using IdentityModel.Client;
 using bookShopSolution.ViewModels.Common;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Identity.Web.Resource;
+using Microsoft.AspNetCore.Authorization;
 
 namespace bookShopSolution.Application.System.Users
 {
@@ -47,7 +50,7 @@ namespace bookShopSolution.Application.System.Users
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
                 return new ApiErrorResult<AuthenticateResponseViewModel>("Username or Password is invalid");
-            
+
             if (request.IsFromAdmin)
             {
                 var roles = await _userManager.GetRolesAsync(user);
@@ -59,9 +62,10 @@ namespace bookShopSolution.Application.System.Users
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, request.RememberMe, true);
             if (!result.Succeeded)
                 return new ApiErrorResult<AuthenticateResponseViewModel>("Username or Password is invalid");
-
+            // admin
             IdentityServerRequest getTokenRequest = new IdentityServerRequest(request.UserName, request.Password, SystemConstants.BackendGrandType, SystemConstants.BackendClientId, SystemConstants.BackendClientSecret);
-            // identity server 4 only accept "application/x-www-form-urlencoded"
+
+              // identity server 4 only accept "application/x-www-form-urlencoded"
 
             var content = getTokenRequest.GetTokenContent();
 
@@ -117,12 +121,11 @@ namespace bookShopSolution.Application.System.Users
                     await _userManager.AddToRolesAsync(currentUser, roles);
                 }
                 return new ApiSuccessResult<string>(currentUser.Id.ToString());
-
-            } else
+            }
+            else
             {
                 return new ApiErrorResult<string>("Register failed");
             }
-            
         }
 
         public async Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(GetUserPagingRequest request)
@@ -148,7 +151,9 @@ namespace bookShopSolution.Application.System.Users
             var pageResult = new PagedResult<UserVm>()
             {
                 TotalRecord = totalRow,
-                Items = data
+                Items = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
             };
             return new ApiSuccessResult<PagedResult<UserVm>>(pageResult);
         }
