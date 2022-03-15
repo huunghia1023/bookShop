@@ -13,27 +13,34 @@ namespace bookShopSolution.BackendApi.IdentityServer
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
                 new IdentityResources.Phone(),
-                new IdentityResource("UserInfo", new List<string>{"firstname", "lastname", "birthday", "role"})
+                new IdentityResource("roles", new[] { "role" }),
+                new IdentityResource("UserInfo", new List<string>{"firstname", "lastname", "birthday", "role"}),
           };
 
         public static IEnumerable<ApiResource> Apis =>
-            new ApiResource[]
+            new List<ApiResource>
             {
-                new ApiResource {
-                    Name="api.BackendApi",
-                    ApiSecrets={ new Secret("swagger_RookiesB4_BookShopBackendApi".Sha256()) },
-
-                    UserClaims =
-                    {
-                        JwtClaimTypes.Name,
-                        JwtClaimTypes.Profile,
-                    },
-                } // "api.BackendApi", "Backend API"
+                new ApiResource("api1", "My API"),
+                new ApiResource("roles", "My Roles", new[] { "role" })
             };
 
+        //new ApiResource[]
+        //{
+        //    new ApiResource {
+        //        Name="api.BackendApi",
+        //        ApiSecrets={ new Secret("swagger_RookiesB4_BookShopBackendApi".Sha256()) },
+
+        //        UserClaims =
+        //        {
+        //            JwtClaimTypes.Name,
+        //            JwtClaimTypes.Profile,
+        //        },
+        //    } // "api.BackendApi", "Backend API"
+        //};
+
         public static IEnumerable<ApiScope> ApiScopes =>
-        new ApiScope[]
-        {
+                new ApiScope[]
+                {
             new ApiScope(){
                 Name = "BackendApiScope",
                 DisplayName = "Backend API Scope",
@@ -50,7 +57,7 @@ namespace bookShopSolution.BackendApi.IdentityServer
                     JwtClaimTypes.Profile
                 }
             },
-        };
+                };
 
         public static IEnumerable<Client> Clients =>
             new Client[]
@@ -92,7 +99,29 @@ namespace bookShopSolution.BackendApi.IdentityServer
                         IdentityServerConstants.StandardScopes.Phone,
                         "BackendApiScope",
                         //"api.BackendApi",
-                        "UserInfo"
+                        "UserInfo",
+                        "roles"
+                    }
+                },
+                new Client
+                {
+                    ClientName = "Customer",
+                    ClientId = "customer",
+                    ClientSecrets = { new Secret("customer_RookiesB4_BookShop".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowedCorsOrigins = { "https://localhost:5000", "http://localhost:3000" }, // cho phép nguồn gốc cores
+
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.Phone,
+                        "BackendApiScope",
+                        //"api.BackendApi",
+                        "UserInfo",
+                        "roles"
                     }
                 },
             };

@@ -27,31 +27,42 @@ namespace bookShopSolution.BackendApi.IdentityServer
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var sub = context.Subject.GetSubjectId();
-            var user = await _userManager.FindByIdAsync(sub);
+            context.IssuedClaims.AddRange(context.Subject.Claims);
 
-            var principal = await _claimsFactory.CreateAsync(user);
+            var user = await _userManager.GetUserAsync(context.Subject);
 
-            var claims = principal.Claims.ToList();
+            var roles = await _userManager.GetRolesAsync(user);
 
-            claims.AddRange(new List<Claim>()
+            foreach (var role in roles)
             {
-                new Claim("firstname", user.FirstName),
-                new Claim("lastname", user.LastName),
-                new Claim("birthday", user.BirthDay.ToString())
-            });
+                context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
+            }
+            //var sub = context.Subject.GetSubjectId();
+            //var user = await _userManager.FindByIdAsync(sub);
 
-            // specific role of user
+            //var principal = await _claimsFactory.CreateAsync(user);
+
+            //var claims = principal.Claims.ToList();
+
+            //claims.AddRange(new List<Claim>()
+            //{
+            //    new Claim("firstname", user.FirstName),
+            //    new Claim("lastname", user.LastName),
+            //    new Claim("birthday", user.BirthDay.ToString())
+            //});
+
+            //// specific role of user
             //var roles = await _userManager.GetRolesAsync(user);
-            //claims.Add(new Claim(JwtClaimTypes.Role, String.Join(";", roles)));
 
-            //
-            claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
+            ////claims.Add(new Claim(JwtClaimTypes.Role, String.Join(";", roles)));
 
-            //if (claims == null)
-            //    throw new ECommerceException("Don't have claim to request");
+            ////
+            //claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
 
-            context.IssuedClaims.AddRange(claims);
+            ////if (claims == null)
+            ////    throw new ECommerceException("Don't have claim to request");
+
+            //context.IssuedClaims.AddRange(claims);
         }
 
         public async Task IsActiveAsync(IsActiveContext context)

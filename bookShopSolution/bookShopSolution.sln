@@ -26,7 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Hosts", "3. Hosts", "{96
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "bookShopSolution.AdminApp", "bookShopSolution.AdminApp\bookShopSolution.AdminApp.esproj", "{9B520AA6-87D3-4BFB-A746-1780F12A491B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bookShopSolution.WebApp", "bookShopSolution.WebApp\bookShopSolution.WebApp.csproj", "{860BC1AD-023C-4427-962C-70A0E84E6C67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bookShopSolution.WebApp", "bookShopSolution.WebApp\bookShopSolution.WebApp.csproj", "{860BC1AD-023C-4427-962C-70A0E84E6C67}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Tests", "4. Tests", "{185EF66D-70D0-48B9-8B68-28F9A741ADF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bookShopSulotion.UnitTests", "bookShopSulotion.UnitTests\bookShopSulotion.UnitTests.csproj", "{9DDEC6EA-BD30-4518-B33A-4FEBA22684DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +68,10 @@ Global
 		{860BC1AD-023C-4427-962C-70A0E84E6C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{860BC1AD-023C-4427-962C-70A0E84E6C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{860BC1AD-023C-4427-962C-70A0E84E6C67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DDEC6EA-BD30-4518-B33A-4FEBA22684DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DDEC6EA-BD30-4518-B33A-4FEBA22684DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DDEC6EA-BD30-4518-B33A-4FEBA22684DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DDEC6EA-BD30-4518-B33A-4FEBA22684DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +84,7 @@ Global
 		{11C784BE-0ADD-49CF-8770-7D1F95D34FC5} = {96D6C06D-18AE-4A90-8D75-D1874C5B54A6}
 		{9B520AA6-87D3-4BFB-A746-1780F12A491B} = {96D6C06D-18AE-4A90-8D75-D1874C5B54A6}
 		{860BC1AD-023C-4427-962C-70A0E84E6C67} = {96D6C06D-18AE-4A90-8D75-D1874C5B54A6}
+		{9DDEC6EA-BD30-4518-B33A-4FEBA22684DE} = {185EF66D-70D0-48B9-8B68-28F9A741ADF1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78ABD25E-CF7F-41F8-B107-68BA9B007106}

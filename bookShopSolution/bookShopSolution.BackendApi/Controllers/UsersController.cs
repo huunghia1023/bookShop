@@ -12,6 +12,7 @@ namespace bookShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -22,6 +23,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpPost("authenticate")]
+        [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
@@ -38,6 +40,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (!ModelState.IsValid)
@@ -54,7 +57,6 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("paging")]
-        [Authorize]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
         {
             var result = await _userService.GetUserPaging(request);
@@ -62,7 +64,6 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("info")]
-        [Authorize]
         public async Task<IActionResult> GetUserInfo()
         {
             var token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -80,8 +81,7 @@ namespace bookShopSolution.BackendApi.Controllers
 
         //PUT https://localhost/users/id
         [HttpPut("{id}")]
-        [Authorize]
-        public async Task<IActionResult> Update(Guid id, [FromForm] UserUpdateRequest request)
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -97,7 +97,6 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _userService.GetUserById(id);
@@ -107,7 +106,6 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _userService.Delete(id);
@@ -117,7 +115,6 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpPatch]
-        [Authorize]
         public async Task<IActionResult> DeleteMultiple([FromForm] List<Guid> ids)
         {
             var result = await _userService.DeleteMultiple(ids);

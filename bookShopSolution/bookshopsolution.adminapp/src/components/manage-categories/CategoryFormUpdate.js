@@ -191,8 +191,8 @@ const CategoryFormUpdate = (props) => {
             <FormGroup check>
               <Label check>Show On Home</Label>
               <Input
-                value={isShowOnHome}
-                onChange={(e) => setIsShowOnHome(e.target.value)}
+                checked={isShowOnHome}
+                onChange={(e) => setIsShowOnHome(e.target.checked)}
                 type="checkbox"
               />
             </FormGroup>

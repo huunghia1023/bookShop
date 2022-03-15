@@ -1,8 +1,9 @@
 ﻿@model ProductDetailViewModel
+@using System.Security.Claims;
 @inject IConfiguration _config;
 @{
     ViewData["Title"] = "Detail";
-    var culture = CultureInfo.CurrentCulture;
+    var culture = CultureInfo.CurrentCulture.Name;
 }
 
 
@@ -72,72 +73,7 @@
         </div>
     </div>
 </div>
-<div class="card mt-3">
-    <h3>Review And Rating</h3>
-
-    <div class="rating-component">
-
-        <div class="stars-box">
-            <i class="star fa fa-star" title="1 star" data-message="Poor" data-value="1"></i>
-            <i class="star fa fa-star" title="2 stars" data-message="Too bad" data-value="2"></i>
-            <i class="star fa fa-star" title="3 stars" data-message="Average quality" data-value="3"></i>
-            <i class="star fa fa-star" title="4 stars" data-message="Nice" data-value="4"></i>
-            <i class="star fa fa-star" title="5 stars" data-message="very good qality" data-value="5"></i>
-        </div>
-
-    </div>
-
-    <div class="feedback-tags">
-        <div class="tags-container" data-tag-set="1">
-            <div class="question-tag">
-                Why was this book so bad?
-            </div>
-        </div>
-        <div class="tags-container" data-tag-set="2">
-            <div class="question-tag">
-                Why was this book so bad?
-            </div>
-
-        </div>
-
-        <div class="tags-container" data-tag-set="3">
-            <div class="question-tag">
-                Why was this book good?
-            </div>
-        </div>
-        <div class="tags-container" data-tag-set="4">
-            <div class="question-tag">
-                Why was this book good?
-            </div>
-        </div>
-
-        <div class="tags-container" data-tag-set="5">
-            <div class="make-compliment">
-                <div class="compliment-container">
-                    Give a compliment
-                    <i class="far fa-smile-wink"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="tags-box">
-            <input type="text" class="tag form-control" name="comment" id="inlineFormInputName" placeholder="please enter your review">
-            <input type="hidden" name="product_id" value="{{ $products->id }}" />
-        </div>
-
-    </div>
-
-    <div class="button-box">
-        <input type="submit" class=" done btn btn-warning" disabled="disabled" value="Add review" />
-    </div>
-
-    <div class="submited-box">
-        <div class="loader"></div>
-        <div class="success-message">
-            Thank you!
-        </div>
-    </div>
-</div>
+@await Component.InvokeAsync("Rating", @Model.product.Id)
 
 
 

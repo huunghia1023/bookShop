@@ -2,6 +2,7 @@
 using bookShopSolution.WebApp.Models;
 using bookShopSolution.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace bookShopSolution.WebApp.Controllers
 {
@@ -9,11 +10,13 @@ namespace bookShopSolution.WebApp.Controllers
     {
         private readonly IProductApiClient _productApiClient;
         private readonly ICategoryApiClient _categoryApiClient;
+        private readonly IConfiguration _config;
 
-        public ProductController(IProductApiClient productApiClient, ICategoryApiClient categoryApiClient)
+        public ProductController(IProductApiClient productApiClient, ICategoryApiClient categoryApiClient, IConfiguration config)
         {
             _productApiClient = productApiClient;
             _categoryApiClient = categoryApiClient;
+            _config = config;
         }
 
         public async Task<IActionResult> Detail(int id, string culture)
@@ -33,7 +36,6 @@ namespace bookShopSolution.WebApp.Controllers
             var products = await _productApiClient.GetProductByCategory(new GetManageProductPagingRequest()
             {
                 CategoryId = id,
-                Keyword = "",
                 LanguageId = culture,
                 PageIndex = page,
                 PageSize = 9
@@ -44,6 +46,32 @@ namespace bookShopSolution.WebApp.Controllers
                 Category = category,
                 Products = products
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Rating(RatingRequest request)
+        {
+            var productId = int.Parse(TempData["productId"].ToString());
+            var handler = new JwtSecurityTokenHandler();
+            var token = HttpContext.Session.GetString("Token");
+            var tokenDecode = handler.ReadJwtToken(token);
+            if (tokenDecode.Payload.Sub == null)
+            {
+            }
+            request.UserId = Guid.Parse(tokenDecode.Payload.Sub);
+            if (!ModelState.IsValid)
+            {
+                return Redirect($"https://localhost:5001/en/products/{productId}");
+                return BadRequest();
+            }
+            var response = await _productApiClient.Rating(productId, request);
+            if (!response.IsSuccessed)
+            {
+                ModelState.AddModelError("", response.Message);
+            }
+            ViewData["ratingResult"] = "Rating successed";
+
+            return Redirect($"https://localhost:5001/en/products/{productId}");
         }
     }
 }

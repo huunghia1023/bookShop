@@ -22,6 +22,18 @@ namespace bookShopSolution.Application.Catalog.Categories
 
         public async Task<int> Create(CategoryCreateRequest request)
         {
+            if (request.SeoAlias == null)
+            {
+                request.SeoAlias = "";
+            }
+            if (request.SeoDescription == null)
+            {
+                request.SeoDescription = "";
+            }
+            if (request.SeoTitle == null)
+            {
+                request.SeoTitle = "";
+            }
             var category = new Category()
             {
                 IsShowOnHome = request.IsShowOnHome,
@@ -98,6 +110,18 @@ namespace bookShopSolution.Application.Catalog.Categories
 
         public async Task<ApiResult<int>> Update(int id, CategoryUpdateRequest request)
         {
+            if (request.SeoAlias == null)
+            {
+                request.SeoAlias = "";
+            }
+            if (request.SeoDescription == null)
+            {
+                request.SeoDescription = "";
+            }
+            if (request.SeoTitle == null)
+            {
+                request.SeoTitle = "";
+            }
             var category = await _context.Categories.FindAsync(id);
             var categoryTranslation = await _context.CategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == id && x.LanguageId == request.LanguageId);
             if (category == null || categoryTranslation == null)

@@ -81,7 +81,7 @@ namespace bookShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("6a768150-5de9-48d0-97df-9d1542314334"),
-                            ConcurrencyStamp = "11a7992a-2cd4-435e-9731-fc8df5d79398",
+                            ConcurrencyStamp = "cc0deaa4-cdd7-4ef0-99bf-0aa1d685b220",
                             Description = "Adminstrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -89,7 +89,7 @@ namespace bookShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("7297be39-5977-40af-9aaf-4b57b21b24c1"),
-                            ConcurrencyStamp = "1c6bd67a-1839-4ec5-9326-b1cf3b135d93",
+                            ConcurrencyStamp = "068d1037-0ec7-494b-9917-3aa3fdc02ffa",
                             Description = "Customer role",
                             Name = "customer",
                             NormalizedName = "customer"
@@ -167,7 +167,7 @@ namespace bookShopSolution.Data.Migrations
                             Id = new Guid("bab47f6a-ca90-4fc2-a18d-484060a1332b"),
                             AccessFailedCount = 0,
                             BirthDay = new DateTime(1999, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "82f794a0-4593-4bc9-86bf-998c3fd84971",
+                            ConcurrencyStamp = "60fa14f4-c0b8-4500-8bbf-ee7be9ab6cf7",
                             Email = "nguyengiahuunghia118@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Nghia",
@@ -175,7 +175,7 @@ namespace bookShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "nguyengiahuunghia118@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMNaFbu9VNJxBoXgLjwQz1TYKnCzvxLTfaS2HcxI6R2L97codHBrimk9ryTBX3qkSw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENE1XZHyN1YzU9XMRdQjOFZv6k3/jiXoLHlx+4gUyjM/gLjzr6wcS5d5lUfGflnxbA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -186,7 +186,7 @@ namespace bookShopSolution.Data.Migrations
                             Id = new Guid("5f9ec3c0-6f07-4103-ab0a-413f961c8b06"),
                             AccessFailedCount = 0,
                             BirthDay = new DateTime(1999, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "987bb12b-9358-47c5-9ed8-a510576acc05",
+                            ConcurrencyStamp = "defe46b4-d35f-4a64-9549-13d9d94f7083",
                             Email = "nghiadev@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Nghia",
@@ -194,7 +194,7 @@ namespace bookShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "nghiadev@gmail.com",
                             NormalizedUserName = "customer",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKFoEsqRQZH1HMM9Ebv9/ENpaxOdPahKGV+xNQ8DQv2v3vlJxg62vAhCXXp2Zm09Qw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEP/v2rK56YiYiWkv9fFieL1NAcONIcbboyIRua9JgC2XSgKn01GuNa2T1Ywov3UUMA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -692,9 +692,6 @@ namespace bookShopSolution.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<Guid>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -716,11 +713,11 @@ namespace bookShopSolution.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
-
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Review");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("bookShopSolution.Data.Entities.Transaction", b =>
@@ -1002,15 +999,15 @@ namespace bookShopSolution.Data.Migrations
 
             modelBuilder.Entity("bookShopSolution.Data.Entities.Review", b =>
                 {
-                    b.HasOne("bookShopSolution.Data.Entities.AppUser", "AppUser")
-                        .WithMany("Reviews")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("bookShopSolution.Data.Entities.Product", "Product")
                         .WithMany("ProductReviews")
                         .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("bookShopSolution.Data.Entities.AppUser", "AppUser")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

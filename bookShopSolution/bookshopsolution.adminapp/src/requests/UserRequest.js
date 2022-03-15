@@ -3,6 +3,7 @@ import AxiosClient from "./AxiosClient";
 const config = {
   headers: {
     Authorization: "Bearer ",
+    "content-type": "application/json",
   },
 };
 
