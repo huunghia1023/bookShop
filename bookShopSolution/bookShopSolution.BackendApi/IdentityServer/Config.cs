@@ -108,7 +108,6 @@ namespace bookShopSolution.BackendApi.IdentityServer
                     ClientName = "Customer",
                     ClientId = "customer",
                     ClientSecrets = { new Secret("customer_RookiesB4_BookShop".Sha256()) },
-
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     AllowedCorsOrigins = { "https://localhost:5000", "http://localhost:3000" }, // cho phép nguồn gốc cores
 

@@ -8,7 +8,7 @@ namespace bookShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="admin")]
+    [Authorize(Roles = "admin")]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -45,7 +45,7 @@ namespace bookShopSolution.BackendApi.Controllers
                 return BadRequest(ModelState);
             var categoryId = await _categoryService.Create(request);
             if (categoryId == 0) return BadRequest("Create failed");
-            var category = await _categoryService.GetCategoryById(categoryId, request.LanguageId);
+            //var category = await _categoryService.GetCategoryById(categoryId, request.LanguageId);
             return CreatedAtAction(nameof(GetById), new { id = categoryId });
         }
 

@@ -68,6 +68,10 @@ namespace bookShopSolution.Application.Catalog.Categories
                     continue;
                 }
             }
+            if (listCategorySuccessed == null || listCategorySuccessed.Count == 0)
+            {
+                return new ApiErrorResult<List<int>>("Delete failed");
+            }
             _context.Categories.RemoveRange(listCategorySuccessed);
             await _context.SaveChangesAsync();
 
