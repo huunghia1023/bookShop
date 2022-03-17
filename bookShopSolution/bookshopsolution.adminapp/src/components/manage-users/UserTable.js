@@ -187,40 +187,52 @@ function UserTable() {
 
   const DeleteUser = async (ids) => {
     try {
-      let token = localStorage.getItem("token");
-      if (token) {
-        let requestModel = new UserRequestModel();
-        let requestFormData = requestModel.GetDeleteUserFormData(ids);
-        let response = await userResquest.deleteMultiple(
-          requestFormData,
-          token
-        );
-        if (response.status === 200) {
-          var responseData = response.data ? response.data : "";
-          if (!responseData) {
-            await Swal.fire({
-              icon: "error",
-              title: "Error: Can not create user",
-              showConfirmButton: true,
-            });
-            return;
-          }
-          var results = responseData.results ? responseData.results : "";
-          var userData = users.filter(function (e) {
-            return (
-              results.filter(function (ae) {
-                return ae === e.id;
-              }).length === 0
+      await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let token = localStorage.getItem("token");
+          if (token) {
+            let requestModel = new UserRequestModel();
+            let requestFormData = requestModel.GetDeleteUserFormData(ids);
+            let response = await userResquest.deleteMultiple(
+              requestFormData,
+              token
             );
-          });
+            if (response.status === 200) {
+              var responseData = response.data ? response.data : "";
+              if (!responseData) {
+                await Swal.fire({
+                  icon: "error",
+                  title: "Error: Can not delete user",
+                  showConfirmButton: true,
+                });
+                return;
+              }
+              var results = responseData.results ? responseData.results : "";
+              var userData = users.filter(function (e) {
+                return (
+                  results.filter(function (ae) {
+                    return ae === e.id;
+                  }).length === 0
+                );
+              });
 
-          setUsers(userData);
-          await Swal.fire({
-            icon: "success",
-            title: "Detete user success",
-          });
+              setUsers(userData);
+              await Swal.fire({
+                icon: "success",
+                title: "Detete user success",
+              });
+            }
+          }
         }
-      }
+      });
     } catch (error) {
       await Swal.fire({
         icon: "error",
