@@ -313,34 +313,46 @@ function ProductTable() {
 
   const DeleteProducts = async (ids) => {
     try {
-      let token = localStorage.getItem("token");
-      if (token) {
-        ids.forEach(async (id) => {
-          let response = await productResquest.delete(id, token);
-          if (response.status === 200) {
-            var productData = products.filter(function (e) {
-              return (
-                ids.filter(function (ae) {
-                  return ae == e.id;
-                }).length == 0
-              );
-            });
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let token = localStorage.getItem("token");
+          if (token) {
+            ids.forEach(async (id) => {
+              let response = await productResquest.delete(id, token);
+              if (response.status === 200) {
+                var productData = products.filter(function (e) {
+                  return (
+                    ids.filter(function (ae) {
+                      return ae === e.id;
+                    }).length === 0
+                  );
+                });
 
-            setProducts(productData);
-            await Swal.fire({
-              icon: "success",
-              title: "Delete success",
-            });
+                setProducts(productData);
+                await Swal.fire({
+                  icon: "success",
+                  title: "Delete success",
+                });
 
-            return;
+                return;
+              }
+              await Swal.fire({
+                icon: "error",
+                title: "Error: Can not detele Product",
+                showConfirmButton: true,
+              });
+            });
           }
-          await Swal.fire({
-            icon: "error",
-            title: "Error: Can not detele Product",
-            showConfirmButton: true,
-          });
-        });
-      }
+        }
+      });
     } catch (error) {
       await Swal.fire({
         icon: "error",
