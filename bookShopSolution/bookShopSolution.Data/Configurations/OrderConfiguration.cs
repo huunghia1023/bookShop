@@ -18,7 +18,7 @@ namespace bookShopSolution.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.ShipName).HasMaxLength(200);
             builder.Property(x => x.ShipEmail).IsUnicode(false).HasMaxLength(200);
-            builder.Property(x => x.ShipAddress).HasMaxLength(200);
+            builder.Property(x => x.ShipAddress).HasMaxLength(300);
             builder.Property(x => x.ShipPhoneNumber).HasMaxLength(15);
             builder.HasOne(x => x.AppUser).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
         }

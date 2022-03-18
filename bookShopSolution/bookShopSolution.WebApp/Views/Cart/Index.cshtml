@@ -1,6 +1,8 @@
-﻿@{
+﻿@using bookShopSolution.ViewModels.Catalog.Orders
+@{
     ViewData["Title"] = "Index";
 }
+@model OrderCreateRequest
 @section scripts {
     <script src="/js/add-to-cart.js"></script>
     <script src="/js/cart.js"></script>
@@ -57,30 +59,58 @@
                 <div class="total-amount">
                     <div class="row">
                         <div class="col-lg-8 col-md-5 col-12">
-                            <div class="left">
-                                <div class="coupon">
-                                    <form action="#" target="_blank">
-                                        <input name="Coupon" placeholder="Enter Your Coupon">
-                                        <button class="btn">Apply</button>
-                                    </form>
-                                </div>
-                                <div class="checkbox">
-                                    <label class="checkbox-inline" for="2"><input name="news" id="2" type="checkbox"> Shipping (+10$)</label>
-                                </div>
+                            @if (TempData["checkoutResult"] != null)
+                            {
+                                <script type="text/javascript">
+                                    window.onload = function () {
+                                        Swal.fire({
+                                          position: 'top-end',
+                                          icon: 'success',
+                                          title: 'Your work has been saved',
+                                          showConfirmButton: false,
+                                          timer: 1500
+                                        })
+                                    };
+                                </script>
+                            }
+                            <div class="button5">
+                                <form method="post" asp-action="Create" asp-controller="Order">
+                                    <h4>Order Info</h4>
+                                    <div class="editor-label">
+                                        <label for="ShipName">Name</label>
+                                    </div>
+                                    <div class="editor-field">
+                                        <input class="text-box single-line w-50" asp-for="ShipName" id="ShipName" name="ShipName" type="text" value="" />
+                                        <span class="field-validation-valid" asp-validation-for="ShipName"></span>
+                                    </div>
+                                    <div class="editor-label">
+                                        <label for="ShipEmail">Email</label>
+                                    </div>
+                                    <div class="editor-field">
+                                        <input class="text-box single-line w-50" asp-for="ShipEmail" id="ShipEmail" name="ShipEmail" type="text" value="" />
+                                        <span class="field-validation-valid" asp-validation-for="ShipEmail"></span>
+                                    </div>
+                                    <div class="editor-label">
+                                        <label for="ShipAddress">Address</label>
+                                    </div>
+                                    <div class="editor-field">
+                                        <input class="text-box single-line w-50" asp-for="ShipAddress" id="ShipAddress" name="ShipAddress" type="text" value="" />
+                                        <span class="field-validation-valid" asp-validation-for="ShipAddress"></span>
+                                    </div>
+                                    <button class="btn mt-3" type="submit">Checkout</button>
+                                </form>
+
                             </div>
+
                         </div>
                         <div class="col-lg-4 col-md-7 col-12">
                             <div class="right">
                                 <ul>
-                                    <li>Cart Subtotal<span id="lb_cart_total"></span></li>
-                                    <li>Shipping<span>Free</span></li>
-                                    <li>You Save<span>$20.00</span></li>
-                                    <li class="last">You Pay<span>$310.00</span></li>
+                                    <li>Cart Subtotal<span id="lb_cart_total">$0</span></li>
+                                    <li>Shipping<span>$10</span></li>
+                                    <li class="last">You Pay<span id="lb_total_pay">$0</span></li>
                                 </ul>
-                                <div class="button5">
-                                    <a href="#" class="btn">Checkout</a>
-                                    <a href="#" class="btn">Continue shopping</a>
-                                </div>
+
                             </div>
                         </div>
                     </div>

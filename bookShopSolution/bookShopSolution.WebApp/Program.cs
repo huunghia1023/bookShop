@@ -14,6 +14,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
 builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
 builder.Services.AddTransient<IUserApiClient, UserApiClient>();
+builder.Services.AddTransient<IOrderApiClient, OrderApiClient>();
 
 var cultures = new[]
 {
@@ -87,6 +88,13 @@ app.UseSession();
 app.UseRequestLocalization();
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapControllerRoute(
+    name: "Order en",
+    pattern: "{culture}/orders", new
+    {
+        controller = "Order",
+        action = "Index"
+    });
     endpoints.MapControllerRoute(
     name: "Product category en",
     pattern: "{culture}/categories/{id}", new
