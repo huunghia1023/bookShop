@@ -1,4 +1,5 @@
 using bookShopSolution.Application.Catalog.Categories;
+using bookShopSolution.Application.Catalog.Orders;
 using bookShopSolution.Application.Catalog.Products;
 using bookShopSolution.Application.Common;
 using bookShopSolution.Application.System.Users;
@@ -46,6 +47,7 @@ builder.Services.AddDbContext<BookShopDbContext>(options =>
 builder.Services.AddTransient<IStorageService, FileStorageService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 
 builder.Services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
 builder.Services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();

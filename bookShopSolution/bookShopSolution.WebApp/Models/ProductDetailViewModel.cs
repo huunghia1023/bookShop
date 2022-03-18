@@ -8,6 +8,5 @@ namespace bookShopSolution.WebApp.Models
         public ProductViewModel product { get; set; }
         public List<ProductImageViewModel> images { get; set; }
         public RatingRequest ratingRequest { get; set; }
-        public int ProductId { get; set; }
     }
 }

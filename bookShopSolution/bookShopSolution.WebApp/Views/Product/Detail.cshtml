@@ -62,11 +62,12 @@
                 <p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
                 <h6 class="sizes">
                     Quantity:
-                    <input type="number" id="quantity" min="1" value="1" />
+                    <input type="hidden" id="hiddenCulture" value="@culture"/>
+                    <input type="number" id="quantity" min="1" />
                 </h6>
 
                 <div class="action">
-                    <button class="add-to-cart btn btn-default" type="button"><a href="/"></a>Add to cart</button>
+                    <button class="btn btn-add-cart" data-id="@Model.product.Id">Add to cart</button>
                     <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
                 </div>
             </div>
