@@ -20,5 +20,12 @@ namespace bookShopSolution.Utilities.Constants
             public const string Token = "Token";
             public const string BaseAddress = "BaseAddress";
         }
+
+        public class GuestAccount
+        {
+            public const string Username = "guest";
+            public const string Password = "Nn1234@";
+            public const string Email = "guest.bookshop@gmail.com";
+        }
     }
 }

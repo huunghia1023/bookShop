@@ -117,6 +117,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("{productId}/images")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllImage(int productId)
         {
             var images = await _productService.GetListImages(productId);

@@ -53,22 +53,6 @@ namespace bookShopSolution.Application.Catalog.Products
 
         public async Task<int> Create(ProductCreateRequest request)
         {
-            if (request.Details == null)
-            {
-                request.Details = "";
-            }
-            if (request.SeoAlias == null)
-            {
-                request.SeoAlias = "";
-            }
-            if (request.SeoDescription == null)
-            {
-                request.SeoDescription = "";
-            }
-            if (request.SeoTitle == null)
-            {
-                request.SeoTitle = "";
-            }
             var product = new Product()
             {
                 Price = request.Price,
@@ -84,15 +68,16 @@ namespace bookShopSolution.Application.Catalog.Products
                     new ProductTranslation()
                     {
                         Description = request.Description,
-                        Details = request.Details,
+                        Details = request.Details?? "",
                         LanguageId = request.LanguageId,
                         ProductName = request.ProductName,
-                        SeoAlias = request.SeoAlias,
-                        SeoDescription = request.SeoDescription,
-                        SeoTitle = request.SeoTitle
+                        SeoAlias = request.SeoAlias?? "",
+                        SeoDescription = request.SeoDescription?? "",
+                        SeoTitle = request.SeoTitle?? ""
                     }
-                }
+    }
             };
+
             // save image
             if (request.ThumbnailImage != null)
             {
@@ -157,10 +142,11 @@ namespace bookShopSolution.Application.Catalog.Products
             {
                 query = query.Where(x => x.pic.CategoryId == request.CategoryId);
             }
-            var a = await query.ToListAsync();
+
             // paging
             var totalRow = await query.CountAsync();
-            var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+
+            var data = await query.Distinct().Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
@@ -299,7 +285,7 @@ namespace bookShopSolution.Application.Catalog.Products
             }
             var product = await _context.Products.FindAsync(productId);
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == request.LanguageId);
-            if (product == null || productTranslation == null) 
+            if (product == null || productTranslation == null)
                 return 0;
             productTranslation.ProductName = request.ProductName;
             productTranslation.Description = request.Description;

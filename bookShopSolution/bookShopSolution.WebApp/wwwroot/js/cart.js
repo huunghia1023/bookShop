@@ -90,7 +90,8 @@
                 });
                 $("#card-body").html(html);
 
-                $("#lb_cart_total").text(total.toFixed(2).toString());
+                $("#lb_cart_total").text("$" + total.toFixed(2).toString());
+                $("#lb_total_pay").text("$" + (total+10).toFixed(2).toString());
             }
         });
     }

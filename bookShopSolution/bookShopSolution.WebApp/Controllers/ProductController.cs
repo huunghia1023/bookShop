@@ -1,4 +1,5 @@
-﻿using bookShopSolution.ViewModels.Catalog.Products;
+﻿using bookShopSolution.ViewModels.Catalog.ProductImages;
+using bookShopSolution.ViewModels.Catalog.Products;
 using bookShopSolution.WebApp.Models;
 using bookShopSolution.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace bookShopSolution.WebApp.Controllers
             return View(new ProductDetailViewModel()
             {
                 product = productDetail,
-                images = productImages.Items
+                images = productImages != null? productImages.Items: new List<ProductImageViewModel>()
             });
         }
 
@@ -62,7 +63,6 @@ namespace bookShopSolution.WebApp.Controllers
             if (!ModelState.IsValid)
             {
                 return Redirect($"https://localhost:5001/en/products/{productId}");
-                return BadRequest();
             }
             var response = await _productApiClient.Rating(productId, request);
             if (!response.IsSuccessed)

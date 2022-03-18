@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace bookShopSolution.Data.Enums
 {
-    public enum OrderStatus
+    public enum PaymentMethod
     {
-        Confirmed,
-        Shipping,
-        Success,
-        Canceled
+        Paypal,
+        COD
     }
 }
