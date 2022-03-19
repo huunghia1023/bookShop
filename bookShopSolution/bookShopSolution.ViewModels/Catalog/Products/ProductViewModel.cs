@@ -27,5 +27,7 @@ namespace bookShopSolution.ViewModels.Catalog.Products
         public bool IsFeatured { get; set; }
         public List<string> Categories { get; set; } = new List<string>();
         public string Thumbnail { get; set; }
+        public double AverageStar { get; set; }
+        public int ReviewCount { get; set; }
     }
 }

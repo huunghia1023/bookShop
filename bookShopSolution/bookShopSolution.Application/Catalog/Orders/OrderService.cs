@@ -42,6 +42,10 @@ namespace bookShopSolution.Application.Catalog.Orders
             {
                 // get price
                 var product = await _context.Products.FindAsync(item.ProductId);
+                if (product.Stock < item.Quantity)
+                {
+                    return 0;
+                }
                 var price = product.Price * item.Quantity;
                 var detail = new OrderDetail()
                 {
@@ -64,7 +68,21 @@ namespace bookShopSolution.Application.Catalog.Orders
             };
             _context.Orders.Add(order);
 
-            await _context.SaveChangesAsync();
+            var createOrderResult = await _context.SaveChangesAsync();
+            if (createOrderResult != 0)
+            {
+                // update stock
+                foreach (var item in request.Carts)
+                {
+                    // get price
+                    var productUpdate = await _context.Products.FindAsync(item.ProductId);
+                    if (productUpdate != null)
+                    {
+                        productUpdate.Stock -= item.Quantity;
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
             return order.Id;
         }
 
@@ -101,6 +119,20 @@ namespace bookShopSolution.Application.Catalog.Orders
                 Details = orderDetails
             };
             return orderResult;
+        }
+
+        public async Task<bool> UpdateStatus(int orderId, OrderStatus status)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)
+                return false;
+            order.Status = status;
+            var result = await _context.SaveChangesAsync();
+            if (result == 0)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

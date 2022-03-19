@@ -43,5 +43,20 @@ namespace bookShopSolution.WebApp.Services
 
             return new OrderViewModel();
         }
+
+        public async Task<bool> CancelOrder(int id)
+        {
+            var json = "3";
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var url = $"/api/Orders/{id}";
+            var response = await client.PatchAsync(url, httpContent);
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            return false;
+        }
     }
 }

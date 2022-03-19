@@ -1,4 +1,5 @@
-﻿using bookShopSolution.ViewModels.Catalog.Orders;
+﻿using bookShopSolution.Data.Enums;
+using bookShopSolution.ViewModels.Catalog.Orders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace bookShopSolution.Application.Catalog.Orders
         public Task<int> Create(OrderCreateRequest request);
 
         public Task<OrderViewModel> GetOrderById(int id);
+
+        Task<bool> UpdateStatus(int orderId, OrderStatus status);
     }
 }

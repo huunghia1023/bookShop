@@ -9,7 +9,6 @@ namespace bookShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -20,22 +19,13 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("paging")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
         {
             var products = await _productService.GetAllPaging(request);
             return Ok(products);
         }
 
-        //[HttpGet("{languageId}")]
-        //public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery] GetPublicProductPagingRequest request)
-        //{
-        //    var products = await _productService.GetAllByCategoryId(languageId, request);
-        //    return Ok(products);
-        //}
-
         [HttpGet("{productId}/{languageId}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {
             var product = await _productService.GetProductById(productId, languageId);
@@ -47,7 +37,6 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("featured/{languageId}/{take}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetFeatured(int take, string languageId)
         {
             var products = await _productService.GetFeaturedProduct(languageId, take);
@@ -55,7 +44,6 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("viewest/{languageId}/{take}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetTopView(int take, string languageId)
         {
             var products = await _productService.GetTopViewProduct(languageId, take);
@@ -63,7 +51,6 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("latest/{languageId}/{take}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetLatest(int take, string languageId)
         {
             var products = await _productService.GetLatestProduct(languageId, take);
@@ -72,6 +59,7 @@ namespace bookShopSolution.BackendApi.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -83,6 +71,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpPut("{productId}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Update(int productId, [FromForm] ProductUpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -95,6 +84,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpDelete("{productId}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int productId)
         {
             var result = await _productService.Delete(productId);
@@ -106,6 +96,7 @@ namespace bookShopSolution.BackendApi.Controllers
 
         //update 1 phan
         [HttpPatch("{productId}/{newPrice}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdatePrice(int productId, decimal newPrice)
         {
             if (!ModelState.IsValid)
@@ -117,7 +108,6 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("{productId}/images")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAllImage(int productId)
         {
             var images = await _productService.GetListImages(productId);
@@ -136,6 +126,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpPost("{productId}/images")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -152,6 +143,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpPost("{productId}/rating")]
+        [Authorize]
         public async Task<IActionResult> Rating(int productId, [FromBody] RatingRequest request)
         {
             if (!ModelState.IsValid)
@@ -164,7 +156,6 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpGet("{productId}/rating/{take}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetRatingById(int productId, int take)
         {
             var reviews = await _productService.GetAllRating(productId, take);
@@ -172,6 +163,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpPut("{productId}/images/{imageId}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -184,6 +176,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpDelete("{productId}/images/{imageId}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> RemoveImage(int imageId)
         {
             if (!ModelState.IsValid)
@@ -196,6 +189,7 @@ namespace bookShopSolution.BackendApi.Controllers
         }
 
         [HttpPut("{id}/categories")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CategoryAssign(int id, [FromBody] CategoryAssignRequest request)
         {
             if (!ModelState.IsValid)

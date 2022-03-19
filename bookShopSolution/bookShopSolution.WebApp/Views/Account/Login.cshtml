@@ -9,7 +9,12 @@
         <div class="text-center">
         <img src="/images/logo.jpg" class="rounded-circle border p-1" style="width: 130px;margin-bottom: 65px;margin-top: 20px;">
     </div>
-
+        @{
+            if(ViewBag.loginError != null)
+            {
+                <div class="alert alert-danger">@ViewBag.loginError</div>
+            }
+        }
     <form method="post" id="singninFrom" action="/@culture/Account/Login">
         <div class="form-group">
             <label font-size: 1.2em; class="font-weight-bold">Username <span class="text-danger">*</span></label>

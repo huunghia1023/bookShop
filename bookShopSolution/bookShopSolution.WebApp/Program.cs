@@ -90,7 +90,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
     name: "Order en",
-    pattern: "{culture}/orders", new
+    pattern: "{culture}/orders/{id}", new
     {
         controller = "Order",
         action = "Index"
