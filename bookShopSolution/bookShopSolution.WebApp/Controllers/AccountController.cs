@@ -31,10 +31,15 @@ namespace bookShopSolution.WebApp.Controllers
             if (!ModelState.IsValid)
                 return View(request);
             var response = await _userApiClient.Login(request);
+            if (!response.IsSuccessed)
+            {
+                ViewBag.LoginError = response.Message;
+                return View();
+            }
             if (response.Results == null)
             {
-                ModelState.AddModelError("", "Login failed");
-                return View(ModelState);
+                ViewBag.LoginError = "Login Failed";
+                return View();
             }
             var claims = new List<Claim>
             {
@@ -93,6 +98,7 @@ namespace bookShopSolution.WebApp.Controllers
                 RememberMe = true,
                 IsFromAdmin = false
             });
+
             var claims = new List<Claim>
             {
                 new Claim("Expire", loginResult.Results.expires_in.ToString()),

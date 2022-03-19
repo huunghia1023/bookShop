@@ -33,10 +33,10 @@
         @if (Model.PageIndex != startIndex)
         {
             <li class="page-item">
-                <a class="page-link" title="1" href="@urlTemplate.Replace("{0}", "1")">Đầu</a>
+                <a class="page-link" title="1" href="@urlTemplate.Replace("{0}", "1")"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="@urlTemplate.Replace("{0}", (Model.PageIndex-1).ToString())">Trước</a>
+                <a class="page-link" href="@urlTemplate.Replace("{0}", (Model.PageIndex-1).ToString())"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
             </li>
         }
         @for (var i = startIndex; i <= finishIndex; i++)
@@ -55,10 +55,10 @@
         @if (Model.PageIndex != finishIndex)
         {
             <li class="page-item">
-                <a class="page-link" title="@Model.PageCount.ToString()" href="@urlTemplate.Replace("{0}", (Model.PageIndex+1).ToString())">Sau</a>
+                <a class="page-link" title="@Model.PageCount.ToString()" href="@urlTemplate.Replace("{0}", (Model.PageIndex+1).ToString())"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())">Cuối</a>
+                <a class="page-link" href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
             </li>
         }
     </ul>

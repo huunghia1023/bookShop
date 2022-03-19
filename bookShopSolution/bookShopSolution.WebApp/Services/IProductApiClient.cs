@@ -22,7 +22,7 @@ namespace bookShopSolution.WebApp.Services
 
         Task AddViewCount(int productId);
 
-        Task<ApiResult<bool>> Rating(int productId, RatingRequest request);
+        Task<ApiResult<bool>> Rating(int productId, RatingRequest request, string token);
 
         Task<List<ProductRatingViewModel>> GetAllRating(int product, int take);
     }

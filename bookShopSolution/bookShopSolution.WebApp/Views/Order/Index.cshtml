@@ -1,9 +1,8 @@
 ﻿@using bookShopSolution.ViewModels.Catalog.Orders
 @model OrderViewModel
 @inject IConfiguration _config
-@{
-    var order = @Model;
-    var b = order.Details;
+@section scripts {
+<script src="~/js/order.js"></script>
 }
 <form class="search-form">
     <div class="row">
@@ -11,138 +10,158 @@
         </div>
         <div class="col">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search Order" aria-label="Search Order" aria-describedby="button-addon2">
+                <input type="text" class="form-control" id="inp_search_order" placeholder="Search Order" aria-label="Search Order" aria-describedby="button-addon2">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                    <button class="btn btn-outline-secondary" type="button" id="btn_search_order">Search</button>
                 </div>
             </div>
         </div>
     </div>
 
 </form>
-
-<div class="card" style="border-radius: 10px;">
-    <div class="card-body p-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <p class="lead fw-normal mb-0" style="color: #a8729a;">Order: #@Model.Id</p>
-
-        </div>
-        @for (var i = 0; i < @Model.Details.Count; i++)
-        {
-            <div class="shadow-0 border mb-4">
-
-                <div class="row">
-                    <div class="col-md-2">
-                        <img src="@_config["BaseAddress"]/user-content/@Model.Details[i].Thumbnail" class="img-fluid" alt="Phone">
-                    </div>
-                    <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0">@Model.Details[i].Name</p>
-                    </div>
-                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">Qty: @Model.Details[i].Quantity</p>
-                    </div>
-                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">$@Model.Details[i].Price</p>
-                    </div>
+@{
+    if (@Model.Id != 0)
+    {
+        <div class="card" style="border-radius: 10px;">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <p class="lead fw-normal mb-0" style="color: #a8729a;">Order: #@Model.Id</p>
 
                 </div>
-                <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
-            </div>
-        }
-        <div class="col-md-12 text-center d-flex justify-content-center align-items-center">
-            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseOrderTracking" aria-expanded="false" aria-controls="collapseOrderTracking">
-                Track Order
-            </button>
-            <button class="btn btn-primary" type="button" id=@($"cancel_order_{@Model.Id}")>
-                Cancel Order
-            </button>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="collapse" id="collapseOrderTracking">
-                    <div class="card mb-3">
-                        <div class="p-4 text-center text-white text-lg bg-dark rounded-top"><span class="text-uppercase">Tracking Order No - </span><span class="text-medium">34VB5540K83</span></div>
-                        <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between py-3 px-2 bg-secondary">
-                            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Address:</span> @Model.ShipAddress</div>
-                            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Status:</span> @Model.ShipStatus</div>
-                            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Order Date:</span> @Model.OrderDate</div>
-                        </div>
-                        <div class="card-body">
-                            <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
-                                @{
-                                    if (@Model.ShipStatus == bookShopSolution.Data.Enums.OrderStatus.Success)
-                                    {
-                                        <div class="step completed">
-                                            <div class="step-icon-wrap">
-                                                <div class="step-icon"><i class="pe-7s-cart"></i></div>
-                                            </div>
-                                            <h4 class="step-title">Confirmed Order</h4>
-                                        </div>
-                                        <div class="step completed">
-                                            <div class="step-icon-wrap">
-                                                <div class="step-icon"><i class="pe-7s-car"></i></div>
-                                            </div>
-                                            <h4 class="step-title">Product Dispatched</h4>
-                                        </div>
-                                        <div class="step completed">
-                                            <div class="step-icon-wrap">
-                                                <div class="step-icon"><i class="pe-7s-home"></i></div>
-                                            </div>
-                                            <h4 class="step-title">Product Delivered</h4>
-                                        </div>
-                                    }
-                                    else if (@Model.ShipStatus == bookShopSolution.Data.Enums.OrderStatus.Shipping)
-                                    {
-                                        <div class="step completed">
-                                            <div class="step-icon-wrap">
-                                                <div class="step-icon"><i class="pe-7s-cart"></i></div>
-                                            </div>
-                                            <h4 class="step-title">Confirmed Order</h4>
-                                        </div>
-                                        <div class="step completed">
-                                            <div class="step-icon-wrap">
-                                                <div class="step-icon"><i class="pe-7s-car"></i></div>
-                                            </div>
-                                            <h4 class="step-title">Product Dispatched</h4>
-                                        </div>
-                                        <div class="step">
-                                            <div class="step-icon-wrap">
-                                                <div class="step-icon"><i class="pe-7s-home"></i></div>
-                                            </div>
-                                            <h4 class="step-title">Product Delivered</h4>
-                                        </div>
-                                    }
-                                    else if (@Model.ShipStatus == bookShopSolution.Data.Enums.OrderStatus.Confirmed)
-                                    {
-                                        <div class="step completed">
-                                            <div class="step-icon-wrap">
-                                                <div class="step-icon"><i class="pe-7s-cart"></i></div>
-                                            </div>
-                                            <h4 class="step-title">Confirmed Order</h4>
-                                        </div>
-                                        <div class="step">
-                                            <div class="step-icon-wrap">
-                                                <div class="step-icon"><i class="pe-7s-car"></i></div>
-                                            </div>
-                                            <h4 class="step-title">Product Dispatched</h4>
-                                        </div>
-                                        <div class="step">
-                                            <div class="step-icon-wrap">
-                                                <div class="step-icon"><i class="pe-7s-home"></i></div>
-                                            </div>
-                                            <h4 class="step-title">Product Delivered</h4>
-                                        </div>
-                                    }
-                                }
+                @for (var i = 0; i < @Model.Details.Count; i++)
+                {
+                    <div class="shadow-0 border mb-4">
 
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img src="@_config["BaseAddress"]/user-content/@Model.Details[i].Thumbnail" class="img-fluid" alt="Phone">
+                            </div>
+                            <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
+                                <p class="text-muted mb-0">@Model.Details[i].Name</p>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                <p class="text-muted mb-0 small">Qty: @Model.Details[i].Quantity</p>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                <p class="text-muted mb-0 small">$@Model.Details[i].Price</p>
+                            </div>
+
+                        </div>
+                        <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                    </div>
+                }
+                @{
+                    if (@Model.ShipStatus == bookShopSolution.Data.Enums.OrderStatus.Canceled)
+                    {
+                        <div class="col-md-12">
+                            <button class="btn" style="background-color: #f7941d; color: white;" type="button">
+                                Order Canceled
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-12 text-center d-flex justify-content-center align-items-center">
+                            <button class="btn btn-primary mr-2" type="button" data-toggle="collapse" data-target="#@($"collapseOrderTracking_{@Model.Id}")" aria-expanded="false" aria-controls="@($"collapseOrderTracking_{@Model.Id}")">
+                                Track Order
+                            </button>
+                            <input type="hidden" id="order_id" value=@Model.Id />
+                            <button class="btn btn-primary btn_cancel_order" type="button" id=@($"cancel_order_{@Model.Id}")>
+                                Cancel Order
+                            </button>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="collapse" id=@($"collapseOrderTracking_{@Model.Id}")>
+                                    <div class="card mb-3">
+                                        <div class="p-4 text-center text-white text-lg bg-dark rounded-top"><span class="text-uppercase">Tracking Order No - </span><span class="text-medium">@Model.Id</span></div>
+                                        <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between py-3 px-2 bg-secondary">
+                                            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Address:</span> @Model.ShipAddress</div>
+                                            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Status:</span> @Model.ShipStatus</div>
+                                            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Order Date:</span> @Model.OrderDate</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
+                                                @{
+                                                    if (@Model.ShipStatus == bookShopSolution.Data.Enums.OrderStatus.Success)
+                                                    {
+                                                        <div class="step completed">
+                                                            <div class="step-icon-wrap">
+                                                                <div class="step-icon"><i class="pe-7s-cart"></i></div>
+                                                            </div>
+                                                            <h4 class="step-title">Confirmed Order</h4>
+                                                        </div>
+                                                        <div class="step completed">
+                                                            <div class="step-icon-wrap">
+                                                                <div class="step-icon"><i class="pe-7s-car"></i></div>
+                                                            </div>
+                                                            <h4 class="step-title">Product Dispatched</h4>
+                                                        </div>
+                                                        <div class="step completed">
+                                                            <div class="step-icon-wrap">
+                                                                <div class="step-icon"><i class="pe-7s-home"></i></div>
+                                                            </div>
+                                                            <h4 class="step-title">Product Delivered</h4>
+                                                        </div>
+                                                    }
+                                                    else if (@Model.ShipStatus == bookShopSolution.Data.Enums.OrderStatus.Shipping)
+                                                    {
+                                                        <div class="step completed">
+                                                            <div class="step-icon-wrap">
+                                                                <div class="step-icon"><i class="pe-7s-cart"></i></div>
+                                                            </div>
+                                                            <h4 class="step-title">Confirmed Order</h4>
+                                                        </div>
+                                                        <div class="step completed">
+                                                            <div class="step-icon-wrap">
+                                                                <div class="step-icon"><i class="pe-7s-car"></i></div>
+                                                            </div>
+                                                            <h4 class="step-title">Product Dispatched</h4>
+                                                        </div>
+                                                        <div class="step">
+                                                            <div class="step-icon-wrap">
+                                                                <div class="step-icon"><i class="pe-7s-home"></i></div>
+                                                            </div>
+                                                            <h4 class="step-title">Product Delivered</h4>
+                                                        </div>
+                                                    }
+                                                    else if (@Model.ShipStatus == bookShopSolution.Data.Enums.OrderStatus.Confirmed)
+                                                    {
+                                                        <div class="step completed">
+                                                            <div class="step-icon-wrap">
+                                                                <div class="step-icon"><i class="pe-7s-cart"></i></div>
+                                                            </div>
+                                                            <h4 class="step-title">Confirmed Order</h4>
+                                                        </div>
+                                                        <div class="step">
+                                                            <div class="step-icon-wrap">
+                                                                <div class="step-icon"><i class="pe-7s-car"></i></div>
+                                                            </div>
+                                                            <h4 class="step-title">Product Dispatched</h4>
+                                                        </div>
+                                                        <div class="step">
+                                                            <div class="step-icon-wrap">
+                                                                <div class="step-icon"><i class="pe-7s-home"></i></div>
+                                                            </div>
+                                                            <h4 class="step-title">Product Delivered</h4>
+                                                        </div>
+                                                    }
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    }
+                }
+
             </div>
         </div>
-    </div>
-</div>
+    }
+}
+
 
 
 

@@ -4,9 +4,8 @@
 }
 @model OrderCreateRequest
 @section scripts {
-    <script src="/js/add-to-cart.js"></script>
-    <script src="/js/cart.js"></script>
-    <script>
+<script src="/js/cart.js"></script>
+<script>
     var cartController = new CartController();
     cartController.initialize();
 </script>
@@ -27,6 +26,12 @@
         </div>
     </div>
 </div>
+@{
+    if(TempData["checkoutError"] != null)
+    {
+        <h6 class="alert alert-danger text-center">@TempData["checkoutError"]</h6>
+    }
+}
 <!-- End Breadcrumbs -->
 <!-- Shopping Cart -->
 <div class="shopping-cart section">
@@ -46,8 +51,6 @@
                         </tr>
                     </thead>
                     <tbody id="card-body">
-                        
-
                     </tbody>
                 </table>
                 <!--/ End Shopping Summery -->
@@ -57,24 +60,10 @@
             <div class="col-12">
                 <!-- Total Amount -->
                 <div class="total-amount">
-                    <div class="row">
+                    <div class="row" style="margin: auto">
                         <div class="col-lg-8 col-md-5 col-12">
-                            @if (TempData["checkoutResult"] != null)
-                            {
-                                <script type="text/javascript">
-                                    window.onload = function () {
-                                        Swal.fire({
-                                          position: 'top-end',
-                                          icon: 'success',
-                                          title: 'Your work has been saved',
-                                          showConfirmButton: false,
-                                          timer: 1500
-                                        })
-                                    };
-                                </script>
-                            }
                             <div class="button5">
-                                <form method="post" asp-action="Create" asp-controller="Order">
+                                @*<form method="post" asp-action="Create" asp-controller="Order">
                                     <h4>Order Info</h4>
                                     <div class="editor-label">
                                         <label for="ShipName">Name</label>
@@ -98,8 +87,34 @@
                                         <span class="field-validation-valid" asp-validation-for="ShipAddress"></span>
                                     </div>
                                     <button class="btn mt-3" type="submit">Checkout</button>
-                                </form>
 
+                                </form>*@
+                                
+                                    <h4>Order Info</h4>
+                                    <div class="editor-label">
+                                        <label for="ShipName">Name</label>
+                                    </div>
+                                    <div class="editor-field">
+                                        <input class="text-box single-line w-50" id="ShipName" name="ShipName" type="text" value="" />
+                                        
+                                    </div>
+                                    <div class="editor-label">
+                                        <label for="ShipEmail">Email</label>
+                                    </div>
+                                    <div class="editor-field">
+                                        <input class="text-box single-line w-50" id="ShipEmail" name="ShipEmail" type="text" value="" />
+                                       
+                                    </div>
+                                    <div class="editor-label">
+                                        <label for="ShipAddress">Address</label>
+                                    </div>
+                                    <div class="editor-field">
+                                        <input class="text-box single-line w-50" id="ShipAddress" name="ShipAddress" type="text" value="" />
+                                        
+                                    </div>
+                                    <button class="btn mt-3 btn_checkout" type="button">Checkout</button>
+
+                            
                             </div>
 
                         </div>

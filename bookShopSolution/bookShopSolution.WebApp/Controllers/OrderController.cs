@@ -17,10 +17,22 @@ namespace bookShopSolution.WebApp.Controllers
             _orderApiClient = orderApiClient;
         }
 
-        public async Task<IActionResult> Index(int id)
+        public async Task<IActionResult> Index(string id)
         {
-            var order = await _orderApiClient.GetById(id);
+            var order = new OrderViewModel();
+            if (id != "all")
+            {
+                order = await _orderApiClient.GetById(int.Parse(id));
+            }
             return View(order);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            var result = await _orderApiClient.CancelOrder(id);
+
+            return Ok(result);
         }
 
         //[HttpGet]
@@ -31,52 +43,53 @@ namespace bookShopSolution.WebApp.Controllers
         //    return RedirectToAction("index", order);
         //}
 
-        [HttpPost]
-        public async Task<IActionResult> Create(OrderCreateRequest request)
-        {
-            request.Carts = new List<CartViewModel>();
-            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
-            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
-            if (session != null)
-                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
-            foreach (var cart in currentCart)
-            {
-                var orderCart = new CartViewModel()
-                {
-                    ProductId = cart.ProductId,
-                    Quantity = cart.Quantity
-                };
-                request.Carts.Add(orderCart);
-            }
+        //[HttpPost]
+        //[Route("orders/Create")]
+        //public async Task<IActionResult> Create(OrderCreateRequest request)
+        //{
+        //    request.Carts = new List<CartViewModel>();
+        //    var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+        //    List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+        //    if (session != null)
+        //        currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+        //    foreach (var cart in currentCart)
+        //    {
+        //        var orderCart = new CartViewModel()
+        //        {
+        //            ProductId = cart.ProductId,
+        //            Quantity = cart.Quantity
+        //        };
+        //        request.Carts.Add(orderCart);
+        //    }
 
-            var token = HttpContext.Session.GetString("Token");
-            if (token == null)
-            {
-                request.UserId = "";
-            }
-            else
-            {
-                var handler = new JwtSecurityTokenHandler();
-                var tokenDecode = handler.ReadJwtToken(token);
-                if (tokenDecode.Payload.Sub == null)
-                {
-                    request.UserId = "";
-                }
-                request.UserId = tokenDecode.Payload.Sub;
-            }
+        //    var token = HttpContext.Session.GetString("Token");
+        //    if (token == null)
+        //    {
+        //        request.UserId = "";
+        //    }
+        //    else
+        //    {
+        //        var handler = new JwtSecurityTokenHandler();
+        //        var tokenDecode = handler.ReadJwtToken(token);
+        //        if (tokenDecode.Payload.Sub == null)
+        //        {
+        //            request.UserId = "";
+        //        }
+        //        request.UserId = tokenDecode.Payload.Sub;
+        //    }
 
-            var order = await _orderApiClient.Create(request);
-            var orderId = 0;
-            if (order == null)
-            {
-                TempData["checkoutResult"] = "Error";
-            }
-            else
-            {
-                orderId = order.Id;
-                TempData["checkoutResult"] = "Success";
-            }
-            return RedirectToAction("index", new { id = orderId });
-        }
+        //    var order = await _orderApiClient.Create(request);
+        //    var orderId = 0;
+        //    if (order == null)
+        //    {
+        //        TempData["checkoutResult"] = "Error";
+        //    }
+        //    else
+        //    {
+        //        orderId = order.Id;
+        //        TempData["checkoutResult"] = "Success";
+        //    }
+        //    return RedirectToAction("index", new { id = orderId });
+        //}
     }
 }

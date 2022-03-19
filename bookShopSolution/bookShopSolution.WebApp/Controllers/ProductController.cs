@@ -1,4 +1,6 @@
-﻿using bookShopSolution.ViewModels.Catalog.ProductImages;
+﻿using bookShopSolution.ViewModels.Catalog.Categories;
+using bookShopSolution.ViewModels.Catalog.ProductImages;
+using bookShopSolution.ViewModels.Catalog.ProductRatings;
 using bookShopSolution.ViewModels.Catalog.Products;
 using bookShopSolution.WebApp.Models;
 using bookShopSolution.WebApp.Services;
@@ -25,10 +27,13 @@ namespace bookShopSolution.WebApp.Controllers
             var productDetail = await _productApiClient.GetProductById(id, culture);
             await _productApiClient.AddViewCount(id);
             var productImages = await _productApiClient.GetAllImages(id);
+
+            productDetail.AverageStar = Math.Round(productDetail.AverageStar);
+
             return View(new ProductDetailViewModel()
             {
                 product = productDetail,
-                images = productImages != null? productImages.Items: new List<ProductImageViewModel>()
+                images = productImages != null ? productImages.Items : new List<ProductImageViewModel>()
             });
         }
 
@@ -41,7 +46,11 @@ namespace bookShopSolution.WebApp.Controllers
                 PageIndex = page,
                 PageSize = 9
             });
-            var category = await _categoryApiClient.GetCategoryById(culture, id);
+            var category = new CategoryVm();
+            if (id != 0)
+            {
+                category = await _categoryApiClient.GetCategoryById(culture, id);
+            }
             return View(new ProductCategoryViewModel()
             {
                 Category = category,
@@ -62,16 +71,18 @@ namespace bookShopSolution.WebApp.Controllers
             request.UserId = Guid.Parse(tokenDecode.Payload.Sub);
             if (!ModelState.IsValid)
             {
-                return Redirect($"https://localhost:5001/en/products/{productId}");
+                //await Response.WriteAsync("<script language='javascript'>window.alert('Popup message ')");
+                //return RedirectToAction("Detail", new { id = productId, culture = "en" });
+                return Redirect($"/en/products/{productId}");
             }
-            var response = await _productApiClient.Rating(productId, request);
+            var response = await _productApiClient.Rating(productId, request, token);
             if (!response.IsSuccessed)
             {
                 ModelState.AddModelError("", response.Message);
             }
             ViewData["ratingResult"] = "Rating successed";
-
-            return Redirect($"https://localhost:5001/en/products/{productId}");
+            //return RedirectToAction("detail", new { id = productId, culture = "en" });
+            return Redirect($"/en/products/{productId}");
         }
     }
 }

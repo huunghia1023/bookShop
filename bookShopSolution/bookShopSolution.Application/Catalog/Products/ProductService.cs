@@ -115,66 +115,98 @@ namespace bookShopSolution.Application.Catalog.Products
 
         public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
         {
-            // select join
-            //var query = from p in _context.Products
-            //            join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-            //            join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-            //            join c in _context.Categories on pic.CategoryId equals c.Id
-            //            where pt.LanguageId == request.LanguageId
-            //            select new { p, pt, c };
-            var query = from p in _context.Products
-                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
-                        from pic in ppic.DefaultIfEmpty()
-                        join c in _context.Categories on pic.CategoryId equals c.Id into picc
-                        from c in picc.DefaultIfEmpty()
-                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
-                        from pi in ppi.DefaultIfEmpty()
-                        where pt.LanguageId == request.LanguageId && pi.IsDefault == true
-                        select new { p, pt, pic, pi };
-
-            //filter by keyword search and categoryid
-            if (!string.IsNullOrEmpty(request.Keyword))
+            if (request.CategoryId == null || request.CategoryId == 0)
             {
-                query = query.Where(x => x.pt.ProductName.Contains(request.Keyword));
-            }
-            if (request.CategoryId != null && request.CategoryId != 0)
-            {
-                query = query.Where(x => x.pic.CategoryId == request.CategoryId);
-            }
-
-            // paging
-            var totalRow = await query.CountAsync();
-
-            var data = await query.Distinct().Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
-                .Select(x => new ProductViewModel()
+                var queryAll = from p in _context.Products
+                               join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                               join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                               from pi in ppi.DefaultIfEmpty()
+                               where pt.LanguageId == request.LanguageId && pi.IsDefault == true
+                               select new { p, pt, pi };
+                //filter by keyword search and categoryid
+                if (!string.IsNullOrEmpty(request.Keyword))
                 {
-                    Id = x.p.Id,
-                    DateCreated = x.p.DateCreated,
-                    Description = x.pt.Description,
-                    Details = x.pt.Details,
-                    LanguageId = x.pt.LanguageId,
-                    OriginalPrice = x.p.OriginalPrice,
-                    Price = x.p.Price,
-                    Name = x.pt.ProductName,
-                    SeoAlias = x.pt.SeoAlias,
-                    SeoDescription = x.pt.SeoDescription,
-                    SeoTitle = x.pt.SeoTitle,
-                    Stock = x.p.Stock,
-                    ViewCount = x.p.ViewCount,
-                    Thumbnail = x.pi.ImagePath,
-                    IsFeatured = x.p.IsFeatured,
-                    LikeCount = x.p.LikeCount
-                }).ToListAsync();
-            // set result to PageResult and return
-            var pageResult = new PagedResult<ProductViewModel>()
+                    queryAll = queryAll.Where(x => x.pt.ProductName.Contains(request.Keyword));
+                }
+
+                // paging
+                var totalRow = await queryAll.CountAsync();
+
+                var data = await queryAll.Distinct().Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+                    .Select(x => new ProductViewModel()
+                    {
+                        Id = x.p.Id,
+                        DateCreated = x.p.DateCreated,
+                        Description = x.pt.Description,
+                        Details = x.pt.Details,
+                        LanguageId = x.pt.LanguageId,
+                        OriginalPrice = x.p.OriginalPrice,
+                        Price = x.p.Price,
+                        Name = x.pt.ProductName,
+                        SeoAlias = x.pt.SeoAlias,
+                        SeoDescription = x.pt.SeoDescription,
+                        SeoTitle = x.pt.SeoTitle,
+                        Stock = x.p.Stock,
+                        ViewCount = x.p.ViewCount,
+                        Thumbnail = x.pi.ImagePath,
+                        IsFeatured = x.p.IsFeatured,
+                        LikeCount = x.p.LikeCount
+                    }).ToListAsync();
+                // set result to PageResult and return
+                var pageResult = new PagedResult<ProductViewModel>()
+                {
+                    TotalRecord = totalRow,
+                    Items = data,
+                    PageIndex = request.PageIndex,
+                    PageSize = request.PageSize
+                };
+                return pageResult;
+            }
+            else
             {
-                TotalRecord = totalRow,
-                Items = data,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize
-            };
-            return pageResult;
+                var query = from p in _context.Products
+                            join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                            join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
+                            from pic in ppic.DefaultIfEmpty()
+                            join c in _context.Categories on pic.CategoryId equals c.Id into picc
+                            from c in picc.DefaultIfEmpty()
+                            join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                            from pi in ppi.DefaultIfEmpty()
+                            where pt.LanguageId == request.LanguageId && pi.IsDefault == true && pic.CategoryId == request.CategoryId
+                            select new { p, pt, pic, pi };
+                // paging
+                var totalRow = await query.CountAsync();
+
+                var data = await query.Distinct().Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+                    .Select(x => new ProductViewModel()
+                    {
+                        Id = x.p.Id,
+                        DateCreated = x.p.DateCreated,
+                        Description = x.pt.Description,
+                        Details = x.pt.Details,
+                        LanguageId = x.pt.LanguageId,
+                        OriginalPrice = x.p.OriginalPrice,
+                        Price = x.p.Price,
+                        Name = x.pt.ProductName,
+                        SeoAlias = x.pt.SeoAlias,
+                        SeoDescription = x.pt.SeoDescription,
+                        SeoTitle = x.pt.SeoTitle,
+                        Stock = x.p.Stock,
+                        ViewCount = x.p.ViewCount,
+                        Thumbnail = x.pi.ImagePath,
+                        IsFeatured = x.p.IsFeatured,
+                        LikeCount = x.p.LikeCount
+                    }).ToListAsync();
+                // set result to PageResult and return
+                var pageResult = new PagedResult<ProductViewModel>()
+                {
+                    TotalRecord = totalRow,
+                    Items = data,
+                    PageIndex = request.PageIndex,
+                    PageSize = request.PageSize
+                };
+                return pageResult;
+            }
         }
 
         public async Task<ProductImageViewModel> GetImageById(int imageId)
@@ -232,6 +264,14 @@ namespace bookShopSolution.Application.Catalog.Products
                                     where pic.ProductId == productId && ct.LanguageId == languageId
                                     select ct.CategoryName).ToListAsync();
             var image = _context.ProductImages.Where(x => x.ProductId == productId && x.IsDefault == true).FirstOrDefault();
+            var averageStar = 0.0;
+
+            var review = _context.Reviews.Where(x => x.ProductId == productId);
+            var reviewCount = review.Count();
+            if (reviewCount != 0)
+            {
+                averageStar = review.Average(x => x.Star);
+            }
             var productModel = new ProductViewModel()
             {
                 Id = product.Id,
@@ -249,7 +289,9 @@ namespace bookShopSolution.Application.Catalog.Products
                 Thumbnail = image.ImagePath,
                 IsFeatured = product.IsFeatured,
                 LikeCount = product.LikeCount,
-                LanguageId = languageId
+                LanguageId = languageId,
+                AverageStar = averageStar,
+                ReviewCount = reviewCount
             };
             return productModel;
         }
@@ -515,6 +557,10 @@ namespace bookShopSolution.Application.Catalog.Products
 
         public async Task<ApiResult<bool>> Rating(int productId, RatingRequest request)
         {
+            if (request.Star < 1 || request.Star > 5)
+            {
+                return new ApiErrorResult<bool>("Star is not allow");
+            }
             var review = new Review()
             {
                 ProductId = productId,
