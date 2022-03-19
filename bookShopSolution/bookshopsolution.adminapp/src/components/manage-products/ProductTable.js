@@ -23,7 +23,7 @@ import ProductModel from "../../models/ProductModel";
 import categoryResquest from "../../requests/CategoryRequest";
 import CategorytModel from "../../models/CategoryModel";
 import { Markup } from "interweave";
-import { BaseAddress } from "../../utils/constant";
+import { BaseAddress } from "../../utils/Constant";
 
 const thumbStyle = { width: "100%", padding: "20px 0px" };
 const columns = [

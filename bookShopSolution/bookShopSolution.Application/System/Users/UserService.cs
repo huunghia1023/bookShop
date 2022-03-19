@@ -65,7 +65,7 @@ namespace bookShopSolution.Application.System.Users
             // admin
             IdentityServerRequest getTokenRequest = new IdentityServerRequest(request.UserName, request.Password, SystemConstants.BackendGrandType, SystemConstants.BackendClientId, SystemConstants.BackendClientSecret);
 
-              // identity server 4 only accept "application/x-www-form-urlencoded"
+            // identity server 4 only accept "application/x-www-form-urlencoded"
 
             var content = getTokenRequest.GetTokenContent();
 
@@ -172,13 +172,13 @@ namespace bookShopSolution.Application.System.Users
 
                 var responseModel = await response.Content.ReadFromJsonAsync<GetUserInfoViewModel>();
                 userModel.Id = responseModel.sub;
-                userModel.UserName = responseModel.preferred_username;
+                //userModel.UserName = responseModel.preferred_username;
                 userModel.Roles = string.Join(";", responseModel.role);
-                userModel.FirstName = responseModel.firstname;
-                userModel.LastName = responseModel.lastname;
-                userModel.BirthDay = DateTime.Parse(responseModel.birthday);
-                userModel.Email = responseModel.email;
-                userModel.EmailVerified = responseModel.email_verified;
+                //userModel.FirstName = responseModel.firstname;
+                //userModel.LastName = responseModel.lastname;
+                //userModel.BirthDay = DateTime.Parse(responseModel.birthday);
+                //userModel.Email = responseModel.email;
+                //userModel.EmailVerified = responseModel.email_verified;
                 return new ApiSuccessResult<UserVm>(userModel);
             }
             return new ApiErrorResult<UserVm>("Get user info failed");

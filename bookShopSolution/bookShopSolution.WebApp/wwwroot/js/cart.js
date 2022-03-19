@@ -6,6 +6,7 @@
 
     function registerEvents() {
         $('body').on('click', '.btn-plus', function (e) {
+            $('.btn-plus').unbind('click');
             e.preventDefault();
             const id = $(this).data("id");
             const quantity = parseInt($('#txt_quantity_' + id).val()) + 1;
@@ -16,14 +17,52 @@
             e.preventDefault();
             const id = $(this).data("id");
             const quantity = parseInt($('#txt_quantity_' + id).val()) - 1;
-            updateCart(id, quantity);
+            if (quantity === 0) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        updateCart(id, quantity);
+                        Swal.fire(
+                            'Deleted!',
+                            'Your cart has been deleted.',
+                            'success'
+                        )
+                    }
+                })
+            } else {
+                updateCart(id, quantity);
+            }
         });
 
         $('body').on('click', '.btn-remove', function (e) {
             e.preventDefault();
-            const id = $(this).data("id");
-            const quantity = 0;
-            updateCart(id, quantity);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const id = $(this).data("id");
+                    const quantity = 0;
+                    updateCart(id, quantity);
+                    Swal.fire(
+                        'Deleted!',
+                        'Your cart has been deleted.',
+                        'success'
+                    )
+                }
+            })
         });
 
         $('body').on('click', '.btn_checkout', async function (e) {
@@ -35,7 +74,15 @@
                 await Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: "Name is invalid"
+                    text: "Please enter your name"
+                });
+                return;
+            }
+            if (!email) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "Please enter your email"
                 });
                 return;
             }
@@ -51,7 +98,7 @@
                 await Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: "Address is invalid"
+                    text: "Please enter your address"
                 });
                 return;
             }
@@ -97,7 +144,7 @@
                     html += "<tr>" +
                         "<td class=\"image\" data-title=\"No\"><img src=\"" + baseAdress + "/user-content/" + item.image + "\" alt=\"#\"></td>" +
                         "<td class=\"product-des\" data-title=\"Description\">" +
-                        "<p class=\"product-name\"><a href=\"#\">" + item.productName + "</a></p>" +
+                        "<p class=\"product-name\"><a href=\"/" + culture + "/products/" + item.productId + "\">" + item.productName + "</a></p>" +
                         "</td>" +
                         "<td class=\"price\" data-title=\"Price\"><span>" + item.price + "</span></td>" +
                         "<td class=\"qty\" data-title=\"Qty\">" +
@@ -107,7 +154,7 @@
                         "<i class=\"ti-minus\"></i>" +
                         "</button>" +
                         "</div>" +
-                        "<input type=\"text\" name=\"quant[1]\" class=\"input-number\" data-min=\"1\" data-max=\"100\" id=\"txt_quantity_" + item.productId + "\" value=\"" + item.quantity + "\">" +
+                        "<input type=\"text\" readonly name=\"quant[1]\" class=\"input-number inp_cart_quantity\" data-min=\"1\" data-max=\"100\" id=\"txt_quantity_" + item.productId + "\" value=\"" + item.quantity + "\">" +
                         "<div class=\"button plus\">" +
                         "<button type=\"button\" class=\"btn btn-primary btn-number btn-plus\" data-id=\"" + item.productId + "\" data-type=\"plus\" data-field=\"quant[1]\">" +
                         "<i class=\"ti-plus\"></i>" +
