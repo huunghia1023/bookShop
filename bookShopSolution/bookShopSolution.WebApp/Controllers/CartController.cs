@@ -126,8 +126,14 @@ namespace bookShopSolution.WebApp.Controllers
             }
 
             var response = await _orderApiClient.Create(request);
-
-            return View();
+            if (response.Id != 0)
+            {
+                //delete cart
+                HttpContext.Session.Remove(SystemConstants.CartSession);
+                return Ok("/orders/" + response.Id);
+            }
+            TempData["checkoutError"] = "Checkout Failed, Product not available";
+            return Ok("/Cart");
         }
     }
 }

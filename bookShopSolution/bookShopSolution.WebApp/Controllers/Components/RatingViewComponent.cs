@@ -21,6 +21,7 @@ namespace bookShopSolution.WebApp.Controllers.Components
             //var productId = int.Parse(TempData["productId"].ToString());
             TempData["productId"] = productId;
             var ratings = await _productApiClient.GetAllRating(productId, 10);
+
             return View(new ProductReviewViewModel()
             {
                 Reviews = ratings

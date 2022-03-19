@@ -5,6 +5,7 @@ using bookShopSolution.ViewModels.Catalog.Products;
 using bookShopSolution.ViewModels.common;
 using bookShopSolution.ViewModels.Common;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace bookShopSolution.WebApp.Services
@@ -76,14 +77,14 @@ namespace bookShopSolution.WebApp.Services
             return data;
         }
 
-        public async Task<ApiResult<bool>> Rating(int productId, RatingRequest request)
+        public async Task<ApiResult<bool>> Rating(int productId, RatingRequest request, string token)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
 
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.PostAsync($"/api/products/{productId}/rating", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)

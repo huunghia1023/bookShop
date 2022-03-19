@@ -25,6 +25,38 @@
             const quantity = 0;
             updateCart(id, quantity);
         });
+
+        $('body').on('click', '.btn_checkout', async function (e) {
+            e.preventDefault();
+            const name = $('#ShipName').val();
+            const email = $('#ShipEmail').val();
+            const address = $('#ShipAddress').val();
+            if (!name) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "Name is invalid"
+                });
+                return;
+            }
+            if (!validateEmail(email)) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "Email is invalid"
+                });
+                return;
+            }
+            if (!address) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "Address is invalid"
+                });
+                return;
+            }
+            checkout(email, address, name);
+        });
     }
 
     function updateCart(id, quantity) {
@@ -84,15 +116,42 @@
                         "</div>" +
                         "</td>" +
                         "<td class=\"total-amount\" data-title=\"Total\"><span>" + priceUnit + "</span></td>" +
-                        "<td class=\"action\" data-title=\"Remove\"><button type=\"button\" class=\"btn btn-danger btn-remove\" data-id=\"" + item.productId + "\"><i class=\"ti-trash remove-icon\"></i></button></td>" +
+                        "<td class=\"action\" data-title=\"Remove\"><button type=\"button\" class=\"btn btn-danger btn-remove\" style=\"color: white; background-color: #f7941d;\" data-id=\"" + item.productId + "\"><i class=\"ti-trash remove-icon\"></i></button></td>" +
                         "</tr>";
                     total = total + item.price * item.quantity;
                 });
                 $("#card-body").html(html);
 
                 $("#lb_cart_total").text("$" + total.toFixed(2).toString());
-                $("#lb_total_pay").text("$" + (total+10).toFixed(2).toString());
+                $("#lb_total_pay").text("$" + (total + 10).toFixed(2).toString());
             }
         });
     }
+
+    function checkout(email, address, name) {
+        const culture = $('#hiddenCulture').val();
+        $.ajax({
+            type: "POST",
+            url: "/" + culture + "/Cart/CreateOrder",
+            data: {
+                ShipEmail: email,
+                ShipAddress: address,
+                ShipName: name
+            },
+            success: function (res) {
+                window.location.href = "/" + culture + res;
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
 }

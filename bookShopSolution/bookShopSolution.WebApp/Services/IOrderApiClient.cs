@@ -7,5 +7,7 @@ namespace bookShopSolution.WebApp.Services
         public Task<OrderViewModel> Create(OrderCreateRequest request);
 
         public Task<OrderViewModel> GetById(int id);
+
+        public Task<bool> CancelOrder(int id);
     }
 }

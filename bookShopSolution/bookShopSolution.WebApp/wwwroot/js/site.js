@@ -35,7 +35,7 @@
                 success: function (res) {
                     $("#lb_cart_count").text(res.length);
                     Swal.fire({
-                        position: 'top-end',
+                        position: 'center',
                         icon: 'success',
                         title: 'Add product to cart success',
                         showConfirmButton: false,
