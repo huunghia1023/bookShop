@@ -11,7 +11,9 @@ export default class ImageRequestModel {
     formData.append("Caption", Caption);
     formData.append("IsDefault", IsDefault);
     formData.append("SortOrder", SortOrder);
-    formData.append("ImageFile", ImageFile);
+    if (ImageFile) {
+      formData.append("ImageFile", ImageFile);
+    }
 
     return formData;
   }

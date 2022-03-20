@@ -16,6 +16,8 @@ namespace bookShopSolution.ViewModels.Catalog.Products
         public string? SeoTitle { get; set; }
         public string LanguageId { get; set; }
         public string? SeoAlias { get; set; }
+        public decimal? Price { get; set; }
+        public int? Stock { get; set; }
         //public IFormFile ThumbnailImage { get; set; }
     }
 }

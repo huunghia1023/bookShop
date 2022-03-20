@@ -70,6 +70,8 @@ export default class ProductRequestModel {
     SeoDescription,
     SeoTitle,
     SeoAlias,
+    Price,
+    Stock,
     LanguageId
   ) {
     var formData = new FormData();
@@ -81,6 +83,8 @@ export default class ProductRequestModel {
     formData.append("SeoAlias", SeoAlias);
     formData.append("LanguageId", LanguageId);
     formData.append("SeoAlias", SeoAlias);
+    formData.append("Price", Price);
+    formData.append("Stock", Stock);
 
     return formData;
   }

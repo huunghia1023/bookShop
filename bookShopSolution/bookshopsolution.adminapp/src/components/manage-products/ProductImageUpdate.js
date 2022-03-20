@@ -10,10 +10,11 @@ import {
 } from "reactstrap";
 import "./ManageProduct.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import ImageRequestModel from "../../models/ImageRequestModel";
-import ImageResquest from "../../requests/ImageRequest";
+import ImageRequest from "../../requests/ImageRequest";
+import ImageModel from "../../models/ImageModel";
 
 const ProductImageUpdate = () => {
   const [caption, setCaption] = useState("");
@@ -24,6 +25,52 @@ const ProductImageUpdate = () => {
   let { idProduct, idImage } = useParams();
 
   let navigate = useNavigate();
+
+  useEffect(() => {
+    GetImageInfo(idProduct, idImage);
+  }, []);
+
+  const GetImageInfo = async (productId, imageId) => {
+    try {
+      let token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login", { replace: true });
+        return;
+      }
+      var image = new ImageModel();
+      let response = await ImageRequest.getImageInfo(productId, imageId);
+      if (response.status !== 200 || !response.data) {
+        await Swal.fire({
+          icon: "error",
+          title: "Can not get image with id " + imageId,
+          showConfirmButton: true,
+        });
+        return;
+      }
+
+      var imageResponse = response.data;
+      if (imageResponse) {
+        image.ImageId = imageResponse.imageId;
+        image.Caption = imageResponse.caption;
+        image.DateCreated = imageResponse.dateCreated;
+        image.FileSize = imageResponse.fileSize;
+        image.ImagePath = imageResponse.imagePath;
+        image.IsDefault = imageResponse.isDefault;
+        image.SortOrder = imageResponse.sortOrder;
+
+        setCaption(image.Caption);
+        setImage(image.ImagePath);
+        setIsDefault(image.IsDefault);
+        setOrder(image.SortOrder);
+      }
+    } catch (error) {
+      await Swal.fire({
+        icon: "error",
+        title: error,
+        showConfirmButton: true,
+      });
+    }
+  };
 
   const UpdateImage = async () => {
     try {
@@ -45,7 +92,7 @@ const ProductImageUpdate = () => {
           order,
           image
         );
-        let response = await ImageResquest.update(
+        let response = await ImageRequest.update(
           idProduct,
           idImage,
           requestData,
@@ -87,6 +134,7 @@ const ProductImageUpdate = () => {
             <FormGroup>
               <Label for="addimagecaption">Caption</Label>
               <Input
+                value={caption}
                 onChange={(e) => setCaption(e.target.value)}
                 id="addimagecaption"
                 name="addimagecaption"
@@ -99,6 +147,7 @@ const ProductImageUpdate = () => {
                 Thumbnail
               </Label>
               <Input
+                checked={isDefault}
                 onChange={(e) => setIsDefault(e.target.checked)}
                 id="addimagedefault"
                 name="addimagedefault"
@@ -108,6 +157,7 @@ const ProductImageUpdate = () => {
             <FormGroup>
               <Label for="addimageorder">Order</Label>
               <Input
+                value={order}
                 onChange={(e) => setOrder(e.target.value)}
                 id="addimageorder"
                 name="addimageorder"

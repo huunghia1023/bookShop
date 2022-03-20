@@ -13,7 +13,6 @@ import userResquest from "../../requests/UserRequest";
 import { useState } from "react";
 import UserRequestModel from "../../models/UserRequestModel";
 import Swal from "sweetalert2";
-import { roles } from "aria-query";
 import {
   ValidateConfirmPassword,
   ValidateEmail,

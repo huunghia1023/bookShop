@@ -13,7 +13,8 @@ export default class ProductModel {
     seoTitle,
     stock,
     viewCount,
-    thumbnail
+    thumbnail,
+    categories
   ) {
     this.id = id;
     this.dateCreated = dateCreated;
@@ -29,5 +30,6 @@ export default class ProductModel {
     this.stock = stock;
     this.viewCount = viewCount;
     this.thumbnail = thumbnail;
+    this.categories = categories;
   }
 }
