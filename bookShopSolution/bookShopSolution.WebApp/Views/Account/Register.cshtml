@@ -10,50 +10,50 @@
         <div class="text-center">
             <img src="/images/logo.jpg" class="rounded-circle border p-1" style="width: 130px;margin-bottom: 65px;margin-top: 20px;">
         </div>
-
+        <div asp-validation-summary="All" class="alert alert-danger"></div>
         <article class="card-body">
             <form asp-action="Register" asp-controller="Account">
                 <div class="form-row">
                     <div class="col form-group">
-                        <label>First name </label>
+                        <label>First name <span class="text-danger">*</span></label>
                         <input type="text" asp-for="FirstName" class="form-control">
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                        @*<span asp-validation-for="FirstName" class="text-danger"></span>*@
                     </div> <!-- form-group end.// -->
                     <div class="col form-group">
-                        <label>Last name</label>
+                        <label>Last name <span class="text-danger">*</span></label>
                         <input type="text" asp-for="LastName" class="form-control">
-                        <span asp-validation-for="LastName" class="text-danger"></span>
+                        @*<span asp-validation-for="LastName" class="text-danger"></span>*@
                     </div> <!-- form-group end.// -->
                 </div> <!-- form-row end.// -->
                 <div class="form-group">
-                    <label>Email address</label>
+                    <label>Email address <span class="text-danger">*</span></label>
                     <input type="email" asp-for="Email" class="form-control">
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    @*<span asp-validation-for="Email" class="text-danger"></span>*@
                 </div> <!-- form-group end.// -->
                 <div class="form-group">
-                    <label>Phone Number</label>
+                    <label>Phone Number <span class="text-danger">*</span></label>
                     <input type="tel" asp-for="PhoneNumber" class="form-control" placeholder="">
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    @*<span asp-validation-for="PhoneNumber" class="text-danger"></span>*@
                 </div> <!-- form-group end.// -->
                 <div class="form-group">
-                    <label>Birth Day</label>
+                    <label>Birthday <span class="text-danger">*</span></label>
                     <input type="date" asp-for=BirthDay class="form-control" placeholder="">
-                    <span asp-validation-for="BirthDay" class="text-danger"></span>
+                    @*<span asp-validation-for="BirthDay" class="text-danger"></span>*@
                 </div> <!-- form-group end.// -->
                 <div class="form-group">
-                    <label>Username</label>
+                    <label>Username <span class="text-danger">*</span></label>
                     <input type="text" asp-for="UserName" class="form-control" placeholder="">
-                    <span asp-validation-for="UserName" class="text-danger"></span>
+                    @*<span asp-validation-for="UserName" class="text-danger"></span>*@
                 </div> <!-- form-group end.// -->
                 <div class="form-group">
-                    <label>Password</label>
+                    <label>Password <span class="text-danger">*</span></label>
                     <input asp-for="Password" class="form-control" type="password">
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                    @*<span asp-validation-for="Password" class="text-danger"></span>*@
                 </div> <!-- form-group end.// -->
                 <div class="form-group">
-                    <label>Confirm password</label>
+                    <label>Confirm password <span class="text-danger">*</span></label>
                     <input asp-for="ConfirmPassword" class="form-control" type="password">
-                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    @*<span asp-validation-for="ConfirmPassword" class="text-danger"></span>*@
                 </div> <!-- form-group end.// -->
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block"><localize>Register</localize></button>
@@ -61,6 +61,6 @@
                 <small class="text-muted"><localize>By clicking the 'Sign Up' button, you confirm that you accept our</localize> <br> <localize>Terms of use and Privacy Policy</localize>.</small>
             </form>
         </article> <!-- card-body end .// -->
-        <div class="border-top card-body text-center"><localize>Have an account</localize>? <a href="/@culture/Account/Login"><localize>Login</localize></a></div>
+        <div class="border-top card-body text-center"><localize>Have an account</localize>? <a href="/@culture/Account/Login" style="color: #e08211;"><localize>Login</localize></a></div>
     </div> <!-- card.// -->
 </div>

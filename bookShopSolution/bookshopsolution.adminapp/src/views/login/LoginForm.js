@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Form,
   FormGroup,
@@ -13,7 +13,6 @@ import userResquest from "../../requests/UserRequest";
 import AuthenticateResponseModel from "../../models/AuthenticateResponseModel";
 import { useNavigate } from "react-router-dom";
 import UserModel from "../../models/UserModel";
-import Swal from "sweetalert2";
 
 function LoginForm() {
   let navigate = useNavigate();
@@ -68,6 +67,7 @@ function LoginForm() {
         }
       }
     }
+    return user;
   };
 
   const CloseAlert = () => {
@@ -121,7 +121,9 @@ function LoginForm() {
             ? results.token_type
             : "";
           if (responseModel.accessToken) {
+            var userRes = await GetAccountInfo(responseModel.accessToken);
             localStorage.setItem("token", responseModel.accessToken);
+            localStorage.setItem("accountId", userRes.id);
             setLoginSuccess({ messages: "Login Success!", isSuccess: true });
             setLoading(false);
             navigate("/home", { replace: true });
@@ -151,10 +153,15 @@ function LoginForm() {
           isError: true,
           errors: messageErrors,
         });
+      } else if (error.message.includes("403")) {
+        setLoginError({
+          isError: true,
+          errors: ["Permission Denied"],
+        });
       } else {
         setLoginError({
           isError: true,
-          errors: error,
+          errors: [error],
         });
       }
       //CloseAlert();
