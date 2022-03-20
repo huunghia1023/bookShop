@@ -31,7 +31,7 @@ const columns = [
     name: "Id",
     selector: (row) => row.id,
     sortable: true,
-    maxWidth: "20px",
+    maxWidth: "10px",
   },
   {
     name: "Thumbnail",
@@ -44,19 +44,13 @@ const columns = [
     name: "Name",
     selector: (row) => row.name,
     sortable: true,
-    maxWidth: "300px",
+    maxWidth: "150px",
   },
   {
     name: "Description",
     selector: (row) => <Markup content={row.description} />,
     sortable: true,
-    maxWidth: "500px",
-  },
-  {
-    name: "Original Price",
-    selector: (row) => row.originalPrice,
-    sortable: true,
-    maxWidth: "100px",
+    maxWidth: "300px",
   },
   {
     name: "Price",
@@ -69,18 +63,6 @@ const columns = [
     selector: (row) => row.stock,
     sortable: true,
     maxWidth: "20px",
-  },
-  {
-    name: "ViewCount",
-    selector: (row) => row.viewCount,
-    sortable: true,
-    maxWidth: "20px",
-  },
-  {
-    name: "Date Created",
-    selector: (row) => row.dateCreated,
-    sortable: true,
-    maxWidth: "200px",
   },
   {
     cell: (row, index, column, id) => (
@@ -262,11 +244,23 @@ function ProductTable() {
         }
       }
     } catch (error) {
-      await Swal.fire({
-        icon: "error",
-        title: error,
-        showConfirmButton: true,
-      });
+      if (error.message.includes("401")) {
+        await Swal.fire({
+          icon: "error",
+          title: "Please login again",
+          showConfirmButton: true,
+        }).then(function () {
+          localStorage.removeItem("token");
+          localStorage.removeItem("accountId");
+          navigate("/login", { replace: true });
+        });
+      } else {
+        await Swal.fire({
+          icon: "error",
+          title: error,
+          showConfirmButton: true,
+        });
+      }
     }
   }
 
@@ -303,11 +297,23 @@ function ProductTable() {
         }
       }
     } catch (error) {
-      await Swal.fire({
-        icon: "error",
-        title: error,
-        showConfirmButton: true,
-      });
+      if (error.message.includes("401")) {
+        await Swal.fire({
+          icon: "error",
+          title: "Please login again",
+          showConfirmButton: true,
+        }).then(function () {
+          localStorage.removeItem("token");
+          localStorage.removeItem("accountId");
+          navigate("/login", { replace: true });
+        });
+      } else {
+        await Swal.fire({
+          icon: "error",
+          title: error,
+          showConfirmButton: true,
+        });
+      }
     }
   }
 

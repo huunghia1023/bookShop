@@ -14,6 +14,11 @@ const ImageResquest = {
     return response;
   },
 
+  getImageInfo(productId, imageId) {
+    const url = `api/products/${productId}/images/${imageId}`;
+    return AxiosClient.get(url, config);
+  },
+
   create(id, data, token) {
     const url = `api/products/${id}/images`;
     config.headers = {

@@ -14,12 +14,25 @@ import styled, { keyframes } from "styled-components";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import ImageResquest from "../../requests/ImageRequest";
 import ImageModel from "../../models/ImageModel";
+import { BaseAddress } from "../../utils/Constant";
 
+const thumbStyle = { width: "100%", padding: "20px 0px" };
 const columns = [
   {
     name: "Id",
     selector: (row) => row.ImageId,
     sortable: true,
+  },
+  {
+    name: "Image",
+    selector: (row) => (
+      <img
+        style={thumbStyle}
+        src={BaseAddress + "/user-content/" + row.ImagePath}
+        alt="pic"
+      ></img>
+    ),
+    maxWidth: "100px",
   },
   {
     name: "Path",
@@ -34,11 +47,6 @@ const columns = [
   {
     name: "IsDefault",
     selector: (row) => row.IsDefault,
-    sortable: true,
-  },
-  {
-    name: "SortOrder",
-    selector: (row) => row.SortOrder,
     sortable: true,
   },
   {

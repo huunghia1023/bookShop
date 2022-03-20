@@ -177,11 +177,23 @@ function UserTable() {
         }
       }
     } catch (error) {
-      await Swal.fire({
-        icon: "error",
-        title: error,
-        showConfirmButton: true,
-      });
+      if (error.message.includes("401")) {
+        await Swal.fire({
+          icon: "error",
+          title: "Please login again",
+          showConfirmButton: true,
+        }).then(function () {
+          localStorage.removeItem("token");
+          localStorage.removeItem("accountId");
+          navigate("/login", { replace: true });
+        });
+      } else {
+        await Swal.fire({
+          icon: "error",
+          title: error,
+          showConfirmButton: true,
+        });
+      }
     }
   }
 

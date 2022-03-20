@@ -291,7 +291,8 @@ namespace bookShopSolution.Application.Catalog.Products
                 LikeCount = product.LikeCount,
                 LanguageId = languageId,
                 AverageStar = averageStar,
-                ReviewCount = reviewCount
+                ReviewCount = reviewCount,
+                Categories = categories
             };
             return productModel;
         }
@@ -309,32 +310,19 @@ namespace bookShopSolution.Application.Catalog.Products
 
         public async Task<int> Update(int productId, ProductUpdateRequest request)
         {
-            if (request.Details == null)
-            {
-                request.Details = "";
-            }
-            if (request.SeoDescription == null)
-            {
-                request.SeoDescription = "";
-            }
-            if (request.SeoTitle == null)
-            {
-                request.SeoTitle = "";
-            }
-            if (request.SeoAlias == null)
-            {
-                request.SeoAlias = "";
-            }
             var product = await _context.Products.FindAsync(productId);
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == request.LanguageId);
             if (product == null || productTranslation == null)
                 return 0;
             productTranslation.ProductName = request.ProductName;
             productTranslation.Description = request.Description;
-            productTranslation.Details = request.Details;
-            productTranslation.SeoDescription = request.SeoDescription;
-            productTranslation.SeoTitle = request.SeoTitle;
-            productTranslation.SeoAlias = request.SeoAlias;
+            productTranslation.Details = request.Details ?? "";
+            productTranslation.SeoDescription = request.SeoDescription ?? "";
+            productTranslation.SeoTitle = request.SeoTitle ?? "";
+            productTranslation.SeoAlias = request.SeoAlias ?? "";
+
+            product.Price = request.Price ?? product.Price;
+            product.Stock = request.Stock ?? product.Stock;
 
             return await _context.SaveChangesAsync();
         }
@@ -344,7 +332,7 @@ namespace bookShopSolution.Application.Catalog.Products
             var productImage = await _context.ProductImages.FindAsync(imageId);
             if (productImage == null)
             {
-                throw new BookShopException($"Can not find image with id {imageId}");
+                return 0;
             }
             productImage.Caption = request.Caption;
             productImage.IsDefault = request.IsDefault;
