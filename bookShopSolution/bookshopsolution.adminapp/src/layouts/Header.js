@@ -11,7 +11,7 @@ import {
   Button,
 } from "reactstrap";
 import Logo from "./Logo";
-import "./layout.css";
+import "./Layout.css";
 import { ReactComponent as LogoWhite } from "../assets/images/logos/adminprowhite.svg";
 import user1 from "../assets/images/users/user4.jpg";
 import Swal from "sweetalert2";
@@ -31,10 +31,9 @@ const Header = () => {
   };
 
   const OpenMyAccountPage = async () => {
-    var user = localStorage.getItem("user");
-    var userJson = JSON.parse(user);
-    if (userJson.id) {
-      navigate(`/manage-users/${userJson.id}`, { replace: true });
+    var accountId = localStorage.getItem("accountId");
+    if (accountId) {
+      navigate(`/manage-users/${accountId}`, { replace: true });
       return;
     }
     await Swal.fire({

@@ -11,7 +11,7 @@ namespace bookShopSolution.ViewModels.System.Users
     {
         public ProductCreateRequestValidator()
         {
-            RuleFor(x => x.Password).MinimumLength(6).WithMessage("Password has at least 6 characters");
+            
         }
     }
 }

@@ -15,10 +15,10 @@ import UserRequestModel from "../../models/UserRequestModel";
 import Swal from "sweetalert2";
 import { roles } from "aria-query";
 import {
-  validateConfirmPassword,
-  validateEmail,
-  validatePassword,
-} from "../../utils/validate";
+  ValidateConfirmPassword,
+  ValidateEmail,
+  ValidatePassword,
+} from "../../utils/Validate";
 
 const UserFormCreate = () => {
   const [lastName, setLastName] = useState("");
@@ -53,7 +53,7 @@ const UserFormCreate = () => {
         return;
       }
 
-      if (!validateEmail(email)) {
+      if (!ValidateEmail(email)) {
         await Swal.fire({
           icon: "error",
           title: "Error: Email invalid",
@@ -62,7 +62,7 @@ const UserFormCreate = () => {
 
         return;
       }
-      if (!validatePassword(password)) {
+      if (!ValidatePassword(password)) {
         await Swal.fire({
           icon: "error",
           title: "Error: Password invalid",
@@ -71,7 +71,7 @@ const UserFormCreate = () => {
 
         return;
       }
-      if (!validateConfirmPassword(confirmPassword, password)) {
+      if (!ValidateConfirmPassword(confirmPassword, password)) {
         await Swal.fire({
           icon: "error",
           title: "Error: Confirm password invalid",
@@ -106,7 +106,7 @@ const UserFormCreate = () => {
           password: password,
           email: email,
           birthDay: birthDay,
-          listRole: listRole,
+          roles: listRole,
         };
         let response = await userResquest.create(requestFormData, token);
         if (response.status === 200) {
@@ -224,14 +224,14 @@ const UserFormCreate = () => {
             <FormGroup check inline>
               <Input
                 type="checkbox"
-                onChange={(e) => setAdmin(e.target.value)}
+                onChange={(e) => setAdmin(e.target.checked)}
               />
               <Label check>Admin</Label>
             </FormGroup>
             <FormGroup check inline>
               <Input
                 type="checkbox"
-                onChange={(e) => setCustomer(e.target.value)}
+                onChange={(e) => setCustomer(e.target.checked)}
               />
               <Label check>Customer</Label>
             </FormGroup>

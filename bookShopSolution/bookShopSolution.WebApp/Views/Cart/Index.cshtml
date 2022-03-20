@@ -11,21 +11,6 @@
 </script>
 }
 
-<!-- Breadcrumbs -->
-<div class="breadcrumbs">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="bread-inner">
-                    <ul class="bread-list">
-                        <li><a href="index1.html">Home<i class="ti-arrow-right"></i></a></li>
-                        <li class="active"><a href="blog-single.html">Cart</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @{
     if(TempData["checkoutError"] != null)
     {
@@ -119,7 +104,7 @@
 
                         </div>
                         <div class="col-lg-4 col-md-7 col-12">
-                            <div class="right">
+                            <div class="right" style="padding-left: 0px">
                                 <ul>
                                     <li>Cart Subtotal<span id="lb_cart_total">$0</span></li>
                                     <li>Shipping<span>$10</span></li>

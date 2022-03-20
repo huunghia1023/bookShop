@@ -21,7 +21,17 @@ namespace bookShopSolution.BackendApi.IdentityServer
             new List<ApiResource>
             {
                 new ApiResource("api1", "My API"),
-                new ApiResource("roles", "My Roles", new[] { "role" })
+                new ApiResource("roles", "My Roles", new[] { "role" }),
+                new ApiResource {
+                    Name="api.BackendApi",
+                    ApiSecrets={ new Secret("swagger_RookiesB4_BookShopBackendApi".Sha256()) },
+
+                    UserClaims =
+                    {
+                        JwtClaimTypes.Name,
+                        JwtClaimTypes.Profile,
+                    }, 
+                }
             };
 
         //new ApiResource[]
@@ -118,7 +128,7 @@ namespace bookShopSolution.BackendApi.IdentityServer
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.Phone,
                         "BackendApiScope",
-                        //"api.BackendApi",
+                        "api.BackendApi",
                         "UserInfo",
                         "roles"
                     }
