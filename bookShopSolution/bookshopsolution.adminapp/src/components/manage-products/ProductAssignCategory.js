@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 import ProductAssignCategoryModel from "../../models/ProductAssignCategoryModel";
 import ProductRequestModel from "../../models/ProductRequestModel";
 import productResquest from "../../requests/ProductRequest";
+import ProductModel from "../../models/ProductModel";
 
 const ProductAssignCategory = () => {
   const [languageId, setLanguageId] = useState("en");
@@ -111,19 +112,30 @@ const ProductAssignCategory = () => {
   async function GetAllCategory() {
     try {
       var listCategory = [];
+      var listCateChecked = [];
       let token = localStorage.getItem("token");
       if (token) {
         let response = await categoryResquest.getAll(token, languageId);
         if (response.status === 200) {
           var categoryResponse = response.data ? response.data : [];
-
+          // var categoryChecked = await GetProductCategory(productIdParam);
           categoryResponse.forEach((element) => {
             var category = new CategorytModel();
             category.id = element.id;
             category.name = element.name;
+            // category.selected = false;
+            // for (let i = 0; i < categoryChecked.length; i++) {
+            //   const c = categoryChecked[i];
+            //   if (element.name === c) {
+            //     category.selected = true;
+            //     listCateChecked.push(category);
+            //     break;
+            //   }
+            // }
+
             listCategory.push(category);
           });
-
+          // setProductAssigns(listCateChecked);
           setCategories(listCategory);
         } else {
           await Swal.fire({
@@ -142,6 +154,42 @@ const ProductAssignCategory = () => {
     }
   }
 
+  const GetProductCategory = async (id) => {
+    try {
+      let token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login", { replace: true });
+        return;
+      }
+
+      let response = await productResquest.getProductInfo(
+        id,
+        languageId,
+        token
+      );
+      if (response.status !== 200 || !response.data) {
+        await Swal.fire({
+          icon: "error",
+          title: "Can not get product category",
+          showConfirmButton: true,
+        });
+        return;
+      }
+
+      var productResponse = response.data;
+      if (productResponse) {
+        return productResponse.categories;
+      }
+      return [];
+    } catch (error) {
+      await Swal.fire({
+        icon: "error",
+        title: error,
+        showConfirmButton: true,
+      });
+    }
+  };
+
   return (
     <div>
       <Card>
@@ -153,10 +201,10 @@ const ProductAssignCategory = () => {
             {categories.map((x) => {
               return (
                 <React.Fragment>
-                  <FormGroup check>
+                  <FormGroup check key={x.id}>
                     <Input
                       type="checkbox"
-                      onClick={(e) => {
+                      onChange={(e) => {
                         handleCategoryChange(e, x);
                       }}
                     />

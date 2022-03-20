@@ -25,6 +25,8 @@ const ProductFormUpdate = () => {
   const [seoDescription, setSeoDescription] = useState("");
   const [seoTitle, setSeoTitle] = useState("");
   const [seoAlias, setSeoAlias] = useState("");
+  const [price, setPrice] = useState(0);
+  const [stock, setStock] = useState(0);
   const [languageId, setLanguageId] = useState("en");
 
   let params = useParams();
@@ -58,6 +60,8 @@ const ProductFormUpdate = () => {
           seoDescription,
           seoTitle,
           seoAlias,
+          price,
+          stock,
           languageId
         );
         let response = await productResquest.update(
@@ -122,6 +126,8 @@ const ProductFormUpdate = () => {
         product.seoTitle = productResponse.seoTitle;
         product.description = productResponse.description;
         product.details = productResponse.details;
+        product.price = productResponse.price;
+        product.stock = productResponse.stock;
 
         setProductName(product.name);
         setSeoAlias(product.seoAlias);
@@ -129,6 +135,8 @@ const ProductFormUpdate = () => {
         setSeoTitle(product.seoTitle);
         setDescription(product.description);
         setDetails(product.details);
+        setPrice(product.price);
+        setStock(product.stock);
       }
     } catch (error) {
       await Swal.fire({
@@ -210,6 +218,26 @@ const ProductFormUpdate = () => {
                 id="addproductseoalias"
                 name="addproductseoalias"
                 type="text"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="addproductprice">Price</Label>
+              <Input
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                id="addproductprice"
+                name="addproductprice"
+                type="number"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="addproductstock">Stock</Label>
+              <Input
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+                id="addproductstock"
+                name="addproductstock"
+                type="number"
               />
             </FormGroup>
             <br />
