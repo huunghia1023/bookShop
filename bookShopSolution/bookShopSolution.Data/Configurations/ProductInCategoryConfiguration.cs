@@ -10,10 +10,8 @@ namespace bookShopSolution.Data.Configurations
         {
             builder.ToTable("ProductInCategories");
             builder.HasKey(x => new { x.CategoryId, x.ProductId });
-            builder.HasOne(t => t.Product).WithMany(pc => pc.ProductInCategories).HasForeignKey(pc=>pc.ProductId);
-            builder.HasOne(t => t.Category).WithMany(pc => pc.ProductInCategories).HasForeignKey(pc=>pc.CategoryId);
+            builder.HasOne(t => t.Product).WithMany(pc => pc.ProductInCategories).HasForeignKey(pc => pc.ProductId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(t => t.Category).WithMany(pc => pc.ProductInCategories).HasForeignKey(pc => pc.CategoryId).OnDelete(DeleteBehavior.Restrict);
         }
-
-
     }
 }

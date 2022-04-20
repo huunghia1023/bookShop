@@ -8,7 +8,7 @@ namespace bookShopSolution.Data.Enums
 {
     public enum Status
     {
-        InActive,
-        Active
+        InActive = 0,
+        Active = 1
     }
 }

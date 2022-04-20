@@ -8,7 +8,7 @@ namespace bookShopSolution.Data.Enums
 {
     public enum TransactionStatus
     {
-        Success,
-        Failed
+        Success = 0,
+        Failed = 1
     }
 }

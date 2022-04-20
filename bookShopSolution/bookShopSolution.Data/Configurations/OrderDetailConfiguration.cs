@@ -15,8 +15,8 @@ namespace bookShopSolution.Data.Configurations
         {
             builder.ToTable("OrderDetails");
             builder.HasKey(x => new { x.ProductId, x.OrderId });
-            builder.HasOne(o => o.Order).WithMany(x => x.OrderDetails).HasForeignKey(x => x.OrderId);
-            builder.HasOne(p => p.Product).WithMany(x => x.OrderDetails).HasForeignKey(x => x.ProductId);
+            builder.HasOne(o => o.Order).WithMany(x => x.OrderDetails).HasForeignKey(x => x.OrderId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(p => p.Product).WithMany(x => x.OrderDetails).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

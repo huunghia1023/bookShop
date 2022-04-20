@@ -67,8 +67,11 @@ namespace bookShopSolution.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
+            // clear seesion
+            HttpContext.Session.Clear();
             await HttpContext.SignOutAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme);
+             CookieAuthenticationDefaults.AuthenticationScheme);
+            
             return RedirectToAction("Index", "Home");
         }
 

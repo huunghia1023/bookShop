@@ -22,18 +22,6 @@ namespace bookShopSolution.Application.Catalog.Categories
 
         public async Task<int> Create(CategoryCreateRequest request)
         {
-            if (request.SeoAlias == null)
-            {
-                request.SeoAlias = "";
-            }
-            if (request.SeoDescription == null)
-            {
-                request.SeoDescription = "";
-            }
-            if (request.SeoTitle == null)
-            {
-                request.SeoTitle = "";
-            }
             var category = new Category()
             {
                 IsShowOnHome = request.IsShowOnHome,
@@ -43,9 +31,9 @@ namespace bookShopSolution.Application.Catalog.Categories
                     {
                         CategoryName = request.Name,
                         LanguageId = request.LanguageId,
-                        SeoAlias = request.SeoAlias,
-                        SeoDescription = request.SeoDescription,
-                        SeoTitle = request.SeoTitle,
+                        SeoAlias = request.SeoAlias?? "",
+                        SeoDescription = request.SeoDescription?? "",
+                        SeoTitle = request.SeoTitle?? "",
                     }
                 }
             };
@@ -114,18 +102,6 @@ namespace bookShopSolution.Application.Catalog.Categories
 
         public async Task<ApiResult<int>> Update(int id, CategoryUpdateRequest request)
         {
-            if (request.SeoAlias == null)
-            {
-                request.SeoAlias = "";
-            }
-            if (request.SeoDescription == null)
-            {
-                request.SeoDescription = "";
-            }
-            if (request.SeoTitle == null)
-            {
-                request.SeoTitle = "";
-            }
             var category = await _context.Categories.FindAsync(id);
             var categoryTranslation = await _context.CategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == id && x.LanguageId == request.LanguageId);
             if (category == null || categoryTranslation == null)
@@ -134,9 +110,9 @@ namespace bookShopSolution.Application.Catalog.Categories
             }
             category.IsShowOnHome = request.IsShowOnHome;
             categoryTranslation.CategoryName = request.Name;
-            categoryTranslation.SeoAlias = request.SeoAlias;
-            categoryTranslation.SeoDescription = request.SeoDescription;
-            categoryTranslation.SeoTitle = request.SeoTitle;
+            categoryTranslation.SeoAlias = request.SeoAlias ?? "";
+            categoryTranslation.SeoDescription = request.SeoDescription ?? "";
+            categoryTranslation.SeoTitle = request.SeoTitle ?? "";
             var result = await _context.SaveChangesAsync();
             return new ApiSuccessResult<int>();
         }

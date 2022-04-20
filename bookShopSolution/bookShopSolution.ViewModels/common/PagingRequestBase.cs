@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace bookShopSolution.ViewModels.common
+namespace bookShopSolution.ViewModels.Common
 {
     public class PagingRequestBase
     {

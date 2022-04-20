@@ -8,9 +8,9 @@ namespace bookShopSolution.Data.Enums
 {
     public enum OrderStatus
     {
-        Confirmed,
-        Shipping,
-        Success,
-        Canceled
+        Confirmed = 0,
+        Shipping = 1,
+        Success = 2,
+        Canceled = 3
     }
 }
