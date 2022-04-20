@@ -8,7 +8,7 @@ namespace bookShopSolution.Data.Enums
 {
     public enum PaymentMethod
     {
-        Paypal,
-        COD
+        Paypal = 0,
+        COD = 1
     }
 }

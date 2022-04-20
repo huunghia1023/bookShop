@@ -22,8 +22,8 @@ namespace bookShopSolution.Data.Configurations
             builder.Property(x => x.SeoDescription).HasMaxLength(200);
             builder.Property(x => x.SeoTitle).HasMaxLength(200);
             builder.Property(x => x.SeoAlias).HasMaxLength(200);
-            builder.HasOne(x => x.Product).WithMany(x => x.ProductTranslations).HasForeignKey(x => x.ProductId);
-            builder.HasOne(x => x.Language).WithMany(x => x.ProductTranslations).HasForeignKey(x => x.LanguageId);
+            builder.HasOne(x => x.Product).WithMany(x => x.ProductTranslations).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(x => x.Language).WithMany(x => x.ProductTranslations).HasForeignKey(x => x.LanguageId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

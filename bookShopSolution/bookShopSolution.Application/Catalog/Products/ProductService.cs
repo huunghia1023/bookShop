@@ -47,8 +47,11 @@ namespace bookShopSolution.Application.Catalog.Products
         public async Task AddViewCount(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
-            product.ViewCount += 1;
-            await _context.SaveChangesAsync();
+            if (product != null)
+            {
+                product.ViewCount += 1;
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<int> Create(ProductCreateRequest request)
@@ -75,7 +78,7 @@ namespace bookShopSolution.Application.Catalog.Products
                         SeoDescription = request.SeoDescription?? "",
                         SeoTitle = request.SeoTitle?? ""
                     }
-    }
+                }
             };
 
             // save image
@@ -320,7 +323,7 @@ namespace bookShopSolution.Application.Catalog.Products
             productTranslation.SeoDescription = request.SeoDescription ?? "";
             productTranslation.SeoTitle = request.SeoTitle ?? "";
             productTranslation.SeoAlias = request.SeoAlias ?? "";
-
+            product.DateModified = DateTime.Now;
             product.Price = request.Price ?? product.Price;
             product.Stock = request.Stock ?? product.Stock;
 

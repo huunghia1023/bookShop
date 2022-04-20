@@ -17,7 +17,7 @@ namespace bookShopSolution.Data.Configurations
             builder.HasKey(x => x.ImageId);
             builder.Property(x => x.ImageId).UseIdentityColumn();
             builder.Property(x => x.Caption).HasMaxLength(200);
-            builder.HasOne(x => x.Product).WithMany(x => x.ProductImages).HasForeignKey(x => x.ProductId);
+            builder.HasOne(x => x.Product).WithMany(x => x.ProductImages).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
